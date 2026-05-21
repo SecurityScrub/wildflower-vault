@@ -1,4 +1,5 @@
 import { SquareClient, SquareEnvironment, WebhooksHelper } from "square";
+import type { Currency, OrderLineItem } from "square";
 import { getSquareConfig } from "./settings";
 
 let _client: SquareClient | null = null;
@@ -29,7 +30,7 @@ export async function createSquareOrder(params: {
   const response = await client.orders.create({
     order: {
       locationId: config.locationId,
-      lineItems: params.lineItems,
+      lineItems: params.lineItems as OrderLineItem[],
       referenceId: params.referenceId,
     },
     idempotencyKey: `order-${params.referenceId}-${Date.now()}`,

@@ -46,11 +46,8 @@ export function Header() {
               src="/images/logo.png"
               alt="The Wildflower Vault"
               width={160}
-              height={60}
-              className={cn(
-                "h-14 w-auto transition-opacity",
-                scrolled ? "opacity-100" : "opacity-90 brightness-0 invert"
-              )}
+              height={160}
+              className="h-14 w-14 rounded-md object-cover transition-opacity"
               priority
             />
           </Link>

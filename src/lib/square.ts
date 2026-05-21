@@ -47,7 +47,7 @@ export async function createPaymentLink(params: {
   const client = await getSquareClient();
   const config = await getSquareConfig();
 
-  const response = await client.checkout.createPaymentLink({
+  const response = await client.paymentLinks.create({
     idempotencyKey: `link-${params.orderId}-${Date.now()}`,
     order: {
       locationId: config.locationId,

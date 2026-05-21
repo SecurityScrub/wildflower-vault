@@ -5,9 +5,8 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "node node_modules/prisma/build/index.js db push --accept-data-loss --skip-generate && (node seed.js || echo 'seed warning') && node server.js",
-    "healthcheckPath": "/api/health",
-    "healthcheckTimeout": 300,
+    "startCommand": "node node_modules/prisma/build/index.js db push --accept-data-loss --skip-generate && node server.js",
+    "healthcheckPath": "",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }

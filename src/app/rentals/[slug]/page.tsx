@@ -26,13 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  const items = await prisma.rentalItem.findMany({
-    where: { isActive: true },
-    select: { slug: true },
-  });
-  return items.map((i) => ({ slug: i.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function RentalDetailPage({ params }: Props) {
   const { slug } = await params;

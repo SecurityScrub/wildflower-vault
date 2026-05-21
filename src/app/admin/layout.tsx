@@ -14,7 +14,7 @@ import {
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
-  const role = (session?.user as (typeof session.user & { role?: string }) | undefined)?.role;
+  const role = (session?.user as { role?: string } | undefined)?.role;
 
   if (!session?.user || role !== "ADMIN") {
     redirect("/portal/auth/signin?callbackUrl=/admin");

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { encrypt, decrypt } from "@/lib/utils";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return (session?.user as (typeof session.user & { role?: string }) | undefined)?.role === "ADMIN";
+  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
 }
 
 export async function GET(req: NextRequest) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const userId = (session!.user as typeof session.user & { id: string }).id;
+  const userId = (session!.user as { id: string }).id;
   const body = await req.json() as Record<string, unknown>;
   const { settings } = body as { settings: Array<{ key: string; value: string; isSecret?: boolean; label?: string; group?: string }> };
 

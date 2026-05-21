@@ -6,7 +6,7 @@ import { updateCalendarEvent } from "@/lib/google-calendar";
 import { z } from "zod";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return (session?.user as (typeof session.user & { role?: string }) | undefined)?.role === "ADMIN";
+  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
 }
 
 export async function GET(req: NextRequest) {

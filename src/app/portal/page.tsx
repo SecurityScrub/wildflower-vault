@@ -16,7 +16,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default async function PortalDashboard() {
   const session = await getServerSession(authOptions);
-  const userId = (session!.user as typeof session.user & { id: string }).id;
+  const userId = (session!.user as { id: string }).id;
 
   const bookings = await prisma.booking.findMany({
     where: { userId },

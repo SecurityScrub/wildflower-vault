@@ -12,8 +12,8 @@ export async function GET(_req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const userId = (session.user as typeof session.user & { id: string }).id;
-  const role = (session.user as typeof session.user & { role: string }).role;
+  const userId = (session.user as { id: string }).id;
+  const role = (session.user as { role?: string }).role;
 
   const booking = await prisma.booking.findUnique({
     where: { id },
@@ -33,8 +33,8 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const userId = (session.user as typeof session.user & { id: string }).id;
-  const role = (session.user as typeof session.user & { role: string }).role;
+  const userId = (session.user as { id: string }).id;
+  const role = (session.user as { role?: string }).role;
 
   const booking = await prisma.booking.findUnique({ where: { id } });
   if (!booking) return NextResponse.json({ error: "Not found" }, { status: 404 });

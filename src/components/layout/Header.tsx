@@ -79,7 +79,7 @@ export function Header() {
             {session ? (
               <Link
                 href={
-                  (session.user as typeof session.user & { role?: string })?.role === "ADMIN"
+                  (session.user as { role?: string })?.role === "ADMIN"
                     ? "/admin"
                     : "/portal"
                 }
@@ -89,7 +89,7 @@ export function Header() {
                 )}
               >
                 <User size={14} />
-                {(session.user as typeof session.user & { role?: string })?.role === "ADMIN"
+                {(session.user as { role?: string })?.role === "ADMIN"
                   ? "Admin"
                   : "My Account"}
               </Link>

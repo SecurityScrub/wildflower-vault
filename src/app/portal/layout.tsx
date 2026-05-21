@@ -26,9 +26,9 @@ export default async function PortalLayout({ children }: { children: React.React
             <div className="bg-white p-6 sticky top-28">
               <div className="mb-6">
                 <p className="font-serif text-lg text-brand-green-700">
-                  {session.user.name ?? "Welcome back"}
+                  {session?.user?.name ?? "Welcome back"}
                 </p>
-                <p className="font-sans text-xs text-gray-400 mt-1">{session.user.email}</p>
+                <p className="font-sans text-xs text-gray-400 mt-1">{session?.user?.email}</p>
               </div>
               <nav className="space-y-1">
                 {navItems.map((item) => (

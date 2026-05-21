@@ -6,7 +6,7 @@ import { slugify } from "@/lib/utils";
 import { z } from "zod";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return (session?.user as (typeof session.user & { role?: string }) | undefined)?.role === "ADMIN";
+  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
 }
 
 const RentalSchema = z.object({

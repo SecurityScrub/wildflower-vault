@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
       data: {
         bookingNumber,
         userId: session?.user
-          ? (session.user as typeof session.user & { id: string }).id
+          ? (session.user as { id: string }).id
           : undefined,
         guestEmail: data.email,
         guestName: data.name,
@@ -190,7 +190,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = (session.user as typeof session.user & { id: string }).id;
+  const userId = (session.user as { id: string }).id;
   const bookings = await prisma.booking.findMany({
     where: { userId },
     include: { items: { include: { rentalItem: true } } },

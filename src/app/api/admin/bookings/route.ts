@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
+import { BookingStatus } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { updateCalendarEvent } from "@/lib/google-calendar";
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "20");
 
   const where = {
-    ...(status ? { status: status as string } : {}),
+    ...(status ? { status: status as BookingStatus } : {}),
     ...(upcoming ? { eventDate: { gte: new Date() } } : {}),
   };
 

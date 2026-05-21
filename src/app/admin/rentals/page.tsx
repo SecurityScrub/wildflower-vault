@@ -176,7 +176,7 @@ export default function AdminRentalsPage() {
                     type={f.type ?? "text"}
                     className="input-field"
                     value={(editing as Record<string, unknown>)[f.key]?.toString() ?? ""}
-                    onChange={(e) => setEditing((p) => ({ ...p!, [f.key]: f.type === "number" ? e.target.value : e.target.value }))}
+                    onChange={(e) => setEditing((p) => ({ ...p!, [f.key]: e.target.value } as Partial<RentalItem>))}
                   />
                 </div>
               ))}
@@ -198,16 +198,16 @@ export default function AdminRentalsPage() {
               <div>
                 <label className="label">Features (one per line)</label>
                 <textarea rows={4} className="input-field resize-none font-mono text-xs"
-                  value={Array.isArray(editing.features) ? editing.features.join("\n") : (editing.features ?? "")}
-                  onChange={(e) => setEditing((p) => ({ ...p!, features: e.target.value }))}
+                  value={Array.isArray(editing.features) ? editing.features.join("\n") : ((editing.features as unknown as string) ?? "")}
+                  onChange={(e) => setEditing((p) => ({ ...p!, features: e.target.value as unknown as string[] }))}
                 />
               </div>
               <div>
                 <label className="label">Image URLs (one per line)</label>
                 <textarea rows={4} className="input-field resize-none font-mono text-xs"
                   placeholder="https://…"
-                  value={Array.isArray(editing.images) ? editing.images.join("\n") : (editing.images ?? "")}
-                  onChange={(e) => setEditing((p) => ({ ...p!, images: e.target.value }))}
+                  value={Array.isArray(editing.images) ? editing.images.join("\n") : ((editing.images as unknown as string) ?? "")}
+                  onChange={(e) => setEditing((p) => ({ ...p!, images: e.target.value as unknown as string[] }))}
                 />
               </div>
               <div className="flex gap-4">

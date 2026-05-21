@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { encrypt, decrypt } from "@/lib/utils";
 
-function isAdmin(session: { user?: { role?: string } | null } | null) {
-  return session?.user?.role === "ADMIN";
+function isAdmin(session: Session | null) {
+  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
 }
 
 export async function GET(req: NextRequest) {

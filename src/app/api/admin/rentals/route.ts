@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
 import { z } from "zod";
 
-function isAdmin(session: { user?: { role?: string } | null } | null) {
-  return session?.user?.role === "ADMIN";
+function isAdmin(session: Session | null) {
+  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
 }
 
 const RentalSchema = z.object({

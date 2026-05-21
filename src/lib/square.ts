@@ -26,7 +26,7 @@ export async function createSquareOrder(params: {
   const client = await getSquareClient();
   const config = await getSquareConfig();
 
-  const { result } = await client.orders.createOrder({
+  const { result } = await client.orders.create({
     order: {
       locationId: config.locationId,
       lineItems: params.lineItems,

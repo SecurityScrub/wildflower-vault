@@ -4,8 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { encrypt, decrypt } from "@/lib/utils";
 
-function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
+function isAdmin(session: { user?: { role?: string } | null } | null) {
+  return session?.user?.role === "ADMIN";
 }
 
 export async function GET(req: NextRequest) {

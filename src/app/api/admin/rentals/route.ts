@@ -5,8 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
 import { z } from "zod";
 
-function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return (session?.user as { role?: string } | undefined)?.role === "ADMIN";
+function isAdmin(session: { user?: { role?: string } | null } | null) {
+  return session?.user?.role === "ADMIN";
 }
 
 const RentalSchema = z.object({

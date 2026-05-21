@@ -1,14 +1,16 @@
-import { Client, Environment } from "square";
+import { SquareClient, SquareEnvironment, WebhooksHelper } from "square";
 import { getSquareConfig } from "./settings";
 
-let _client: Client | null = null;
+let _client: SquareClient | null = null;
 
-export async function getSquareClient(): Promise<Client> {
+export async function getSquareClient(): Promise<SquareClient> {
   const config = await getSquareConfig();
-  _client = new Client({
-    accessToken: config.accessToken,
+  _client = new SquareClient({
+    token: config.accessToken,
     environment:
-      config.environment === "production" ? Environment.Production : Environment.Sandbox,
+      config.environment === "production"
+        ? SquareEnvironment.Production
+        : SquareEnvironment.Sandbox,
   });
   return _client;
 }
@@ -59,12 +61,11 @@ export async function createPaymentLink(params: {
   return result.paymentLink;
 }
 
-export async function verifyWebhookSignature(
+export function verifyWebhookSignature(
   body: string,
   signature: string,
   webhookKey: string,
   url: string
-): Promise<boolean> {
-  const { WebhooksHelper } = await import("square");
+): boolean {
   return WebhooksHelper.isValidWebhookEventSignature(body, signature, webhookKey, url);
 }

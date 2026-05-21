@@ -17,28 +17,39 @@ async function getFeaturedRentals() {
 const testimonials = [
   {
     quote:
-      "The flower wall was absolutely breathtaking. Our photos turned out stunning and our guests couldn't stop talking about it.",
-    author: "Emily & Jake",
-    event: "Wedding at The Bricks",
+      "The shimmer wall was the highlight of the party. Every single guest took photos in front of it — the kids absolutely loved it.",
+    author: "Jessica M.",
+    event: "Sweet Sixteen Birthday Party",
   },
   {
     quote:
-      "From booking to day-of delivery, everything was seamless. The Wild Flower Vault made our vision come to life.",
+      "We rented the flower wall for our corporate gala and it completely transformed the space. So many compliments from our clients.",
+    author: "Priya & Associates",
+    event: "Annual Client Appreciation Gala",
+  },
+  {
+    quote:
+      "From booking to teardown, everything was seamless. The flower wall made our baby shower feel like a dream.",
     author: "Madison S.",
-    event: "Bridal Shower",
-  },
-  {
-    quote:
-      "Professional, beautiful, and exactly what we wanted. Would book again in a heartbeat.",
-    author: "Sarah & Tyler",
-    event: "Wedding Reception",
+    event: "Baby Shower",
   },
 ];
 
 const process = [
   { num: "01", title: "Browse", desc: "Explore our curated collection and find pieces that match your vision." },
   { num: "02", title: "Reserve", desc: "Pick your date and secure it with a simple deposit." },
-  { num: "03", title: "Celebrate", desc: "We deliver, set up, and take down. You just enjoy your day." },
+  { num: "03", title: "Celebrate", desc: "We deliver, set up, and take down. You just enjoy your event." },
+];
+
+const eventTypes = [
+  "Birthday Parties",
+  "Corporate Events",
+  "Baby Showers",
+  "Brand Activations",
+  "Bachelorette Parties",
+  "Sweet Sixteens",
+  "Holiday Parties",
+  "Grand Openings",
 ];
 
 export default async function V2HomePage() {
@@ -50,8 +61,8 @@ export default async function V2HomePage() {
       <section className="relative h-screen flex items-end overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-10" />
         <Image
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=90"
-          alt="Elegant flower wall backdrop at a wedding reception"
+          src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600&q=90"
+          alt="Vibrant event space with elegant floral backdrop and lighting"
           fill
           priority
           className="object-cover"
@@ -62,13 +73,13 @@ export default async function V2HomePage() {
               Des Moines, Iowa
             </p>
             <h1 className="font-serif text-5xl sm:text-7xl md:text-8xl font-light text-white leading-[0.95] mb-8">
-              Backdrops<br />
-              worth<br />
-              <em className="text-brand-pink-300">remembering</em>
+              Make every<br />
+              event<br />
+              <em className="text-brand-pink-300">unforgettable</em>
             </h1>
             <p className="text-white/60 text-sm leading-relaxed max-w-md mb-10">
-              Flower walls, photo booths, and ceremony pieces — delivered,
-              styled, and removed. You just celebrate.
+              Flower walls, shimmer walls, photo booths, and statement pieces —
+              delivered, styled, and removed. You just celebrate.
             </p>
             <div className="flex gap-4">
               <Link
@@ -85,7 +96,7 @@ export default async function V2HomePage() {
       {/* ─── Marquee strip ────────────────────────────────────────────── */}
       <section className="bg-brand-pink-50 py-5 overflow-hidden">
         <div className="flex items-center justify-center gap-12 text-brand-pink-400">
-          {["Flower Walls", "Photo Booths", "Ceremony Arches", "Backdrops", "Pampas Installations"].map((item) => (
+          {["Flower Walls", "Shimmer Walls", "Photo Booths", "Floral Arches", "Statement Decor"].map((item) => (
             <span key={item} className="font-serif text-sm italic whitespace-nowrap opacity-60">
               {item} &nbsp;·
             </span>
@@ -93,8 +104,27 @@ export default async function V2HomePage() {
         </div>
       </section>
 
+      {/* ─── Event types banner ───────────────────────────────────────── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-8">
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-brand-pink-500 mb-8 text-center">
+            Perfect for any occasion
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {eventTypes.map((event) => (
+              <span
+                key={event}
+                className="px-5 py-2.5 border border-brand-pink-100 text-brand-charcoal/60 font-sans text-[11px] tracking-[0.15em] uppercase"
+              >
+                {event}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Featured collection ──────────────────────────────────────── */}
-      <section className="py-28 bg-white">
+      <section className="py-28 bg-brand-pink-50/30">
         <div className="max-w-6xl mx-auto px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
             <div>
@@ -158,10 +188,10 @@ export default async function V2HomePage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: "Garden Rose Wall", price: 350 },
-                { name: "Greenery Wall", price: 325 },
-                { name: "360° Photo Booth", price: 495 },
-                { name: "Pampas Arch", price: 275 },
+                { name: "5D Flower Wall", price: 400 },
+                { name: "Shimmer Wall", price: 400 },
+                { name: "Photo Booth", price: 200 },
+                { name: "Floral Arch", price: 200 },
               ].map((item, i) => (
                 <Link key={item.name} href="/v2/rentals" className={`group block ${i === 0 ? "sm:col-span-2 sm:row-span-2" : ""}`}>
                   <div className={`bg-gradient-to-br from-brand-pink-50 to-brand-pink-100 flex items-center justify-center ${
@@ -181,7 +211,7 @@ export default async function V2HomePage() {
       </section>
 
       {/* ─── Process ──────────────────────────────────────────────────── */}
-      <section className="py-28 bg-brand-pink-50/50">
+      <section className="py-28 bg-white">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-20">
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-brand-pink-500 mb-3">
@@ -211,8 +241,8 @@ export default async function V2HomePage() {
       <section className="grid grid-cols-1 md:grid-cols-2 min-h-[70vh]">
         <div className="relative">
           <Image
-            src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1000&q=85"
-            alt="Romantic wedding setting"
+            src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1000&q=85"
+            alt="Festive event celebration with elegant decor"
             fill
             className="object-cover"
           />
@@ -220,14 +250,14 @@ export default async function V2HomePage() {
         <div className="bg-brand-charcoal flex items-center px-8 md:px-20 py-20">
           <div>
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-brand-pink-400 mb-4">
-              Ready to begin?
+              Ready to elevate your event?
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-light text-white leading-tight mb-6">
-              Your story<br />deserves a<br />beautiful backdrop
+              Every event<br />deserves a<br />stunning backdrop
             </h2>
             <p className="text-white/40 text-sm leading-relaxed mb-10 max-w-sm">
-              Limited dates available each season. Reserve your rental
-              now to make sure your day is exactly as you imagined.
+              From intimate baby showers to large-scale brand activations —
+              we bring the wow factor. Limited dates available each season.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -248,14 +278,14 @@ export default async function V2HomePage() {
       </section>
 
       {/* ─── Testimonials ─────────────────────────────────────────────── */}
-      <section className="py-28 bg-white">
+      <section className="py-28 bg-brand-pink-50/30">
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-16">
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-brand-pink-500 mb-3">
               Kind Words
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-light text-brand-charcoal">
-              From our couples
+              From our clients
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -280,7 +310,7 @@ export default async function V2HomePage() {
       </section>
 
       {/* ─── Instagram ────────────────────────────────────────────────── */}
-      <section className="py-14 bg-brand-pink-50/50">
+      <section className="py-14 bg-white">
         <div className="max-w-6xl mx-auto px-8 text-center">
           <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-brand-charcoal/30 mb-2">
             Follow along

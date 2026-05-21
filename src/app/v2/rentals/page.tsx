@@ -48,8 +48,8 @@ export default async function V2RentalsPage({
             Find your<br />perfect piece
           </h1>
           <p className="mt-6 text-brand-charcoal/40 text-sm max-w-md leading-relaxed">
-            Every piece is hand-selected and maintained to gallery standards.
-            Delivery, setup, and removal included with every booking.
+            Birthdays, corporate events, baby showers, brand activations — every
+            piece is hand-selected and includes delivery, setup, and removal.
           </p>
         </div>
       </section>
@@ -159,10 +159,10 @@ export default async function V2RentalsPage({
             Need help choosing?
           </p>
           <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-charcoal mb-4">
-            We&apos;d love to help curate your day
+            We&apos;d love to help curate your event
           </h2>
           <p className="text-brand-charcoal/40 text-sm mb-8 leading-relaxed">
-            Tell us about your event — style, venue, color palette — and
+            Tell us about your event — the vibe, venue, and colors — and
             we&apos;ll recommend the perfect combination.
           </p>
           <Link

@@ -1,13 +1,146 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
-import { Loader2, Plus, Edit2, Eye, EyeOff, Star } from "lucide-react";
+import { Loader2, Plus, Edit2, Eye, EyeOff, Star, Upload, X, GripVertical } from "lucide-react";
 import type { RentalItem } from "@prisma/client";
 
 interface RentalWithCount extends RentalItem {
   _count: { bookingItems: number };
+}
+
+function ImageUploader({
+  images,
+  onChange,
+}: {
+  images: string[];
+  onChange: (images: string[]) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+
+  const uploadFiles = useCallback(async (files: FileList | File[]) => {
+    const imageFiles = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (!imageFiles.length) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    imageFiles.forEach((f) => formData.append("files", f));
+
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      const data = (await res.json()) as { urls?: string[]; error?: string };
+      if (data.urls) {
+        onChange([...images, ...data.urls]);
+      }
+    } finally {
+      setUploading(false);
+    }
+  }, [images, onChange]);
+
+  function removeImage(index: number) {
+    onChange(images.filter((_, i) => i !== index));
+  }
+
+  function moveImage(from: number, to: number) {
+    if (to < 0 || to >= images.length) return;
+    const updated = [...images];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(to, 0, moved);
+    onChange(updated);
+  }
+
+  return (
+    <div>
+      <label className="label">Photos</label>
+
+      {images.length > 0 && (
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          {images.map((url, i) => (
+            <div key={url} className="relative group aspect-square bg-gray-100">
+              <Image
+                src={url}
+                alt={`Image ${i + 1}`}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors" />
+              <button
+                type="button"
+                onClick={() => removeImage(i)}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X size={12} />
+              </button>
+              <div className="absolute bottom-1 left-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                {i > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => moveImage(i, i - 1)}
+                    className="bg-white/90 text-gray-700 rounded px-1 py-0.5 text-[10px] font-bold"
+                  >
+                    &larr;
+                  </button>
+                )}
+                {i < images.length - 1 && (
+                  <button
+                    type="button"
+                    onClick={() => moveImage(i, i + 1)}
+                    className="bg-white/90 text-gray-700 rounded px-1 py-0.5 text-[10px] font-bold"
+                  >
+                    &rarr;
+                  </button>
+                )}
+              </div>
+              {i === 0 && (
+                <span className="absolute top-1 left-1 bg-brand-orange-700 text-white text-[9px] px-1.5 py-0.5 uppercase tracking-wider font-bold">
+                  Main
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          if (e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files);
+        }}
+        className={`border-2 border-dashed rounded p-6 text-center cursor-pointer transition-colors ${
+          dragOver
+            ? "border-brand-orange-500 bg-brand-orange-50"
+            : "border-gray-200 hover:border-brand-orange-300"
+        }`}
+        onClick={() => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.multiple = true;
+          input.accept = "image/*";
+          input.onchange = () => { if (input.files) uploadFiles(input.files); };
+          input.click();
+        }}
+      >
+        {uploading ? (
+          <div className="flex items-center justify-center gap-2 text-brand-orange-600">
+            <Loader2 size={18} className="animate-spin" />
+            <span className="text-sm">Uploading...</span>
+          </div>
+        ) : (
+          <>
+            <Upload size={20} className="mx-auto text-gray-400 mb-1" />
+            <p className="text-sm text-gray-500">Drag & drop images or click to browse</p>
+            <p className="text-xs text-gray-400 mt-1">JPG, PNG, WebP up to 10MB</p>
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function AdminRentalsPage() {
@@ -56,9 +189,7 @@ export default function AdminRentalsPage() {
         features: typeof editing.features === "string"
           ? (editing.features as string).split("\n").filter(Boolean)
           : editing.features,
-        images: typeof editing.images === "string"
-          ? (editing.images as string).split("\n").filter(Boolean)
-          : editing.images,
+        images: Array.isArray(editing.images) ? editing.images : [],
       }),
     });
 
@@ -104,7 +235,7 @@ export default function AdminRentalsPage() {
                   <div className="flex items-center gap-3">
                     {rental.images[0] ? (
                       <div className="w-10 h-10 relative overflow-hidden shrink-0">
-                        <Image src={rental.images[0]} alt={rental.name} fill className="object-cover" />
+                        <Image src={rental.images[0]} alt={rental.name} fill className="object-cover" unoptimized />
                       </div>
                     ) : (
                       <div className="w-10 h-10 bg-brand-orange-100 flex items-center justify-center shrink-0">
@@ -148,7 +279,7 @@ export default function AdminRentalsPage() {
         </table>
       </div>
 
-      {/* Edit / Create modal */}
+      {/* Edit / Create panel */}
       {editing && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-start justify-end" onClick={() => setEditing(null)}>
           <div className="bg-white w-full max-w-lg h-full overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
@@ -156,7 +287,7 @@ export default function AdminRentalsPage() {
               <h2 className="font-serif text-2xl text-brand-orange-700">
                 {editing.id ? "Edit Rental" : "New Rental"}
               </h2>
-              <button onClick={() => setEditing(null)} className="text-gray-400">✕</button>
+              <button onClick={() => setEditing(null)} className="text-gray-400">&#x2715;</button>
             </div>
 
             <div className="space-y-4">
@@ -202,14 +333,12 @@ export default function AdminRentalsPage() {
                   onChange={(e) => setEditing((p) => ({ ...p!, features: e.target.value as unknown as string[] }))}
                 />
               </div>
-              <div>
-                <label className="label">Image URLs (one per line)</label>
-                <textarea rows={4} className="input-field resize-none font-mono text-xs"
-                  placeholder="https://…"
-                  value={Array.isArray(editing.images) ? editing.images.join("\n") : ((editing.images as unknown as string) ?? "")}
-                  onChange={(e) => setEditing((p) => ({ ...p!, images: e.target.value as unknown as string[] }))}
-                />
-              </div>
+
+              <ImageUploader
+                images={Array.isArray(editing.images) ? editing.images : []}
+                onChange={(imgs) => setEditing((p) => ({ ...p!, images: imgs }))}
+              />
+
               <div className="flex gap-4">
                 <label className="flex items-center gap-2 text-sm">
                   <input type="checkbox" checked={editing.isActive ?? true}
@@ -226,7 +355,7 @@ export default function AdminRentalsPage() {
               <div className="flex gap-3 pt-2">
                 <button onClick={saveRental} disabled={saving} className="btn-primary flex items-center gap-2">
                   {saving ? <Loader2 size={14} className="animate-spin" /> : null}
-                  {saving ? "Saving…" : "Save"}
+                  {saving ? "Saving..." : "Save"}
                 </button>
                 <button onClick={() => setEditing(null)} className="btn-secondary">Cancel</button>
               </div>

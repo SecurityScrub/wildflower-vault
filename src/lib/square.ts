@@ -26,7 +26,7 @@ export async function createSquareOrder(params: {
   const client = await getSquareClient();
   const config = await getSquareConfig();
 
-  const { result } = await client.orders.create({
+  const response = await client.orders.create({
     order: {
       locationId: config.locationId,
       lineItems: params.lineItems,
@@ -35,7 +35,7 @@ export async function createSquareOrder(params: {
     idempotencyKey: `order-${params.referenceId}-${Date.now()}`,
   });
 
-  return result.order;
+  return response.order;
 }
 
 export async function createPaymentLink(params: {
@@ -46,7 +46,7 @@ export async function createPaymentLink(params: {
   const client = await getSquareClient();
   const config = await getSquareConfig();
 
-  const { result } = await client.checkout.createPaymentLink({
+  const response = await client.checkout.createPaymentLink({
     idempotencyKey: `link-${params.orderId}-${Date.now()}`,
     order: {
       locationId: config.locationId,
@@ -58,7 +58,7 @@ export async function createPaymentLink(params: {
     },
   });
 
-  return result.paymentLink;
+  return response.paymentLink;
 }
 
 export function verifyWebhookSignature(

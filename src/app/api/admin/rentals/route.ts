@@ -12,21 +12,21 @@ function isAdmin(session: Session | null) {
 
 const RentalSchema = z.object({
   name: z.string().min(1),
-  tagline: z.string().optional(),
+  tagline: z.string().nullish(),
   description: z.string().min(1),
-  longDesc: z.string().optional(),
+  longDesc: z.string().nullish(),
   price: z.number().positive(),
   depositPct: z.number().int().min(0).max(100).default(50),
   category: z.string().default("general"),
   images: z.array(z.string()).default([]),
   features: z.array(z.string()).default([]),
-  dimensions: z.string().optional(),
-  capacity: z.string().optional(),
+  dimensions: z.string().nullish(),
+  capacity: z.string().nullish(),
   isActive: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
-  metaTitle: z.string().optional(),
-  metaDesc: z.string().optional(),
+  metaTitle: z.string().nullish(),
+  metaDesc: z.string().nullish(),
 });
 
 export async function GET() {

@@ -88,7 +88,7 @@ export function Header() {
               </Link>
             ) : (
               <Link
-                href="/portal/auth/signin"
+                href="/auth/signin"
                 className={cn(
                   "flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-pink-500",
                   scrolled ? "text-brand-charcoal" : "text-white/90"
@@ -144,7 +144,7 @@ export function Header() {
               </Link>
             ) : (
               <Link
-                href="/portal/auth/signin"
+                href="/auth/signin"
                 onClick={() => setIsOpen(false)}
                 className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-orange-700"
               >

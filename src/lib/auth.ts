@@ -8,8 +8,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as NextAuthOptions["adapter"],
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/portal/auth/signin",
-    error: "/portal/auth/signin",
+    signIn: "/auth/signin",
+    error: "/auth/signin",
   },
   providers: [
     CredentialsProvider({

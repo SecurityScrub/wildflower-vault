@@ -93,7 +93,7 @@ export default function SignInPage() {
 
           <p className="text-center text-sm text-gray-400 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/portal/auth/register" className="text-brand-orange-700 hover:underline">
+            <Link href="/auth/register" className="text-brand-orange-700 hover:underline">
               Create one
             </Link>
           </p>

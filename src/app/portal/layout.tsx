@@ -10,7 +10,7 @@ export default async function PortalLayout({ children }: { children: React.React
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
-    redirect("/portal/auth/signin");
+    redirect("/auth/signin");
   }
 
   const navItems = [

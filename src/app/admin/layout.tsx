@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const role = (session?.user as { role?: string } | undefined)?.role;
 
   if (!session?.user || role !== "ADMIN") {
-    redirect("/portal/auth/signin?callbackUrl=/admin");
+    redirect("/auth/signin?callbackUrl=/admin");
   }
 
   const navItems = [

@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { formatShortDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminInquiriesPage() {
   const inquiries = await prisma.inquiry.findMany({
     orderBy: { createdAt: "desc" },

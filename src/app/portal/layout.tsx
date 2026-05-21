@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import Link from "next/link";
 import { LayoutDashboard, Calendar, User, LogOut } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
 

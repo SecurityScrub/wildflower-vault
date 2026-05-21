@@ -5,6 +5,8 @@ import Link from "next/link";
 import { formatCurrency, formatShortDate } from "@/lib/utils";
 import { Calendar, ChevronRight } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
   CONFIRMED: "bg-blue-100 text-blue-800",

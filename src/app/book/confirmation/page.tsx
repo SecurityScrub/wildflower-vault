@@ -3,6 +3,8 @@ import Link from "next/link";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { CheckCircle } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function ConfirmationPage({
   searchParams,
 }: {

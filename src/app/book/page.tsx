@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { BookingForm } from "@/components/booking/BookingForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Book a Rental",
   description: "Reserve your rental piece for your wedding or event. Secure checkout via Square.",

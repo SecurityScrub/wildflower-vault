@@ -3,6 +3,8 @@ import { formatShortDate, formatCurrency } from "@/lib/utils";
 import { addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, getDay } from "date-fns";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
   CONFIRMED: "bg-blue-100 text-blue-800 border-blue-200",

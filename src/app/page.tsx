@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { Star, ChevronRight, ArrowRight, Calendar, Shield, Heart } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "The Wild Flower Vault | Wedding & Event Rentals – Des Moines, Iowa",
   description:

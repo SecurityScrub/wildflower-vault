@@ -47,7 +47,7 @@ export async function createPaymentLink(params: {
   const client = await getSquareClient();
   const config = await getSquareConfig();
 
-  const response = await client.paymentLinks.create({
+  const response = await client.checkout.paymentLinks.create({
     idempotencyKey: `link-${params.orderId}-${Date.now()}`,
     order: {
       locationId: config.locationId,
@@ -62,11 +62,16 @@ export async function createPaymentLink(params: {
   return response.paymentLink;
 }
 
-export function verifyWebhookSignature(
+export async function verifyWebhookSignature(
   body: string,
   signature: string,
   webhookKey: string,
   url: string
-): boolean {
-  return WebhooksHelper.isValidWebhookEventSignature(body, signature, webhookKey, url);
+): Promise<boolean> {
+  return WebhooksHelper.verifySignature({
+    requestBody: body,
+    signatureHeader: signature,
+    signatureKey: webhookKey,
+    notificationUrl: url,
+  });
 }

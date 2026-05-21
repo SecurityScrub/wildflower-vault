@@ -69,7 +69,7 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-green-700">Orders</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">Orders</h1>
         <span className="font-sans text-sm text-gray-400">{data.total} total</span>
       </div>
 
@@ -92,7 +92,7 @@ export default function AdminOrdersPage() {
               onClick={() => { setStatus(s); setPage(1); }}
               className={`px-3 py-1.5 font-sans text-xs uppercase tracking-wider transition-colors ${
                 status === s
-                  ? "bg-brand-green-700 text-white"
+                  ? "bg-brand-orange-700 text-white"
                   : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-200"
               }`}
             >
@@ -104,7 +104,7 @@ export default function AdminOrdersPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="animate-spin text-brand-green-700" size={32} />
+          <Loader2 className="animate-spin text-brand-orange-700" size={32} />
         </div>
       ) : (
         <div className="bg-white overflow-hidden">
@@ -121,7 +121,7 @@ export default function AdminOrdersPage() {
             <tbody className="divide-y divide-gray-50">
               {filtered.map((b) => (
                 <tr key={b.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedBooking(b)}>
-                  <td className="px-4 py-4 font-sans text-xs text-brand-green-700 font-mono">
+                  <td className="px-4 py-4 font-sans text-xs text-brand-orange-700 font-mono">
                     {b.bookingNumber}
                   </td>
                   <td className="px-4 py-4">
@@ -134,7 +134,7 @@ export default function AdminOrdersPage() {
                   <td className="px-4 py-4 font-sans text-sm">
                     {formatShortDate(b.eventDate)}
                   </td>
-                  <td className="px-4 py-4 font-sans text-sm font-semibold text-brand-gold-600">
+                  <td className="px-4 py-4 font-sans text-sm font-semibold text-brand-pink-600">
                     {formatCurrency(Number(b.totalAmount))}
                   </td>
                   <td className="px-4 py-4">
@@ -196,7 +196,7 @@ export default function AdminOrdersPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <p className="font-sans text-xs text-gray-400">#{selectedBooking.bookingNumber}</p>
-                <h2 className="font-serif text-2xl text-brand-green-700 mt-1">
+                <h2 className="font-serif text-2xl text-brand-orange-700 mt-1">
                   {selectedBooking.guestName}
                 </h2>
               </div>
@@ -228,7 +228,7 @@ export default function AdminOrdersPage() {
               {selectedBooking.items.map((item) => (
                 <div key={item.id} className="flex justify-between text-sm py-2 border-b border-gray-50">
                   <span>{item.rentalItem.name} × {item.quantity}</span>
-                  <span className="text-brand-gold-600">{formatCurrency(Number(item.price))}</span>
+                  <span className="text-brand-pink-600">{formatCurrency(Number(item.price))}</span>
                 </div>
               ))}
             </div>

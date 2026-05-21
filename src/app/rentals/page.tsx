@@ -62,8 +62,8 @@ export default async function RentalsPage({
                   href={cat.value === "all" ? "/rentals" : `/rentals?category=${cat.value}`}
                   className={`whitespace-nowrap px-6 py-4 font-sans text-xs tracking-[0.2em] uppercase border-b-2 transition-colors ${
                     isActive
-                      ? "border-brand-green-700 text-brand-green-700"
-                      : "border-transparent text-gray-400 hover:text-brand-green-700"
+                      ? "border-brand-orange-700 text-brand-orange-700"
+                      : "border-transparent text-gray-400 hover:text-brand-orange-700"
                   }`}
                 >
                   {cat.label}
@@ -94,8 +94,8 @@ export default async function RentalsPage({
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-brand-green-50 to-brand-green-100 flex items-center justify-center">
-                        <span className="text-brand-green-300 font-serif text-sm text-center px-4">
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-orange-50 to-brand-orange-100 flex items-center justify-center">
+                        <span className="text-brand-orange-300 font-serif text-sm text-center px-4">
                           {item.name}
                         </span>
                       </div>
@@ -111,13 +111,13 @@ export default async function RentalsPage({
                   <div className="pt-5">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h2 className="font-serif text-xl text-brand-green-700">{item.name}</h2>
+                        <h2 className="font-serif text-xl text-brand-orange-700">{item.name}</h2>
                         {item.tagline && (
                           <p className="font-sans text-xs text-gray-400 mt-1">{item.tagline}</p>
                         )}
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="font-sans text-sm font-semibold text-brand-gold-600">
+                        <span className="font-sans text-sm font-semibold text-brand-pink-600">
                           {formatCurrency(Number(item.price))}
                         </span>
                         <span className="text-xs text-gray-400 block">/ event</span>
@@ -131,7 +131,7 @@ export default async function RentalsPage({
                         Dimensions: {item.dimensions}
                       </p>
                     )}
-                    <div className="mt-4 inline-flex items-center gap-1 font-sans text-xs text-brand-green-700 font-medium tracking-wider uppercase group-hover:gap-2 transition-all">
+                    <div className="mt-4 inline-flex items-center gap-1 font-sans text-xs text-brand-orange-700 font-medium tracking-wider uppercase group-hover:gap-2 transition-all">
                       Check Availability →
                     </div>
                   </div>
@@ -140,7 +140,7 @@ export default async function RentalsPage({
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="font-serif text-2xl text-brand-green-700 mb-4">
+              <p className="font-serif text-2xl text-brand-orange-700 mb-4">
                 No rentals found
               </p>
               <p className="text-gray-400 font-sans text-sm mb-8">

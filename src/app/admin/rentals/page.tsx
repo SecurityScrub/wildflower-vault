@@ -73,13 +73,13 @@ export default function AdminRentalsPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-brand-green-700" size={32} /></div>;
+    return <div className="flex justify-center py-20"><Loader2 className="animate-spin text-brand-orange-700" size={32} /></div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-green-700">Rentals</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">Rentals</h1>
         <button
           onClick={() => setEditing({ isActive: true, isFeatured: false, depositPct: 50, category: "general", features: [], images: [], sortOrder: 0 })}
           className="btn-primary py-2.5 px-5 text-xs flex items-center gap-2"
@@ -107,8 +107,8 @@ export default function AdminRentalsPage() {
                         <Image src={rental.images[0]} alt={rental.name} fill className="object-cover" />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 bg-brand-green-100 flex items-center justify-center shrink-0">
-                        <span className="text-brand-green-400 text-xs">img</span>
+                      <div className="w-10 h-10 bg-brand-orange-100 flex items-center justify-center shrink-0">
+                        <span className="text-brand-orange-400 text-xs">img</span>
                       </div>
                     )}
                     <div>
@@ -118,13 +118,13 @@ export default function AdminRentalsPage() {
                   </div>
                 </td>
                 <td className="px-4 py-4 font-sans text-sm text-gray-500">{rental.category}</td>
-                <td className="px-4 py-4 font-sans text-sm text-brand-gold-600 font-semibold">
+                <td className="px-4 py-4 font-sans text-sm text-brand-pink-600 font-semibold">
                   {formatCurrency(Number(rental.price))}
                 </td>
                 <td className="px-4 py-4 font-sans text-sm">{rental._count.bookingItems}</td>
                 <td className="px-4 py-4">
                   <button onClick={() => toggleFeatured(rental.id, rental.isFeatured)}>
-                    <Star size={16} className={rental.isFeatured ? "fill-brand-gold-500 text-brand-gold-500" : "text-gray-300"} />
+                    <Star size={16} className={rental.isFeatured ? "fill-brand-pink-500 text-brand-pink-500" : "text-gray-300"} />
                   </button>
                 </td>
                 <td className="px-4 py-4">
@@ -137,7 +137,7 @@ export default function AdminRentalsPage() {
                 <td className="px-4 py-4">
                   <button
                     onClick={() => setEditing({ ...rental, features: rental.features, images: rental.images })}
-                    className="text-brand-green-700 hover:text-brand-gold-500"
+                    className="text-brand-orange-700 hover:text-brand-pink-500"
                   >
                     <Edit2 size={14} />
                   </button>
@@ -153,7 +153,7 @@ export default function AdminRentalsPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-start justify-end" onClick={() => setEditing(null)}>
           <div className="bg-white w-full max-w-lg h-full overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="font-serif text-2xl text-brand-green-700">
+              <h2 className="font-serif text-2xl text-brand-orange-700">
                 {editing.id ? "Edit Rental" : "New Rental"}
               </h2>
               <button onClick={() => setEditing(null)} className="text-gray-400">✕</button>

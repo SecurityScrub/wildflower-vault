@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-serif text-3xl text-brand-green-700">Dashboard</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">Dashboard</h1>
         <p className="text-sm text-gray-400 mt-1">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
         </p>
@@ -70,7 +70,7 @@ export default async function AdminDashboard() {
           { label: "Total Bookings", value: totalBookings.toString(), icon: <Calendar size={20} />, color: "text-blue-600" },
           { label: "Pending Review", value: pendingCount.toString(), icon: <Clock size={20} />, color: "text-yellow-600", href: "/admin/orders?status=PENDING" },
           { label: "Confirmed Events", value: confirmedCount.toString(), icon: <TrendingUp size={20} />, color: "text-green-600" },
-          { label: "Revenue Collected", value: formatCurrency(revenue), icon: <DollarSign size={20} />, color: "text-brand-gold-600" },
+          { label: "Revenue Collected", value: formatCurrency(revenue), icon: <DollarSign size={20} />, color: "text-brand-pink-600" },
         ].map((kpi) => (
           <div key={kpi.label} className={`bg-white p-6 ${kpi.href ? "hover:shadow-md transition-shadow cursor-pointer" : ""}`}>
             {kpi.href ? (
@@ -97,9 +97,9 @@ export default async function AdminDashboard() {
       {unreadInquiries > 0 && (
         <Link
           href="/admin/inquiries"
-          className="flex items-center gap-3 bg-brand-gold-50 border border-brand-gold-200 p-4 text-sm text-brand-gold-800 hover:bg-brand-gold-100 transition-colors"
+          className="flex items-center gap-3 bg-brand-pink-50 border border-brand-pink-200 p-4 text-sm text-brand-pink-800 hover:bg-brand-pink-100 transition-colors"
         >
-          <span className="w-6 h-6 bg-brand-gold-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+          <span className="w-6 h-6 bg-brand-pink-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
             {unreadInquiries}
           </span>
           unread {unreadInquiries === 1 ? "inquiry" : "inquiries"} waiting for your response →
@@ -113,7 +113,7 @@ export default async function AdminDashboard() {
             <h2 className="font-sans font-semibold text-sm text-gray-700 uppercase tracking-wider">
               Upcoming Events
             </h2>
-            <Link href="/admin/calendar" className="text-xs text-brand-green-700 hover:underline">
+            <Link href="/admin/calendar" className="text-xs text-brand-orange-700 hover:underline">
               Calendar →
             </Link>
           </div>
@@ -124,7 +124,7 @@ export default async function AdminDashboard() {
               {upcomingBookings.map((b) => (
                 <Link key={b.id} href={`/admin/orders?id=${b.id}`} className="flex items-center justify-between p-5 hover:bg-gray-50">
                   <div>
-                    <p className="font-sans text-sm font-medium text-brand-green-700">
+                    <p className="font-sans text-sm font-medium text-brand-orange-700">
                       {b.guestName}
                     </p>
                     <p className="font-sans text-xs text-gray-400 mt-0.5">
@@ -132,7 +132,7 @@ export default async function AdminDashboard() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-sans text-sm font-semibold text-brand-gold-600">
+                    <p className="font-sans text-sm font-semibold text-brand-pink-600">
                       {formatShortDate(b.eventDate)}
                     </p>
                     <span className={`font-sans text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>
@@ -151,7 +151,7 @@ export default async function AdminDashboard() {
             <h2 className="font-sans font-semibold text-sm text-gray-700 uppercase tracking-wider">
               Recent Bookings
             </h2>
-            <Link href="/admin/orders" className="text-xs text-brand-green-700 hover:underline">
+            <Link href="/admin/orders" className="text-xs text-brand-orange-700 hover:underline">
               All orders →
             </Link>
           </div>
@@ -165,7 +165,7 @@ export default async function AdminDashboard() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-sans text-sm text-brand-gold-600">
+                  <span className="font-sans text-sm text-brand-pink-600">
                     {formatCurrency(Number(b.totalAmount))}
                   </span>
                   <span className={`font-sans text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Menu, X, ShoppingBag, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -38,25 +39,20 @@ export function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex flex-col items-start leading-none group"
+            className="flex items-center"
             aria-label="The Wild Flower Vault – Home"
           >
-            <span
+            <Image
+              src="/images/logo.png"
+              alt="The Wildflower Vault"
+              width={160}
+              height={60}
               className={cn(
-                "font-serif text-xl tracking-[0.2em] transition-colors",
-                scrolled ? "text-brand-green-700" : "text-white"
+                "h-14 w-auto transition-opacity",
+                scrolled ? "opacity-100" : "opacity-90 brightness-0 invert"
               )}
-            >
-              THE WILD FLOWER
-            </span>
-            <span
-              className={cn(
-                "font-sans text-xs tracking-[0.5em] uppercase transition-colors",
-                scrolled ? "text-brand-gold-500" : "text-brand-gold-300"
-              )}
-            >
-              VAULT
-            </span>
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -66,7 +62,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-gold-500",
+                  "font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-pink-500",
                   scrolled ? "text-brand-charcoal" : "text-white/90"
                 )}
               >
@@ -84,7 +80,7 @@ export function Header() {
                     : "/portal"
                 }
                 className={cn(
-                  "flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-gold-500",
+                  "flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-pink-500",
                   scrolled ? "text-brand-charcoal" : "text-white/90"
                 )}
               >
@@ -97,7 +93,7 @@ export function Header() {
               <Link
                 href="/portal/auth/signin"
                 className={cn(
-                  "flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-gold-500",
+                  "flex items-center gap-1.5 font-sans text-xs tracking-[0.2em] uppercase transition-colors hover:text-brand-pink-500",
                   scrolled ? "text-brand-charcoal" : "text-white/90"
                 )}
               >
@@ -135,7 +131,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-green-700"
+                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-orange-700"
               >
                 {link.label}
               </Link>
@@ -145,7 +141,7 @@ export function Header() {
               <Link
                 href="/portal"
                 onClick={() => setIsOpen(false)}
-                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-green-700"
+                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-orange-700"
               >
                 My Account
               </Link>
@@ -153,7 +149,7 @@ export function Header() {
               <Link
                 href="/portal/auth/signin"
                 onClick={() => setIsOpen(false)}
-                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-green-700"
+                className="font-sans text-sm tracking-[0.2em] uppercase text-brand-charcoal hover:text-brand-orange-700"
               >
                 Sign In
               </Link>

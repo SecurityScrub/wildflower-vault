@@ -53,7 +53,7 @@ export default function AccountPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-serif text-3xl text-brand-green-700">Account Settings</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">Account Settings</h1>
         <p className="text-sm text-gray-400 mt-1">Update your profile and password</p>
       </div>
 

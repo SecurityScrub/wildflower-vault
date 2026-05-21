@@ -13,7 +13,7 @@ export function Footer() {
               <div className="font-serif text-2xl tracking-[0.2em] text-white">
                 THE WILD FLOWER
               </div>
-              <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-gold-500 mt-1">
+              <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-pink-500 mt-1">
                 VAULT
               </div>
             </div>
@@ -27,7 +27,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="text-gray-400 hover:text-brand-gold-500 transition-colors"
+                className="text-gray-400 hover:text-brand-pink-500 transition-colors"
               >
                 <Instagram size={18} />
               </a>
@@ -36,7 +36,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="text-gray-400 hover:text-brand-gold-500 transition-colors"
+                className="text-gray-400 hover:text-brand-pink-500 transition-colors"
               >
                 <Facebook size={18} />
               </a>
@@ -45,7 +45,7 @@ export function Footer() {
 
           {/* Rentals */}
           <div>
-            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-gold-500 mb-5">
+            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-pink-500 mb-5">
               Rentals
             </h3>
             <ul className="space-y-3">
@@ -69,7 +69,7 @@ export function Footer() {
 
           {/* Quick links */}
           <div>
-            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-gold-500 mb-5">
+            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-pink-500 mb-5">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -93,16 +93,16 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-gold-500 mb-5">
+            <h3 className="font-sans text-xs tracking-[0.25em] uppercase text-brand-pink-500 mb-5">
               Contact
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-gray-400">
-                <MapPin size={14} className="mt-0.5 shrink-0 text-brand-gold-500" />
+                <MapPin size={14} className="mt-0.5 shrink-0 text-brand-pink-500" />
                 Des Moines, Iowa & surrounding areas
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
-                <Mail size={14} className="shrink-0 text-brand-gold-500" />
+                <Mail size={14} className="shrink-0 text-brand-pink-500" />
                 <a
                   href="mailto:hello@thewildflowervault.com"
                   className="hover:text-white transition-colors"

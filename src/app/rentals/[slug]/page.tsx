@@ -54,11 +54,11 @@ export default async function RentalDetailPage({ params }: Props) {
       <div className="pt-24 pb-6 bg-white border-b border-gray-100">
         <div className="container mx-auto px-6 max-w-7xl">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-sans text-gray-400">
-            <Link href="/" className="hover:text-brand-green-700">Home</Link>
+            <Link href="/" className="hover:text-brand-orange-700">Home</Link>
             <span>/</span>
-            <Link href="/rentals" className="hover:text-brand-green-700">Rentals</Link>
+            <Link href="/rentals" className="hover:text-brand-orange-700">Rentals</Link>
             <span>/</span>
-            <span className="text-brand-green-700">{item.name}</span>
+            <span className="text-brand-orange-700">{item.name}</span>
           </nav>
         </div>
       </div>
@@ -78,8 +78,8 @@ export default async function RentalDetailPage({ params }: Props) {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-green-100 to-brand-green-200 flex items-center justify-center">
-                    <span className="text-brand-green-400 font-serif text-xl">{item.name}</span>
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-orange-100 to-brand-orange-200 flex items-center justify-center">
+                    <span className="text-brand-orange-400 font-serif text-xl">{item.name}</span>
                   </div>
                 )}
               </div>
@@ -98,18 +98,18 @@ export default async function RentalDetailPage({ params }: Props) {
             <div className="lg:sticky lg:top-28">
               <Link
                 href="/rentals"
-                className="inline-flex items-center gap-2 font-sans text-xs text-gray-400 hover:text-brand-green-700 transition-colors mb-6"
+                className="inline-flex items-center gap-2 font-sans text-xs text-gray-400 hover:text-brand-orange-700 transition-colors mb-6"
               >
                 <ArrowLeft size={12} /> Back to Rentals
               </Link>
 
               {item.category && (
-                <span className="inline-block font-sans text-xs tracking-[0.25em] uppercase text-brand-gold-500 mb-3">
+                <span className="inline-block font-sans text-xs tracking-[0.25em] uppercase text-brand-pink-500 mb-3">
                   {item.category.replace("-", " ")}
                 </span>
               )}
 
-              <h1 className="font-serif text-4xl md:text-5xl text-brand-green-700 font-light leading-tight mb-3">
+              <h1 className="font-serif text-4xl md:text-5xl text-brand-orange-700 font-light leading-tight mb-3">
                 {item.name}
               </h1>
 
@@ -118,7 +118,7 @@ export default async function RentalDetailPage({ params }: Props) {
               )}
 
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="font-sans text-3xl font-semibold text-brand-gold-600">
+                <span className="font-sans text-3xl font-semibold text-brand-pink-600">
                   {formatCurrency(Number(item.price))}
                 </span>
                 <span className="text-sm text-gray-400 font-sans">per event</span>
@@ -130,13 +130,13 @@ export default async function RentalDetailPage({ params }: Props) {
 
               {item.dimensions && (
                 <p className="text-sm text-gray-500 mb-2">
-                  <span className="font-medium text-brand-green-700">Dimensions:</span>{" "}
+                  <span className="font-medium text-brand-orange-700">Dimensions:</span>{" "}
                   {item.dimensions}
                 </p>
               )}
               {item.capacity && (
                 <p className="text-sm text-gray-500 mb-5">
-                  <span className="font-medium text-brand-green-700">Capacity:</span>{" "}
+                  <span className="font-medium text-brand-orange-700">Capacity:</span>{" "}
                   {item.capacity}
                 </p>
               )}
@@ -145,7 +145,7 @@ export default async function RentalDetailPage({ params }: Props) {
                 <ul className="space-y-2 mb-8">
                   {item.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
-                      <Check size={14} className="text-brand-gold-500 shrink-0" />
+                      <Check size={14} className="text-brand-pink-500 shrink-0" />
                       <span className="font-sans text-sm text-gray-600">{feature}</span>
                     </li>
                   ))}
@@ -158,13 +158,13 @@ export default async function RentalDetailPage({ params }: Props) {
                 </p>
                 <div className="flex justify-between text-sm mt-2">
                   <span className="text-gray-600">Rental total</span>
-                  <span className="font-semibold text-brand-green-700">
+                  <span className="font-semibold text-brand-orange-700">
                     {formatCurrency(Number(item.price))}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm mt-2">
                   <span className="text-gray-600">Deposit to reserve ({item.depositPct}%)</span>
-                  <span className="font-semibold text-brand-gold-600">
+                  <span className="font-semibold text-brand-pink-600">
                     {formatCurrency(deposit)}
                   </span>
                 </div>
@@ -196,7 +196,7 @@ export default async function RentalDetailPage({ params }: Props) {
           <div className="mt-20">
             <div className="mb-8">
               <p className="section-subtitle">Availability</p>
-              <h2 className="font-serif text-3xl text-brand-green-700">Check Your Date</h2>
+              <h2 className="font-serif text-3xl text-brand-orange-700">Check Your Date</h2>
             </div>
             <BookingCalendar
               rentalItemId={item.id}

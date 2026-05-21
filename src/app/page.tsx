@@ -75,7 +75,7 @@ export default async function HomePage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-brand-green-900/60 z-10" />
+        <div className="absolute inset-0 bg-brand-orange-900/60 z-10" />
         <Image
           src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=90"
           alt="Elegant flower wall backdrop at a wedding reception"
@@ -84,12 +84,12 @@ export default async function HomePage() {
           className="object-cover object-center"
         />
         <div className="relative z-20 text-center text-white px-6 max-w-5xl mx-auto animate-fade-in">
-          <p className="font-sans text-xs tracking-[0.4em] uppercase text-brand-gold-300 mb-6">
+          <p className="font-sans text-xs tracking-[0.4em] uppercase text-brand-pink-300 mb-6">
             Wedding &amp; Event Rentals · Des Moines, Iowa
           </p>
           <h1 className="font-serif text-6xl md:text-8xl font-light leading-none mb-6">
             The Wild Flower <br />
-            <em className="text-brand-gold-300">Vault</em>
+            <em className="text-brand-pink-300">Vault</em>
           </h1>
           <p className="font-sans text-lg text-white/80 max-w-xl mx-auto mb-10 leading-relaxed">
             Stunning flower walls, photo booths, and backdrops that transform your wedding day
@@ -118,7 +118,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Intro strip ─────────────────────────────────────────────────── */}
-      <section className="bg-brand-green-700 text-white py-6">
+      <section className="bg-brand-orange-700 text-white py-6">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 text-center">
             {[
@@ -127,7 +127,7 @@ export default async function HomePage() {
               { icon: <Heart size={18} />, label: "Delivery & Setup Included" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
-                <span className="text-brand-gold-400">{item.icon}</span>
+                <span className="text-brand-pink-400">{item.icon}</span>
                 <span className="font-sans text-xs tracking-[0.2em] uppercase">{item.label}</span>
               </div>
             ))}
@@ -164,25 +164,25 @@ export default async function HomePage() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-brand-green-50">
-                        <span className="text-brand-green-300 font-serif text-lg">{item.name}</span>
+                      <div className="absolute inset-0 flex items-center justify-center bg-brand-orange-50">
+                        <span className="text-brand-orange-300 font-serif text-lg">{item.name}</span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-brand-green-900/0 group-hover:bg-brand-green-900/20 transition-colors duration-300" />
-                    <div className="absolute bottom-4 right-4 bg-brand-gold-500 text-white px-3 py-1.5 font-sans text-xs tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 bg-brand-orange-900/0 group-hover:bg-brand-orange-900/20 transition-colors duration-300" />
+                    <div className="absolute bottom-4 right-4 bg-brand-pink-500 text-white px-3 py-1.5 font-sans text-xs tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity">
                       View Details
                     </div>
                   </div>
                   <div className="pt-5 pb-2">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-serif text-xl text-brand-green-700">{item.name}</h3>
+                        <h3 className="font-serif text-xl text-brand-orange-700">{item.name}</h3>
                         {item.tagline && (
                           <p className="font-sans text-xs text-gray-400 mt-1">{item.tagline}</p>
                         )}
                       </div>
                       <div className="text-right">
-                        <span className="font-sans text-sm font-semibold text-brand-gold-600">
+                        <span className="font-sans text-sm font-semibold text-brand-pink-600">
                           {formatCurrency(Number(item.price))}
                         </span>
                         <span className="text-xs text-gray-400 block">/ event</span>
@@ -208,15 +208,15 @@ export default async function HomePage() {
               ].map((item) => (
                 <Link key={item.name} href="/rentals" className="group block card-hover">
                   <div className="relative aspect-[4/5] bg-brand-cream overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand-green-100 to-brand-green-200 flex items-center justify-center">
-                      <span className="text-brand-green-400 font-serif text-center px-6">{item.name}</span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-orange-100 to-brand-orange-200 flex items-center justify-center">
+                      <span className="text-brand-orange-400 font-serif text-center px-6">{item.name}</span>
                     </div>
                   </div>
                   <div className="pt-5 pb-2">
                     <div className="flex items-start justify-between">
-                      <h3 className="font-serif text-xl text-brand-green-700">{item.name}</h3>
+                      <h3 className="font-serif text-xl text-brand-orange-700">{item.name}</h3>
                       <div className="text-right">
-                        <span className="font-sans text-sm font-semibold text-brand-gold-600">
+                        <span className="font-sans text-sm font-semibold text-brand-pink-600">
                           {formatCurrency(item.price)}
                         </span>
                         <span className="text-xs text-gray-400 block">/ event</span>
@@ -248,13 +248,13 @@ export default async function HomePage() {
             {howItWorks.map((step, i) => (
               <div key={step.step} className="relative">
                 {i < howItWorks.length - 1 && (
-                  <div className="hidden md:block absolute top-6 left-full w-full h-px bg-brand-gold-200 -translate-y-1/2 z-0" />
+                  <div className="hidden md:block absolute top-6 left-full w-full h-px bg-brand-pink-200 -translate-y-1/2 z-0" />
                 )}
                 <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-full bg-brand-green-700 flex items-center justify-center mb-5">
+                  <div className="w-12 h-12 rounded-full bg-brand-orange-700 flex items-center justify-center mb-5">
                     <span className="font-sans text-xs text-white tracking-widest">{step.step}</span>
                   </div>
-                  <h3 className="font-serif text-xl text-brand-green-700 mb-3">{step.title}</h3>
+                  <h3 className="font-serif text-xl text-brand-orange-700 mb-3">{step.title}</h3>
                   <p className="font-sans text-sm text-gray-500 leading-relaxed">{step.desc}</p>
                 </div>
               </div>
@@ -265,7 +265,7 @@ export default async function HomePage() {
 
       {/* ─── Full-bleed CTA ───────────────────────────────────────────────── */}
       <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-brand-green-800/80 z-10" />
+        <div className="absolute inset-0 bg-brand-orange-800/80 z-10" />
         <Image
           src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1400&q=85"
           alt="Romantic wedding reception"
@@ -273,7 +273,7 @@ export default async function HomePage() {
           className="object-cover object-center"
         />
         <div className="relative z-20 container mx-auto px-6 max-w-3xl text-center text-white">
-          <p className="section-subtitle text-brand-gold-400 mb-6">Reserve Your Date</p>
+          <p className="section-subtitle text-brand-pink-400 mb-6">Reserve Your Date</p>
           <h2 className="font-serif text-5xl md:text-6xl font-light leading-tight mb-6">
             Your Story Deserves a Beautiful Backdrop
           </h2>
@@ -303,14 +303,14 @@ export default async function HomePage() {
               <div key={t.author} className="bg-brand-cream p-8 relative">
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} size={14} className="fill-brand-gold-500 text-brand-gold-500" />
+                    <Star key={i} size={14} className="fill-brand-pink-500 text-brand-pink-500" />
                   ))}
                 </div>
-                <p className="font-serif text-lg text-brand-green-800 italic leading-relaxed mb-6">
+                <p className="font-serif text-lg text-brand-orange-800 italic leading-relaxed mb-6">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div>
-                  <p className="font-sans font-semibold text-sm text-brand-green-700">{t.author}</p>
+                  <p className="font-sans font-semibold text-sm text-brand-orange-700">{t.author}</p>
                   <p className="font-sans text-xs text-gray-400 mt-0.5">{t.event}</p>
                 </div>
               </div>
@@ -320,9 +320,9 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Instagram strip placeholder ──────────────────────────────────── */}
-      <section className="bg-brand-green-700 py-12">
+      <section className="bg-brand-orange-700 py-12">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-gold-400 mb-2">
+          <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-pink-400 mb-2">
             Follow Along
           </p>
           <p className="font-serif text-2xl text-white mb-1">@thewildflowervault</p>

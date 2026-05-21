@@ -39,14 +39,14 @@ export default function SignInPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <Link href="/" className="inline-block">
-            <div className="font-serif text-2xl tracking-[0.2em] text-brand-green-700">
+            <div className="font-serif text-2xl tracking-[0.2em] text-brand-orange-700">
               THE WILD FLOWER
             </div>
-            <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-gold-500 mt-1">
+            <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-pink-500 mt-1">
               VAULT
             </div>
           </Link>
-          <h1 className="font-serif text-3xl text-brand-green-700 mt-6">Sign In</h1>
+          <h1 className="font-serif text-3xl text-brand-orange-700 mt-6">Sign In</h1>
           <p className="text-sm text-gray-400 mt-2">Access your customer portal</p>
         </div>
 
@@ -93,7 +93,7 @@ export default function SignInPage() {
 
           <p className="text-center text-sm text-gray-400 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/portal/auth/register" className="text-brand-green-700 hover:underline">
+            <Link href="/portal/auth/register" className="text-brand-orange-700 hover:underline">
               Create one
             </Link>
           </p>

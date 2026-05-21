@@ -41,7 +41,7 @@ export default async function BookPage({
           <h1 className="section-title">Book a Rental</h1>
           <p className="mt-4 text-gray-500 max-w-xl mx-auto font-sans text-sm leading-relaxed">
             Fill out the form below to secure your rental. A{" "}
-            <span className="text-brand-green-700 font-medium">deposit is required</span> to hold
+            <span className="text-brand-orange-700 font-medium">deposit is required</span> to hold
             your date, with the balance due before your event.
           </p>
         </div>

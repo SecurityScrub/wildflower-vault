@@ -49,7 +49,7 @@ export default function MyBookingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="animate-spin text-brand-green-700" size={32} />
+        <Loader2 className="animate-spin text-brand-orange-700" size={32} />
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default function MyBookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-serif text-3xl text-brand-green-700">My Bookings</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">My Bookings</h1>
         <p className="text-sm text-gray-400 mt-1">{bookings.length} booking{bookings.length !== 1 ? "s" : ""} total</p>
       </div>
 
@@ -69,7 +69,7 @@ export default function MyBookingsPage() {
 
       {bookings.length === 0 ? (
         <div className="bg-white p-12 text-center">
-          <p className="font-serif text-xl text-brand-green-700 mb-3">No bookings yet</p>
+          <p className="font-serif text-xl text-brand-orange-700 mb-3">No bookings yet</p>
           <p className="text-sm text-gray-400 mb-6">Ready to plan your event?</p>
           <a href="/book" className="btn-primary">Book a Rental</a>
         </div>
@@ -85,10 +85,10 @@ export default function MyBookingsPage() {
               <div key={booking.id} className="bg-white p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <p className="font-sans font-semibold text-sm text-brand-green-700">
+                    <p className="font-sans font-semibold text-sm text-brand-orange-700">
                       #{booking.bookingNumber}
                     </p>
-                    <p className="font-serif text-xl text-brand-green-700 mt-1">
+                    <p className="font-serif text-xl text-brand-orange-700 mt-1">
                       {booking.items.map((i) => i.rentalItem.name).join(", ")}
                     </p>
                   </div>
@@ -104,7 +104,7 @@ export default function MyBookingsPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm mb-4">
                   <div>
                     <p className="text-xs text-gray-400">Event Date</p>
-                    <p className="font-medium text-brand-green-700 mt-0.5">
+                    <p className="font-medium text-brand-orange-700 mt-0.5">
                       {formatShortDate(booking.eventDate)}
                     </p>
                   </div>
@@ -114,7 +114,7 @@ export default function MyBookingsPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-400">Total</p>
-                    <p className="font-medium text-brand-gold-600 mt-0.5">
+                    <p className="font-medium text-brand-pink-600 mt-0.5">
                       {formatCurrency(Number(booking.totalAmount))}
                     </p>
                   </div>

@@ -34,7 +34,7 @@ export default async function PortalDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-serif text-3xl text-brand-green-700">
+        <h1 className="font-serif text-3xl text-brand-orange-700">
           Welcome back{session?.user?.name ? `, ${session.user?.name?.split(" ")[0]}` : ""}
         </h1>
         <p className="text-sm text-gray-400 mt-1">
@@ -48,19 +48,19 @@ export default async function PortalDashboard() {
           <p className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-1">
             Upcoming Events
           </p>
-          <p className="font-serif text-3xl text-brand-green-700">{upcoming.length}</p>
+          <p className="font-serif text-3xl text-brand-orange-700">{upcoming.length}</p>
         </div>
         <div className="bg-white p-5">
           <p className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-1">
             Total Bookings
           </p>
-          <p className="font-serif text-3xl text-brand-green-700">{bookings.length}</p>
+          <p className="font-serif text-3xl text-brand-orange-700">{bookings.length}</p>
         </div>
         <div className="bg-white p-5">
           <p className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-1">
             Next Event
           </p>
-          <p className="font-serif text-lg text-brand-green-700">
+          <p className="font-serif text-lg text-brand-orange-700">
             {upcoming[0] ? formatShortDate(upcoming[0].eventDate) : "—"}
           </p>
         </div>
@@ -69,10 +69,10 @@ export default async function PortalDashboard() {
       {/* Upcoming bookings */}
       <div className="bg-white">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="font-serif text-xl text-brand-green-700">Upcoming Bookings</h2>
+          <h2 className="font-serif text-xl text-brand-orange-700">Upcoming Bookings</h2>
           <Link
             href="/portal/bookings"
-            className="font-sans text-xs text-brand-green-700 hover:text-brand-gold-500 flex items-center gap-1"
+            className="font-sans text-xs text-brand-orange-700 hover:text-brand-pink-500 flex items-center gap-1"
           >
             View all <ChevronRight size={12} />
           </Link>
@@ -80,7 +80,7 @@ export default async function PortalDashboard() {
 
         {upcoming.length === 0 ? (
           <div className="p-8 text-center">
-            <Calendar size={32} className="text-brand-green-200 mx-auto mb-3" />
+            <Calendar size={32} className="text-brand-orange-200 mx-auto mb-3" />
             <p className="font-sans text-sm text-gray-400 mb-4">No upcoming bookings</p>
             <Link href="/book" className="btn-primary text-xs py-2.5 px-6">
               Book a Rental
@@ -91,7 +91,7 @@ export default async function PortalDashboard() {
             {upcoming.map((booking) => (
               <div key={booking.id} className="p-6 flex items-start justify-between">
                 <div>
-                  <p className="font-sans font-semibold text-sm text-brand-green-700">
+                  <p className="font-sans font-semibold text-sm text-brand-orange-700">
                     {booking.items.map((i) => i.rentalItem.name).join(", ")}
                   </p>
                   <p className="font-sans text-xs text-gray-400 mt-0.5">
@@ -103,7 +103,7 @@ export default async function PortalDashboard() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-sans text-sm font-medium text-brand-gold-600">
+                  <span className="font-sans text-sm font-medium text-brand-pink-600">
                     {formatCurrency(Number(booking.totalAmount))}
                   </span>
                   <span

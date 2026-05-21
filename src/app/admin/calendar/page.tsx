@@ -50,7 +50,7 @@ export default async function AdminCalendarPage({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-green-700">
+        <h1 className="font-serif text-3xl text-brand-orange-700">
           {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
         </h1>
         <div className="flex gap-2">
@@ -98,13 +98,13 @@ export default async function AdminCalendarPage({
               <div
                 key={day.toISOString()}
                 className={`border-b border-r border-gray-100 min-h-[100px] p-2 ${
-                  isCurrentDay ? "bg-brand-green-50" : ""
+                  isCurrentDay ? "bg-brand-orange-50" : ""
                 }`}
               >
                 <div
                   className={`font-sans text-sm mb-1 w-7 h-7 flex items-center justify-center rounded-full ${
                     isCurrentDay
-                      ? "bg-brand-green-700 text-white font-semibold"
+                      ? "bg-brand-orange-700 text-white font-semibold"
                       : "text-gray-500"
                   }`}
                 >
@@ -151,7 +151,7 @@ export default async function AdminCalendarPage({
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="font-sans text-sm text-brand-gold-600">
+                  <span className="font-sans text-sm text-brand-pink-600">
                     {formatShortDate(b.eventDate)}
                   </span>
                   <span className={`font-sans text-xs px-2 py-0.5 rounded-full border ${STATUS_COLORS[b.status] ?? ""}`}>

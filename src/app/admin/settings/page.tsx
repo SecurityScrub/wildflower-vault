@@ -143,7 +143,7 @@ export default function AdminSettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="animate-spin text-brand-green-700" size={32} />
+        <Loader2 className="animate-spin text-brand-orange-700" size={32} />
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function AdminSettingsPage() {
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
-        <h1 className="font-serif text-3xl text-brand-green-700">Settings</h1>
+        <h1 className="font-serif text-3xl text-brand-orange-700">Settings</h1>
         <p className="text-sm text-gray-400 mt-1">
           Configure integrations and business settings. Changes take effect immediately.
         </p>
@@ -163,7 +163,7 @@ export default function AdminSettingsPage() {
             <div className="flex items-center gap-3">
               <span className="text-2xl">{group.icon}</span>
               <div>
-                <h2 className="font-serif text-xl text-brand-green-700">{group.title}</h2>
+                <h2 className="font-serif text-xl text-brand-orange-700">{group.title}</h2>
                 <p className="font-sans text-xs text-gray-400 mt-0.5">{group.description}</p>
               </div>
             </div>

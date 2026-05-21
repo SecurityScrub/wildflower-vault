@@ -22,11 +22,11 @@ export default async function ConfirmationPage({
   return (
     <div className="min-h-screen bg-brand-cream flex items-center justify-center px-6">
       <div className="w-full max-w-lg text-center">
-        <div className="w-20 h-20 bg-brand-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle size={40} className="text-brand-green-700" />
+        <div className="w-20 h-20 bg-brand-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle size={40} className="text-brand-orange-700" />
         </div>
 
-        <h1 className="font-serif text-4xl text-brand-green-700 mb-3">
+        <h1 className="font-serif text-4xl text-brand-orange-700 mb-3">
           {booking ? "Booking Received!" : "Thank You!"}
         </h1>
 
@@ -42,7 +42,7 @@ export default async function ConfirmationPage({
               <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-100">
                 <div>
                   <p className="font-sans text-xs text-gray-400 tracking-wider uppercase">Booking Reference</p>
-                  <p className="font-serif text-2xl text-brand-green-700 mt-1">{booking.bookingNumber}</p>
+                  <p className="font-serif text-2xl text-brand-orange-700 mt-1">{booking.bookingNumber}</p>
                 </div>
                 <span className="bg-yellow-100 text-yellow-800 font-sans text-xs px-2.5 py-1 rounded-full">
                   {booking.status}
@@ -60,7 +60,7 @@ export default async function ConfirmationPage({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Total</span>
-                  <span className="font-semibold text-brand-gold-600">{formatCurrency(Number(booking.totalAmount))}</span>
+                  <span className="font-semibold text-brand-pink-600">{formatCurrency(Number(booking.totalAmount))}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Deposit</span>

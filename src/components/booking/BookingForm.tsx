@@ -146,13 +146,13 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-sans font-medium transition-colors ${
                   step >= s
-                    ? "bg-brand-green-700 text-white"
+                    ? "bg-brand-orange-700 text-white"
                     : "bg-gray-100 text-gray-400"
                 }`}
               >
                 {s}
               </div>
-              <span className={`font-sans text-xs uppercase tracking-wider ${step >= s ? "text-brand-green-700" : "text-gray-400"}`}>
+              <span className={`font-sans text-xs uppercase tracking-wider ${step >= s ? "text-brand-orange-700" : "text-gray-400"}`}>
                 {s === 1 ? "Select Items" : s === 2 ? "Event Details" : "Review"}
               </span>
               {s < 3 && <div className="w-8 h-px bg-gray-200" />}
@@ -163,7 +163,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
         {/* ── Step 1: Select Items ── */}
         {step === 1 && (
           <div>
-            <h2 className="font-serif text-2xl text-brand-green-700 mb-6">Choose Your Rentals</h2>
+            <h2 className="font-serif text-2xl text-brand-orange-700 mb-6">Choose Your Rentals</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {rentals.map((rental) => {
                 const isSelected = selectedItems.some((i) => i.rental.id === rental.id);
@@ -173,8 +173,8 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
                     onClick={() => !isSelected && addItem(rental)}
                     className={`relative p-4 border-2 cursor-pointer transition-all ${
                       isSelected
-                        ? "border-brand-green-700 bg-brand-green-50"
-                        : "border-gray-100 hover:border-brand-green-300 bg-white"
+                        ? "border-brand-orange-700 bg-brand-orange-50"
+                        : "border-gray-100 hover:border-brand-orange-300 bg-white"
                     }`}
                   >
                     {rental.images[0] && (
@@ -182,12 +182,12 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
                         <Image src={rental.images[0]} alt={rental.name} fill className="object-cover" />
                       </div>
                     )}
-                    <h3 className="font-serif text-base text-brand-green-700">{rental.name}</h3>
-                    <p className="font-sans text-sm text-brand-gold-600 mt-1">
+                    <h3 className="font-serif text-base text-brand-orange-700">{rental.name}</h3>
+                    <p className="font-sans text-sm text-brand-pink-600 mt-1">
                       {formatCurrency(rental.price)} / event
                     </p>
                     {isSelected && (
-                      <div className="absolute top-3 right-3 w-6 h-6 bg-brand-green-700 rounded-full flex items-center justify-center">
+                      <div className="absolute top-3 right-3 w-6 h-6 bg-brand-orange-700 rounded-full flex items-center justify-center">
                         <span className="text-white text-xs">✓</span>
                       </div>
                     )}
@@ -208,7 +208,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
         {/* ── Step 2: Event Details ── */}
         {step === 2 && (
           <form onSubmit={(e) => { e.preventDefault(); setStep(3); }}>
-            <h2 className="font-serif text-2xl text-brand-green-700 mb-6">Event Details</h2>
+            <h2 className="font-serif text-2xl text-brand-orange-700 mb-6">Event Details</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
@@ -291,7 +291,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
         {/* ── Step 3: Review ── */}
         {step === 3 && (
           <form onSubmit={handleSubmit}>
-            <h2 className="font-serif text-2xl text-brand-green-700 mb-6">Review Your Order</h2>
+            <h2 className="font-serif text-2xl text-brand-orange-700 mb-6">Review Your Order</h2>
 
             <div className="bg-brand-cream p-6 mb-6 space-y-3">
               <h3 className="font-sans text-xs uppercase tracking-wider text-gray-500 mb-4">Event Details</h3>
@@ -305,7 +305,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
               ].map(([label, val]) => (
                 <div key={label} className="flex justify-between text-sm">
                   <span className="text-gray-500">{label}</span>
-                  <span className="text-brand-green-700 font-medium">{val}</span>
+                  <span className="text-brand-orange-700 font-medium">{val}</span>
                 </div>
               ))}
             </div>
@@ -318,7 +318,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
 
             <p className="text-sm text-gray-500 mb-6">
               You will be redirected to Square&apos;s secure checkout to pay your deposit of{" "}
-              <strong className="text-brand-gold-600">{formatCurrency(deposit)}</strong>.
+              <strong className="text-brand-pink-600">{formatCurrency(deposit)}</strong>.
             </p>
 
             <div className="flex gap-4">
@@ -347,7 +347,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
               {selectedItems.map((item) => (
                 <div key={item.rental.id} className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="font-sans text-sm font-medium text-brand-green-700 truncate">
+                    <p className="font-sans text-sm font-medium text-brand-orange-700 truncate">
                       {item.rental.name}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -367,7 +367,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-sans text-sm text-brand-gold-600">
+                    <p className="font-sans text-sm text-brand-pink-600">
                       {formatCurrency(item.rental.price * item.quantity)}
                     </p>
                     <button
@@ -385,7 +385,7 @@ export function BookingForm({ rentals, preselectedId, preselectedDate }: Props) 
                   <span className="text-gray-500">Subtotal</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm font-semibold text-brand-gold-600">
+                <div className="flex justify-between text-sm font-semibold text-brand-pink-600">
                   <span>Deposit due today</span>
                   <span>{formatCurrency(deposit)}</span>
                 </div>

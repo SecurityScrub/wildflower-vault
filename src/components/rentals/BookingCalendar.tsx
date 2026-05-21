@@ -52,7 +52,7 @@ export function BookingCalendar({ rentalItemId, bookedDates }: Props) {
 
         <div className="space-y-4">
           <div className="flex items-center gap-3 text-sm">
-            <div className="w-4 h-4 bg-brand-green-700 rounded-sm" />
+            <div className="w-4 h-4 bg-brand-orange-700 rounded-sm" />
             <span className="text-gray-600">Selected date</span>
           </div>
           <div className="flex items-center gap-3 text-sm">
@@ -65,11 +65,11 @@ export function BookingCalendar({ rentalItemId, bookedDates }: Props) {
           </div>
 
           {selected && (
-            <div className="mt-6 p-4 bg-white border border-brand-green-200">
+            <div className="mt-6 p-4 bg-white border border-brand-orange-200">
               <p className="font-sans text-sm text-gray-600 mb-3">
                 {isSelectedAvailable ? (
                   <>
-                    <span className="text-brand-green-700 font-semibold">
+                    <span className="text-brand-orange-700 font-semibold">
                       ✓ Available on{" "}
                       {selected.toLocaleDateString("en-US", {
                         weekday: "long",

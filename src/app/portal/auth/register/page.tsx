@@ -48,10 +48,10 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <Link href="/" className="inline-block">
-            <div className="font-serif text-2xl tracking-[0.2em] text-brand-green-700">THE WILD FLOWER</div>
-            <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-gold-500 mt-1">VAULT</div>
+            <div className="font-serif text-2xl tracking-[0.2em] text-brand-orange-700">THE WILD FLOWER</div>
+            <div className="font-sans text-xs tracking-[0.5em] uppercase text-brand-pink-500 mt-1">VAULT</div>
           </Link>
-          <h1 className="font-serif text-3xl text-brand-green-700 mt-6">Create Account</h1>
+          <h1 className="font-serif text-3xl text-brand-orange-700 mt-6">Create Account</h1>
           <p className="text-sm text-gray-400 mt-2">Manage your bookings in one place</p>
         </div>
         <div className="bg-white p-8 shadow-sm">
@@ -86,7 +86,7 @@ export default function RegisterPage() {
           </form>
           <p className="text-center text-sm text-gray-400 mt-6">
             Already have an account?{" "}
-            <Link href="/portal/auth/signin" className="text-brand-green-700 hover:underline">Sign in</Link>
+            <Link href="/portal/auth/signin" className="text-brand-orange-700 hover:underline">Sign in</Link>
           </p>
         </div>
       </div>

@@ -27,7 +27,7 @@ export default async function PortalLayout({ children }: { children: React.React
           <aside className="lg:col-span-1">
             <div className="bg-white p-6 sticky top-28">
               <div className="mb-6">
-                <p className="font-serif text-lg text-brand-green-700">
+                <p className="font-serif text-lg text-brand-orange-700">
                   {session?.user?.name ?? "Welcome back"}
                 </p>
                 <p className="font-sans text-xs text-gray-400 mt-1">{session?.user?.email}</p>
@@ -37,9 +37,9 @@ export default async function PortalLayout({ children }: { children: React.React
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center gap-3 px-3 py-2.5 font-sans text-sm text-gray-600 hover:bg-brand-green-50 hover:text-brand-green-700 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 font-sans text-sm text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-700 transition-colors"
                   >
-                    <span className="text-brand-gold-500">{item.icon}</span>
+                    <span className="text-brand-pink-500">{item.icon}</span>
                     {item.label}
                   </Link>
                 ))}

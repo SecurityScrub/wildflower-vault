@@ -32,10 +32,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Admin top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-14 bg-brand-green-700 flex items-center px-6">
+      <div className="fixed top-0 left-0 right-0 z-50 h-14 bg-brand-orange-700 flex items-center px-6">
         <Link href="/admin" className="flex items-center gap-3">
           <span className="font-serif text-white text-lg tracking-wider">Wild Flower Vault</span>
-          <span className="bg-brand-gold-500 text-white text-xs px-2 py-0.5 font-sans tracking-wider uppercase">
+          <span className="bg-brand-pink-500 text-white text-xs px-2 py-0.5 font-sans tracking-wider uppercase">
             Admin
           </span>
         </Link>
@@ -57,9 +57,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-3 px-3 py-2.5 font-sans text-sm text-gray-600 hover:bg-brand-green-50 hover:text-brand-green-700 rounded-sm transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 font-sans text-sm text-gray-600 hover:bg-brand-orange-50 hover:text-brand-orange-700 rounded-sm transition-colors"
               >
-                <span className="text-brand-gold-500">{item.icon}</span>
+                <span className="text-brand-pink-500">{item.icon}</span>
                 {item.label}
               </Link>
             ))}

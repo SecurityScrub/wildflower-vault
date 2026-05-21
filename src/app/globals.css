@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --background: 60 33% 99%;
-    --foreground: 0 0% 10%;
-    --brand-green: 91 47% 20%;
-    --brand-gold: 42 52% 54%;
+    --background: 15 50% 98%;
+    --foreground: 15 20% 14%;
+    --brand-orange: 17 70% 45%;
+    --brand-pink: 8 60% 68%;
   }
 
   html {
@@ -25,38 +25,38 @@
   }
 
   ::selection {
-    @apply bg-brand-green-200 text-brand-green-900;
+    @apply bg-brand-orange-200 text-brand-orange-900;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-3.5 bg-brand-green-700 text-brand-ivory
+    @apply inline-flex items-center justify-center px-8 py-3.5 bg-brand-orange-700 text-brand-ivory
            font-sans text-sm font-medium tracking-widest uppercase
-           hover:bg-brand-green-800 active:bg-brand-green-900
+           hover:bg-brand-orange-800 active:bg-brand-orange-900
            transition-colors duration-200 rounded-none;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-3.5 border border-brand-green-700 text-brand-green-700
+    @apply inline-flex items-center justify-center px-8 py-3.5 border border-brand-orange-700 text-brand-orange-700
            font-sans text-sm font-medium tracking-widest uppercase
-           hover:bg-brand-green-700 hover:text-brand-ivory
+           hover:bg-brand-orange-700 hover:text-brand-ivory
            transition-colors duration-200 rounded-none;
   }
 
   .btn-gold {
-    @apply inline-flex items-center justify-center px-8 py-3.5 bg-brand-gold-500 text-white
+    @apply inline-flex items-center justify-center px-8 py-3.5 bg-brand-pink-500 text-white
            font-sans text-sm font-medium tracking-widest uppercase
-           hover:bg-brand-gold-600 active:bg-brand-gold-700
+           hover:bg-brand-pink-600 active:bg-brand-pink-700
            transition-colors duration-200 rounded-none;
   }
 
   .section-title {
-    @apply font-serif text-4xl md:text-5xl text-brand-green-700 font-light leading-tight;
+    @apply font-serif text-4xl md:text-5xl text-brand-orange-700 font-light leading-tight;
   }
 
   .section-subtitle {
-    @apply font-sans text-sm tracking-[0.25em] uppercase text-brand-gold-500 mb-4;
+    @apply font-sans text-sm tracking-[0.25em] uppercase text-brand-pink-500 mb-4;
   }
 
   .card-hover {
@@ -65,7 +65,7 @@
 
   .input-field {
     @apply w-full border border-gray-200 px-4 py-3 text-sm font-sans text-brand-charcoal
-           focus:outline-none focus:border-brand-green-700 focus:ring-1 focus:ring-brand-green-700
+           focus:outline-none focus:border-brand-orange-700 focus:ring-1 focus:ring-brand-orange-700
            bg-white rounded-none transition-colors;
   }
 
@@ -80,7 +80,7 @@
   .divider-gold::before,
   .divider-gold::after {
     content: '';
-    @apply flex-1 h-px bg-brand-gold-300;
+    @apply flex-1 h-px bg-brand-pink-300;
   }
 }
 
@@ -90,17 +90,17 @@
 }
 
 .prose-brand strong {
-  @apply text-brand-green-700 font-semibold;
+  @apply text-brand-orange-700 font-semibold;
 }
 
 /* ─── Calendar overrides ────────────────────────────────────────────────────── */
 .rdp-button:hover:not([disabled]) {
-  background-color: theme('colors.brand.green.100') !important;
-  color: theme('colors.brand.green.700') !important;
+  background-color: theme('colors.brand.orange.100') !important;
+  color: theme('colors.brand.orange.700') !important;
 }
 
 .rdp-day_selected {
-  background-color: theme('colors.brand.green.700') !important;
+  background-color: theme('colors.brand.orange.700') !important;
 }
 
 /* ─── Loading shimmer ───────────────────────────────────────────────────────── */

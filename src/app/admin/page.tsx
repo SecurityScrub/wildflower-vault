@@ -41,7 +41,10 @@ export default async function AdminDashboard() {
       take: 5,
     }),
     prisma.booking.findMany({
-      include: { items: { include: { rentalItem: { select: { name: true } } } } },
+      include: {
+        items: { include: { rentalItem: { select: { name: true } } } },
+        user: { select: { name: true } },
+      },
       orderBy: { createdAt: "desc" },
       take: 8,
     }),

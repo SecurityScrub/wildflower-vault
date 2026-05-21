@@ -33,7 +33,7 @@ export default async function PortalDashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl text-brand-green-700">
-          Welcome back{session?.user?.name ? `, ${session.user.name.split(" ")[0]}` : ""}
+          Welcome back{session?.user?.name ? `, ${session.user?.name?.split(" ")[0]}` : ""}
         </h1>
         <p className="text-sm text-gray-400 mt-1">
           Manage your bookings and account details

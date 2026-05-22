@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 // ─── CORS allowlist ──────────────────────────────────────────────────────────
 //
@@ -55,18 +56,49 @@ function applyCorsHeaders(req: NextRequest, res: NextResponse): NextResponse {
   return res;
 }
 
-export function middleware(req: NextRequest) {
-  // Only run CORS logic for API routes.
-  if (req.nextUrl.pathname.startsWith("/api/")) {
+export async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+
+  // ── Admin gate (defense-in-depth) ─────────────────────────────────────────
+  //
+  // The /admin layout already enforces ADMIN role at the React layer; this
+  // middleware adds a second, lower-level check so an accidental missing
+  // role-guard on a future admin page can never expose data. The JWT is
+  // verified using the same NEXTAUTH_SECRET, so a forged/expired token will
+  // fail here.
+  if (path.startsWith("/admin")) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token) {
+      const signin = new URL("/auth/signin", req.url);
+      signin.searchParams.set("callbackUrl", path);
+      return NextResponse.redirect(signin);
+    }
+    if (token.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/portal", req.url));
+    }
+  }
+
+  // ── Same protection for /api/admin/* ──────────────────────────────────────
+  if (path.startsWith("/api/admin")) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (!token || token.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
+
+  // ── CORS for /api/* ───────────────────────────────────────────────────────
+  if (path.startsWith("/api/")) {
     if (req.method === "OPTIONS") {
       const res = new NextResponse(null, { status: 204 });
       return applyCorsHeaders(req, res);
     }
     return applyCorsHeaders(req, NextResponse.next());
   }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  // Match admin pages, all API routes, and skip Next internals + static assets.
+  matcher: ["/admin/:path*", "/api/:path*"],
 };

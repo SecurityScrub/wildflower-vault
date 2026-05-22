@@ -185,3 +185,27 @@ model Inquiry {
   repliedAt   DateTime?
   createdAt   DateTime @default(now())
 }
+
+// ─── Wedding Planning Leads ──────────────────────────────────────────────────
+
+model WeddingPlanningLead {
+  id              String    @id @default(cuid())
+  name            String
+  partnerName     String?
+  email           String
+  phone           String?
+  weddingDate     DateTime?
+  flexibleDate    Boolean   @default(false)
+  guestCount      Int?
+  venue           String?
+  budget          String?
+  planningType    String?
+  servicesNeeded  String[]
+  hearAboutUs     String?
+  message         String?   @db.Text
+  isRead          Boolean   @default(false)
+  contactedAt     DateTime?
+  createdAt       DateTime  @default(now())
+
+  @@index([createdAt])
+}

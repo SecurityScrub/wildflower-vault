@@ -10,6 +10,8 @@ import {
   Package,
   MessageSquare,
   Heart,
+  ClipboardList,
+  Users,
   LogOut,
 } from "lucide-react";
 
@@ -28,6 +30,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/calendar", label: "Calendar", icon: <Calendar size={16} /> },
     { href: "/admin/inquiries", label: "Inquiries", icon: <MessageSquare size={16} /> },
     { href: "/admin/wedding-planning-leads", label: "Wedding Leads", icon: <Heart size={16} /> },
+    { href: "/admin/consultations", label: "Consultations", icon: <ClipboardList size={16} /> },
+    { href: "/admin/weddings", label: "Weddings", icon: <Users size={16} /> },
     { href: "/admin/settings", label: "Settings", icon: <Settings size={16} /> },
   ];
 

@@ -3,14 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
-import { Star, ChevronRight, ArrowRight, Calendar, Shield, Heart } from "lucide-react";
+import { Star, ChevronRight, ArrowRight, Calendar, Shield, Heart, Sparkles, PartyPopper } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "The Wild Flower Vault | Wedding & Event Rentals – Des Moines, Iowa",
+  title: "The Wild Flower Vault | Wedding & Event Planning, Rentals – Des Moines, Iowa",
   description:
-    "Transform your wedding or event with our stunning flower walls, photo booths, and backdrops. Serving Des Moines and all of Iowa.",
+    "Wedding planning, event coordination, and rental pieces — flower walls, photo booths, and backdrops. Serving Des Moines and all of Iowa.",
 };
 
 async function getFeaturedRentals() {
@@ -92,8 +92,8 @@ export default async function HomePage() {
             <em className="text-brand-pink-300">Vault</em>
           </h1>
           <p className="font-sans text-lg text-white/80 max-w-xl mx-auto mb-10 leading-relaxed">
-            Stunning flower walls, photo booths, and backdrops that transform your wedding day
-            into something unforgettable.
+            Wedding planning, event coordination, and stunning rental pieces —
+            flower walls, photo booths, and backdrops that transform any occasion.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/rentals" className="btn-gold">
@@ -233,6 +233,49 @@ export default async function HomePage() {
             <Link href="/rentals" className="btn-secondary inline-flex items-center gap-2">
               Browse All Rentals <ArrowRight size={14} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Services ──────────────────────────────────────────────────────── */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-16">
+            <p className="section-subtitle">Our Services</p>
+            <h2 className="section-title">More Than Just Rentals</h2>
+            <p className="mt-4 text-gray-500 max-w-xl mx-auto font-sans text-sm leading-relaxed">
+              From full-service planning to day-of coordination, we bring your vision to life.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Heart size={24} />,
+                title: "Wedding Planning",
+                desc: "Full-service and partial planning for your big day — venue selection, vendor coordination, timeline management, and day-of direction.",
+              },
+              {
+                icon: <PartyPopper size={24} />,
+                title: "Event Planning",
+                desc: "Birthdays, corporate events, baby showers, brand activations, and more. We handle the logistics so you can enjoy the celebration.",
+              },
+              {
+                icon: <Sparkles size={24} />,
+                title: "Rental Pieces",
+                desc: "Flower walls, shimmer walls, photo booths, floral arches, and statement decor — delivered, styled, and removed after your event.",
+              },
+            ].map((s) => (
+              <div key={s.title} className="bg-brand-cream p-8 text-center card-hover">
+                <div className="w-14 h-14 rounded-full bg-brand-orange-100 flex items-center justify-center mx-auto mb-5 text-brand-orange-700">
+                  {s.icon}
+                </div>
+                <h3 className="font-serif text-xl text-brand-orange-700 mb-3">{s.title}</h3>
+                <p className="font-sans text-sm text-gray-500 leading-relaxed mb-5">{s.desc}</p>
+                <Link href="/inquiry" className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-500 hover:text-brand-pink-600 transition-colors inline-flex items-center gap-1.5">
+                  Get a Quote <ChevronRight size={12} />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

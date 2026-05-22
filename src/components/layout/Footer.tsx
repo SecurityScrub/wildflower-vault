@@ -18,8 +18,8 @@ export function Footer() {
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              Elegant photo walls, flower walls, and photo booth rentals for weddings and events
-              throughout Iowa.
+              Wedding planning, event coordination, and elegant rental pieces for
+              celebrations throughout Iowa.
             </p>
             <div className="flex gap-4">
               <a
@@ -74,10 +74,10 @@ export function Footer() {
             </h3>
             <ul className="space-y-3">
               {[
-                { label: "Book Now", href: "/book" },
-                { label: "Inquire", href: "/inquiry" },
+                { label: "Wedding Planning", href: "/inquiry" },
+                { label: "Event Planning", href: "/inquiry" },
+                { label: "Book a Rental", href: "/book" },
                 { label: "My Account", href: "/portal" },
-                { label: "FAQ", href: "/faq" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

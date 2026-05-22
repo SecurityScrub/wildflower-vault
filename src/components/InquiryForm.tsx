@@ -18,15 +18,26 @@ const EVENT_TYPES = [
   "Bridal Shower",
   "Baby Shower",
   "Birthday Party",
+  "Sweet Sixteen",
+  "Bachelorette Party",
   "Corporate Event",
+  "Brand Activation",
+  "Grand Opening",
+  "Holiday Party",
   "Other",
+];
+
+const SERVICE_OPTIONS = [
+  "Wedding Planning",
+  "Event Planning",
 ];
 
 const RENTAL_OPTIONS = [
   "Flower Wall",
+  "Shimmer Wall",
   "Photo Booth",
-  "Backdrop",
-  "Arch / Arbor",
+  "Floral Arch",
+  "Throne Chair",
   "Not sure yet",
 ];
 
@@ -114,7 +125,7 @@ export function InquiryForm() {
     return (
       <div className="text-center py-16">
         <div className="w-16 h-16 bg-brand-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <span className="text-brand-orange-700 text-2xl">✓</span>
+          <span className="text-brand-orange-700 text-2xl">&#10003;</span>
         </div>
         <h2 className="font-serif text-3xl text-brand-orange-700 mb-3">Message Sent!</h2>
         <p className="font-sans text-sm text-gray-500 max-w-sm mx-auto">
@@ -125,7 +136,7 @@ export function InquiryForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="label" htmlFor="inq-name">Your Name *</label>
@@ -183,14 +194,34 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <p className="label mb-3">Items you&apos;re interested in</p>
+        <p className="label mb-3">Services you&apos;re interested in</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {SERVICE_OPTIONS.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => toggleItem(item)}
+              className={`px-4 py-2.5 font-sans text-xs tracking-wider uppercase border transition-colors ${
+                form.items.includes(item)
+                  ? "bg-brand-pink-500 text-white border-brand-pink-500"
+                  : "border-gray-200 text-gray-500 hover:border-brand-pink-500 hover:text-brand-pink-500"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className="label mb-3">Rental pieces you&apos;re interested in</p>
         <div className="flex flex-wrap gap-2">
           {RENTAL_OPTIONS.map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => toggleItem(item)}
-              className={`px-4 py-2 font-sans text-xs tracking-wider uppercase border transition-colors ${
+              className={`px-4 py-2.5 font-sans text-xs tracking-wider uppercase border transition-colors ${
                 form.items.includes(item)
                   ? "bg-brand-orange-700 text-white border-brand-orange-700"
                   : "border-gray-200 text-gray-500 hover:border-brand-orange-700 hover:text-brand-orange-700"
@@ -203,13 +234,13 @@ export function InquiryForm() {
       </div>
 
       <div>
-        <label className="label" htmlFor="inq-message">Message *</label>
+        <label className="label" htmlFor="inq-message">Tell Us About Your Event *</label>
         <textarea
           id="inq-message"
           required
           rows={5}
           className="input-field resize-none"
-          placeholder="Tell us about your event, vision, and any questions you have…"
+          placeholder="Share your vision — event details, venue, guest count, color palette, or any questions you have…"
           value={form.message}
           onChange={(e) => updateField("message", e.target.value)}
         />

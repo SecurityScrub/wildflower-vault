@@ -95,6 +95,20 @@ export default async function HomePage() {
             Wedding planning, event coordination, and stunning rental pieces —
             flower walls, photo booths, and backdrops that transform any occasion.
           </p>
+          <div className="mb-6 inline-flex flex-col items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-5 max-w-md">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-pink-300">
+              Planning a Wedding?
+            </p>
+            <p className="font-serif text-lg text-white/90 leading-snug">
+              Full-service planning &amp; coordination in Iowa.
+            </p>
+            <Link
+              href="/wedding-planning"
+              className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-300 hover:text-white inline-flex items-center gap-1.5 transition-colors"
+            >
+              Inquire About Wedding Planning <ArrowRight size={12} />
+            </Link>
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/rentals" className="btn-gold">
               View Rentals
@@ -253,16 +267,22 @@ export default async function HomePage() {
                 icon: <Heart size={24} />,
                 title: "Wedding Planning",
                 desc: "Full-service and partial planning for your big day — venue selection, vendor coordination, timeline management, and day-of direction.",
+                href: "/wedding-planning",
+                cta: "Plan My Wedding",
               },
               {
                 icon: <PartyPopper size={24} />,
                 title: "Event Planning",
                 desc: "Birthdays, corporate events, baby showers, brand activations, and more. We handle the logistics so you can enjoy the celebration.",
+                href: "/inquiry",
+                cta: "Get a Quote",
               },
               {
                 icon: <Sparkles size={24} />,
                 title: "Rental Pieces",
                 desc: "Flower walls, shimmer walls, photo booths, floral arches, and statement decor — delivered, styled, and removed after your event.",
+                href: "/inquiry",
+                cta: "Get a Quote",
               },
             ].map((s) => (
               <div key={s.title} className="bg-brand-cream p-8 text-center card-hover">
@@ -271,8 +291,8 @@ export default async function HomePage() {
                 </div>
                 <h3 className="font-serif text-xl text-brand-orange-700 mb-3">{s.title}</h3>
                 <p className="font-sans text-sm text-gray-500 leading-relaxed mb-5">{s.desc}</p>
-                <Link href="/inquiry" className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-500 hover:text-brand-pink-600 transition-colors inline-flex items-center gap-1.5">
-                  Get a Quote <ChevronRight size={12} />
+                <Link href={s.href} className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-500 hover:text-brand-pink-600 transition-colors inline-flex items-center gap-1.5">
+                  {s.cta} <ChevronRight size={12} />
                 </Link>
               </div>
             ))}
@@ -323,6 +343,26 @@ export default async function HomePage() {
           <p className="font-sans text-white/70 mb-10 text-sm leading-relaxed max-w-xl mx-auto">
             Limited dates available. Secure your rental now before your date is gone.
           </p>
+
+          <div className="mb-12 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-7">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-pink-300 mb-3">
+              Planning a Wedding?
+            </p>
+            <h3 className="font-serif text-2xl md:text-3xl text-white mb-3 leading-snug">
+              Let us plan the day you&apos;ve dreamed about
+            </h3>
+            <p className="font-sans text-sm text-white/70 leading-relaxed mb-6 max-w-lg mx-auto">
+              From venue selection to day-of coordination, our wedding planning team handles
+              every detail. Free consultation, no obligation.
+            </p>
+            <Link
+              href="/wedding-planning"
+              className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
+            >
+              Inquire About Wedding Planning <ArrowRight size={14} />
+            </Link>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/book" className="btn-gold">
               Book Your Date

@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Link from "next/link";
-import { LayoutDashboard, Calendar, User, LogOut } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { LayoutDashboard, Calendar, User, Heart, LogOut } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +14,29 @@ export default async function PortalLayout({ children }: { children: React.React
     redirect("/auth/signin");
   }
 
+  const userId = (session.user as { id?: string }).id;
+  const email = session.user.email ?? "";
+  const hasWedding = userId || email
+    ? Boolean(
+        await prisma.wedding.findFirst({
+          where: {
+            OR: [
+              userId ? { primaryClientId: userId } : {},
+              userId ? { partnerClientId: userId } : {},
+              email ? { lead: { email } } : {},
+            ].filter((w) => Object.keys(w).length > 0),
+          },
+          select: { id: true },
+        }),
+      )
+    : false;
+
   const navItems = [
     { href: "/portal", label: "Dashboard", icon: <LayoutDashboard size={16} /> },
     { href: "/portal/bookings", label: "My Bookings", icon: <Calendar size={16} /> },
+    ...(hasWedding
+      ? [{ href: "/portal/wedding", label: "My Wedding", icon: <Heart size={16} /> }]
+      : []),
     { href: "/portal/account", label: "Account", icon: <User size={16} /> },
   ];
 

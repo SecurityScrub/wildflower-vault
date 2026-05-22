@@ -53,9 +53,29 @@ export async function POST(req: NextRequest) {
     const durationMin = data.durationMin ?? 30;
     const endsAt = new Date(scheduledAt.getTime() + durationMin * 60 * 1000);
 
+    // Lead linkage: an unauthenticated caller can supply `leadId`, but we only
+    // honor it if the email on the request matches the lead's stored email.
+    // Without this check, anyone who guessed or saw a lead cuid could promote
+    // that lead's pipeline status and steer its confirmation email to an
+    // arbitrary address (security-review finding #1).
+    const submittedEmail = data.email.toLowerCase().trim();
+    let verifiedLeadId: string | null = null;
+    if (data.leadId) {
+      const lead = await prisma.weddingPlanningLead.findUnique({
+        where: { id: data.leadId },
+        select: { id: true, email: true },
+      });
+      if (lead && lead.email.toLowerCase().trim() === submittedEmail) {
+        verifiedLeadId = lead.id;
+      }
+      // If the email doesn't match, we silently drop the linkage rather than
+      // erroring — the consultation still gets recorded so the planner can
+      // see and manually associate it if appropriate.
+    }
+
     const consultation = await prisma.consultation.create({
       data: {
-        leadId: data.leadId ?? null,
+        leadId: verifiedLeadId,
         name: data.name,
         email: data.email,
         phone: data.phone ?? null,
@@ -67,9 +87,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (data.leadId) {
+    if (verifiedLeadId) {
       await prisma.weddingPlanningLead.update({
-        where: { id: data.leadId },
+        where: { id: verifiedLeadId },
         data: { status: "CONSULTATION_BOOKED", isRead: true, contactedAt: new Date() },
       });
     }
@@ -134,7 +154,7 @@ export async function POST(req: NextRequest) {
         durationMin,
         location: consultation.location,
         notes: data.notes,
-        leadId: data.leadId,
+        leadId: verifiedLeadId,
       }),
     ]).catch((err) => console.error("[consultation] email send failed", err));
 

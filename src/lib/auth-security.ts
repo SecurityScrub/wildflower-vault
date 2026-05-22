@@ -75,8 +75,15 @@ export async function verifyMfaCode(userId: string, code: string): Promise<MfaVe
 }
 
 export function userNeedsMfa(role: string | null | undefined): boolean {
-  // Policy: every account *except* the single admin account requires MFA.
-  return role !== "ADMIN";
+  // MFA policy: every account, including admin. Exempting any role would
+  // leak that role's identity to anyone with a valid password (the response
+  // shape of /api/auth/begin would differ), so we treat all accounts the
+  // same. An operator can set ADMIN_MFA_EXEMPT=1 to opt admins out, but be
+  // aware that doing so reintroduces the role-disclosure oracle and removes
+  // the second factor from the highest-value account.
+  if (role === "ADMIN" && process.env.ADMIN_MFA_EXEMPT === "1") return false;
+  void role;
+  return true;
 }
 
 // ─── Rate limiting / account lockout ────────────────────────────────────────

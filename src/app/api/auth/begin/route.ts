@@ -88,24 +88,24 @@ export async function POST(req: NextRequest) {
     return genericFail;
   }
 
-  // Password is correct.
-  if (!userNeedsMfa(user.role)) {
-    return NextResponse.json({ mfaRequired: false });
+  // Password is correct. From here on the response shape is identical for
+  // every account regardless of role — anything else would leak whether the
+  // authenticated account is an admin to an unauthenticated caller who
+  // happens to know a valid password (see security-review finding #2).
+  const needsMfa = userNeedsMfa(user.role);
+
+  if (needsMfa) {
+    const code = await issueMfaCode(user.id);
+    try {
+      await sendMfaCode(user.email, code, user.name);
+    } catch (err) {
+      console.error("[auth/begin] sendMfaCode failed", err);
+      return NextResponse.json(
+        { error: "Could not send verification code. Try again shortly." },
+        { status: 500 },
+      );
+    }
   }
 
-  // Issue & send code.
-  const code = await issueMfaCode(user.id);
-  try {
-    await sendMfaCode(user.email, code, user.name);
-  } catch (err) {
-    console.error("[auth/begin] sendMfaCode failed", err);
-    // We deliberately don't surface the email-failure to the user — but we
-    // also can't authenticate them without a code. Tell them generically.
-    return NextResponse.json(
-      { error: "Could not send verification code. Try again shortly." },
-      { status: 500 },
-    );
-  }
-
-  return NextResponse.json({ mfaRequired: true });
+  return NextResponse.json({ mfaRequired: needsMfa });
 }

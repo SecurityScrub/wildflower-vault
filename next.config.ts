@@ -21,6 +21,18 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          // HSTS: tell browsers to only ever load this domain over HTTPS.
+          // 2-year max-age + includeSubDomains is the production-hardened
+          // recommendation; only applied when running in production so dev
+          // over http://localhost still works.
+          ...(process.env.NODE_ENV === "production"
+            ? [
+                {
+                  key: "Strict-Transport-Security",
+                  value: "max-age=63072000; includeSubDomains; preload",
+                },
+              ]
+            : []),
         ],
       },
     ];

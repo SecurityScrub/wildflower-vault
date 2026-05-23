@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { validatePassword, PASSWORD_POLICY } from "@/lib/password";
-import { verifyTurnstile } from "@/lib/turnstile";
+import { verifyTurnstile, turnstileEnforced } from "@/lib/turnstile";
 import { checkIpRate, clientIp } from "@/lib/auth-security";
 
 const RegisterSchema = z.object({
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as unknown;
     const data = RegisterSchema.parse(body);
 
-    if (process.env.TURNSTILE_SECRET_KEY) {
+    if (await turnstileEnforced()) {
       if (!data.turnstileToken) {
         return NextResponse.json({ error: "Security check required." }, { status: 400 });
       }

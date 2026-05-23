@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { verifyTurnstile } from "@/lib/turnstile";
+import { verifyTurnstile, turnstileEnforced } from "@/lib/turnstile";
 import {
   issueMfaCode,
   isAccountLocked,
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   }
 
   const turnstileToken = parsed.turnstileToken;
-  if (process.env.TURNSTILE_SECRET_KEY) {
+  if (await turnstileEnforced()) {
     if (!turnstileToken) {
       return NextResponse.json({ error: "Security check required." }, { status: 400 });
     }

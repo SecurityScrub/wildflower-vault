@@ -85,47 +85,44 @@ export default async function HomePage() {
         />
         <div className="relative z-20 text-center text-white px-5 sm:px-6 max-w-5xl mx-auto w-full animate-fade-in">
           <p className="font-sans text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-brand-pink-300 mb-4 sm:mb-6">
-            Wedding &amp; Event Rentals · Des Moines, Iowa
+            Free Consultations · Des Moines, Iowa
           </p>
           <h1 className="font-serif text-5xl sm:text-6xl md:text-8xl font-light leading-[1.05] sm:leading-none mb-4 sm:mb-6">
             The Wild Flower <br />
             <em className="text-brand-pink-300">Vault</em>
           </h1>
           <p className="font-sans text-base sm:text-lg text-white/85 max-w-xl mx-auto mb-7 sm:mb-10 leading-relaxed">
-            Wedding planning, event coordination, and stunning rental pieces —
-            flower walls, photo booths, and backdrops that transform any occasion.
+            Iowa&apos;s full-service wedding planning team. Book a free consultation —
+            we&apos;ll talk through your vision, timeline, and budget. No obligation.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Link
               href="/wedding-planning#inquire"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-4 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
             >
-              Plan My Wedding <ArrowRight size={14} />
+              Book Free Consultation <ArrowRight size={14} />
             </Link>
             <Link
               href="/rentals"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-orange-700 hover:bg-brand-orange-800 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-4 border border-white/60 text-white font-sans text-sm font-medium tracking-widest uppercase hover:bg-white/10 transition-colors rounded-none"
             >
-              View Rentals
-            </Link>
-            <Link
-              href="/book"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 border border-white/60 text-white font-sans text-sm font-medium tracking-widest uppercase hover:bg-white/10 transition-colors rounded-none"
-            >
-              Book Your Date
+              Browse Rentals
             </Link>
           </div>
+          <p className="font-sans text-[11px] sm:text-xs text-white/60 mt-5 sm:mt-6 tracking-wider">
+            Free · 24–48 hr response · No obligation
+          </p>
         </div>
       </section>
 
-      {/* ─── Intro strip ─────────────────────────────────────────────────── */}
+      {/* ─── Intro strip: lead with consultation value props ──────────────── */}
       <section className="bg-brand-orange-700 text-white py-5 sm:py-6">
         <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 md:gap-16 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 md:gap-12 text-center">
             {[
-              { icon: <Calendar size={18} />, label: "Easy Online Booking" },
-              { icon: <Shield size={18} />, label: "Secure Square Payments" },
-              { icon: <Heart size={18} />, label: "Delivery & Setup Included" },
+              { icon: <Heart size={18} />, label: "Free Consultations" },
+              { icon: <Calendar size={18} />, label: "24–48 hr Response" },
+              { icon: <Shield size={18} />, label: "All of Iowa" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
                 <span className="text-brand-pink-400">{item.icon}</span>
@@ -133,6 +130,27 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─── Consultation-focused band right under the fold ───────────────── */}
+      <section className="py-14 sm:py-20 bg-brand-cream">
+        <div className="container mx-auto px-5 sm:px-6 max-w-3xl text-center">
+          <p className="section-subtitle">Start Here</p>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-orange-700 font-light leading-tight mb-5">
+            Book Your Free Consultation
+          </h2>
+          <p className="font-sans text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl mx-auto mb-7 sm:mb-8">
+            Every wedding starts with a conversation. Tell us about your day and we&apos;ll
+            be in touch within 24&ndash;48 hours to set up a 30-minute consultation —
+            phone, video, or in-person at our Des Moines studio.
+          </p>
+          <Link
+            href="/wedding-planning#inquire"
+            className="inline-flex items-center justify-center px-7 sm:px-8 py-4 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
+          >
+            Get Started <ArrowRight size={14} />
+          </Link>
         </div>
       </section>
 
@@ -253,32 +271,60 @@ export default async function HomePage() {
               {
                 icon: <Heart size={24} />,
                 title: "Wedding Planning",
-                desc: "Full-service and partial planning for your big day — venue selection, vendor coordination, timeline management, and day-of direction.",
+                desc: "Full-service, partial, and day-of coordination. Venue selection, vendor curation, timelines, and day-of direction.",
                 href: "/wedding-planning#inquire",
-                cta: "Plan My Wedding",
+                cta: "Book Free Consultation",
+                featured: true,
               },
               {
                 icon: <PartyPopper size={24} />,
                 title: "Event Planning",
-                desc: "Birthdays, corporate events, baby showers, brand activations, and more. We handle the logistics so you can enjoy the celebration.",
+                desc: "Birthdays, corporate events, baby showers, brand activations. We handle the logistics so you can enjoy the celebration.",
                 href: "/inquiry",
                 cta: "Get a Quote",
+                featured: false,
               },
               {
                 icon: <Sparkles size={24} />,
                 title: "Rental Pieces",
-                desc: "Flower walls, shimmer walls, photo booths, floral arches, and statement decor — delivered, styled, and removed after your event.",
-                href: "/inquiry",
-                cta: "Get a Quote",
+                desc: "Flower walls, shimmer walls, photo booths, floral arches, and statement decor — delivered, styled, and removed.",
+                href: "/rentals",
+                cta: "Browse Rentals",
+                featured: false,
               },
             ].map((s) => (
-              <div key={s.title} className="bg-brand-cream p-6 sm:p-8 text-center card-hover">
-                <div className="w-14 h-14 rounded-full bg-brand-orange-100 flex items-center justify-center mx-auto mb-5 text-brand-orange-700">
+              <div
+                key={s.title}
+                className={`p-6 sm:p-8 text-center card-hover relative ${
+                  s.featured
+                    ? "bg-brand-pink-50 ring-2 ring-brand-pink-500"
+                    : "bg-brand-cream"
+                }`}
+              >
+                {s.featured && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-pink-500 text-white font-sans text-[10px] tracking-[0.25em] uppercase px-3 py-1">
+                    Most Popular
+                  </span>
+                )}
+                <div
+                  className={`w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5 ${
+                    s.featured
+                      ? "bg-brand-pink-500 text-white"
+                      : "bg-brand-orange-100 text-brand-orange-700"
+                  }`}
+                >
                   {s.icon}
                 </div>
                 <h3 className="font-serif text-xl text-brand-orange-700 mb-3">{s.title}</h3>
-                <p className="font-sans text-sm text-gray-500 leading-relaxed mb-5">{s.desc}</p>
-                <Link href={s.href} className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-500 hover:text-brand-pink-600 transition-colors inline-flex items-center gap-1.5">
+                <p className="font-sans text-sm text-gray-600 leading-relaxed mb-5">{s.desc}</p>
+                <Link
+                  href={s.href}
+                  className={`font-sans text-xs tracking-[0.2em] uppercase transition-colors inline-flex items-center gap-1.5 ${
+                    s.featured
+                      ? "text-brand-pink-600 hover:text-brand-pink-700 font-semibold"
+                      : "text-brand-pink-500 hover:text-brand-pink-600"
+                  }`}
+                >
                   {s.cta} <ChevronRight size={12} />
                 </Link>
               </div>
@@ -323,44 +369,32 @@ export default async function HomePage() {
           className="object-cover object-center"
         />
         <div className="relative z-20 container mx-auto px-5 sm:px-6 max-w-3xl text-center text-white">
-          <p className="section-subtitle text-brand-pink-400 mb-5 sm:mb-6">Reserve Your Date</p>
+          <p className="section-subtitle text-brand-pink-400 mb-5 sm:mb-6">Ready When You Are</p>
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light leading-tight mb-5 sm:mb-6">
-            Your Story Deserves a Beautiful Backdrop
+            Let&apos;s Plan the Wedding You&apos;ve Dreamed About
           </h2>
-          <p className="font-sans text-white/75 mb-8 sm:mb-10 text-sm leading-relaxed max-w-xl mx-auto">
-            Limited dates available. Secure your rental now before your date is gone.
+          <p className="font-sans text-white/80 mb-8 sm:mb-10 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+            A free 30-minute consultation is the easiest way to start. Tell us about your
+            day and we&apos;ll respond within 24&ndash;48 hours.
           </p>
 
-          <div className="mb-10 sm:mb-12 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border border-white/20 px-5 sm:px-8 py-6 sm:py-7">
-            <p className="font-sans text-[10px] sm:text-xs tracking-[0.3em] uppercase text-brand-pink-300 mb-3">
-              Planning a Wedding?
-            </p>
-            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-white mb-3 leading-snug">
-              Let us plan the day you&apos;ve dreamed about
-            </h3>
-            <p className="font-sans text-sm text-white/75 leading-relaxed mb-5 sm:mb-6 max-w-lg mx-auto">
-              From venue selection to day-of coordination, our wedding planning team handles
-              every detail. Free consultation, no obligation.
-            </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto mb-6">
             <Link
               href="/wedding-planning#inquire"
-              className="inline-flex w-full sm:w-auto items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
+              className="inline-flex items-center justify-center px-7 sm:px-8 py-4 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
             >
-              Plan My Wedding <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
-            <Link href="/book" className="btn-gold">
-              Book Your Date
+              Book Free Consultation <ArrowRight size={14} />
             </Link>
             <Link
-              href="/inquiry"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 border border-white/50 text-white/90 font-sans text-sm font-medium tracking-widest uppercase hover:border-white hover:text-white transition-colors rounded-none"
+              href="/book"
+              className="inline-flex items-center justify-center px-7 sm:px-8 py-4 border border-white/60 text-white font-sans text-sm font-medium tracking-widest uppercase hover:bg-white/10 transition-colors rounded-none"
             >
-              Ask a Question
+              Reserve a Rental
             </Link>
           </div>
+          <p className="font-sans text-[11px] sm:text-xs text-white/60 tracking-wider">
+            Free · 24–48 hr response · No obligation
+          </p>
         </div>
       </section>
 

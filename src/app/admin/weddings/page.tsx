@@ -22,10 +22,10 @@ export default async function AdminWeddingsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-orange-700">Weddings</h1>
-        <span className="font-sans text-sm text-gray-400">{weddings.length} total</span>
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700">Weddings</h1>
+        <span className="font-sans text-xs sm:text-sm text-gray-400">{weddings.length} total</span>
       </div>
 
       <div className="space-y-2">
@@ -40,26 +40,26 @@ export default async function AdminWeddingsPage() {
               <Link
                 key={w.id}
                 href={`/admin/weddings/${w.id}`}
-                className="block bg-white p-5 hover:bg-gray-50 transition-colors"
+                className="block bg-white p-4 sm:p-5 hover:bg-gray-50 active:bg-gray-100 transition-colors"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-wrap min-w-0">
                     <p className="font-sans font-semibold text-sm">{couple}</p>
-                    <span className={`text-xs px-2 py-0.5 rounded ${STATUS_COLOR[w.status]}`}>
+                    <span className={`text-[10px] sm:text-xs px-2 py-0.5 rounded ${STATUS_COLOR[w.status]}`}>
                       {WEDDING_STATUS_LABELS[w.status]}
                     </span>
                   </div>
-                  <p className="font-sans text-xs text-brand-orange-700">
+                  <p className="font-sans text-xs text-brand-orange-700 shrink-0">
                     {w.weddingDate ? formatShortDate(w.weddingDate) : "Date TBD"}
                   </p>
                 </div>
-                <div className="flex items-center gap-4 text-xs font-sans text-gray-500">
-                  {w.venue && <span>{w.venue}</span>}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] sm:text-xs font-sans text-gray-500">
+                  {w.venue && <span className="truncate max-w-full">{w.venue}</span>}
                   {w.guestCount != null && <span>{w.guestCount} guests</span>}
                   {w.packageType && <span>{w.packageType}</span>}
-                  <span>· {w._count.tasks} tasks</span>
+                  <span>{w._count.tasks} tasks</span>
                   <span>{w._count.vendors} vendors</span>
-                  <span>{w._count.guests} guests in list</span>
+                  <span>{w._count.guests} in list</span>
                 </div>
               </Link>
             );

@@ -68,20 +68,30 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
     revalidatePath(`/admin/wedding-planning-leads/${id}`);
   }
 
+  const existingWeddingId = lead.wedding?.id ?? null;
+  const leadSnapshot = {
+    name: lead.name,
+    partnerName: lead.partnerName,
+    weddingDate: lead.weddingDate,
+    venue: lead.venue,
+    guestCount: lead.guestCount,
+    planningType: lead.planningType,
+  };
+
   async function convertToClient() {
     "use server";
-    if (lead?.wedding) {
-      redirect(`/admin/weddings/${lead.wedding.id}`);
+    if (existingWeddingId) {
+      redirect(`/admin/weddings/${existingWeddingId}`);
     }
     const wedding = await prisma.wedding.create({
       data: {
         leadId: id,
-        partner1Name: lead!.name,
-        partner2Name: lead!.partnerName,
-        weddingDate: lead!.weddingDate,
-        venue: lead!.venue,
-        guestCount: lead!.guestCount,
-        packageType: lead!.planningType,
+        partner1Name: leadSnapshot.name,
+        partner2Name: leadSnapshot.partnerName,
+        weddingDate: leadSnapshot.weddingDate,
+        venue: leadSnapshot.venue,
+        guestCount: leadSnapshot.guestCount,
+        packageType: leadSnapshot.planningType,
       },
     });
     await prisma.weddingPlanningLead.update({
@@ -92,7 +102,7 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <div>
         <Link
           href="/admin/wedding-planning-leads"
@@ -100,21 +110,91 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
         >
           ← Back to all leads
         </Link>
-        <div className="flex items-baseline justify-between mt-2">
-          <h1 className="font-serif text-3xl text-brand-orange-700">{couple}</h1>
-          <span className={`${colors.bg} ${colors.text} text-xs px-2.5 py-1 rounded-full font-sans`}>
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mt-2">
+          <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700 break-words">{couple}</h1>
+          <span className={`${colors.bg} ${colors.text} text-xs px-2.5 py-1 rounded-full font-sans self-start sm:self-auto`}>
             {LEAD_STATUS_LABELS[lead.status]}
           </span>
         </div>
-        <p className="font-sans text-sm text-gray-500 mt-1">
+        <p className="font-sans text-xs sm:text-sm text-gray-500 mt-1">
           Submitted {formatDate(lead.createdAt)}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+        {/* Right column (mobile: shows first as actions, desktop: right side) */}
+        {/* Pipeline / Quick Actions appear before details on mobile, on right on desktop */}
+        <div className="space-y-5 sm:space-y-6 lg:col-start-3 lg:row-start-1">
+          <div className="bg-white p-4 sm:p-6">
+            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-3 sm:mb-4">
+              Pipeline Status
+            </h2>
+            <form action={updateStatus} className="space-y-3">
+              <select
+                name="status"
+                defaultValue={lead.status}
+                className="w-full border border-gray-200 px-3 py-2.5 text-sm font-sans rounded"
+              >
+                {LEAD_STATUS_ORDER.map((s) => (
+                  <option key={s} value={s}>{LEAD_STATUS_LABELS[s]}</option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="w-full bg-brand-orange-700 text-white text-sm font-sans py-2.5 rounded hover:bg-brand-orange-800"
+              >
+                Update status
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-white p-4 sm:p-6 space-y-3">
+            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400">
+              Quick Actions
+            </h2>
+            <a
+              href={`mailto:${lead.email}?subject=Re: Your wedding planning inquiry – The Wild Flower Vault`}
+              className="block w-full text-center bg-white border border-brand-orange-700 text-brand-orange-700 text-sm font-sans py-2.5 rounded hover:bg-brand-orange-50"
+            >
+              Reply via Email
+            </a>
+            {lead.phone && (
+              <a
+                href={`tel:${lead.phone}`}
+                className="block w-full text-center bg-white border border-gray-200 text-gray-600 text-sm font-sans py-2.5 rounded hover:bg-gray-50"
+              >
+                Call {lead.phone}
+              </a>
+            )}
+            <Link
+              href={`/admin/consultations/new?leadId=${lead.id}`}
+              className="block w-full text-center bg-white border border-gray-200 text-gray-600 text-sm font-sans py-2.5 rounded hover:bg-gray-50"
+            >
+              Schedule consultation
+            </Link>
+            {lead.wedding ? (
+              <Link
+                href={`/admin/weddings/${lead.wedding.id}`}
+                className="block w-full text-center bg-brand-orange-700 text-white text-sm font-sans py-2.5 rounded hover:bg-brand-orange-800"
+              >
+                Open wedding workspace →
+              </Link>
+            ) : (
+              <form action={convertToClient}>
+                <button
+                  type="submit"
+                  className="w-full bg-brand-pink-500 text-white text-sm font-sans py-2.5 rounded hover:bg-brand-pink-600"
+                >
+                  Convert to client
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
         {/* Left: details */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6">
+        <div className="lg:col-span-2 space-y-5 sm:space-y-6 lg:row-start-1">
+          <div className="bg-white p-4 sm:p-6">
             <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
               Wedding Details
             </h2>
@@ -206,8 +286,8 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
 
           {/* Consultations summary */}
           {lead.consultations.length > 0 && (
-            <div className="bg-white p-6">
-              <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
+            <div className="bg-white p-4 sm:p-6">
+              <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-3 sm:mb-4">
                 Scheduled Consultations
               </h2>
               <ul className="space-y-2">
@@ -227,8 +307,8 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
           )}
 
           {/* Notes timeline */}
-          <div className="bg-white p-6">
-            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
+          <div className="bg-white p-4 sm:p-6">
+            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-3 sm:mb-4">
               Activity Log
             </h2>
 
@@ -280,74 +360,6 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
           </div>
         </div>
 
-        {/* Right: status + actions */}
-        <div className="space-y-6">
-          <div className="bg-white p-6">
-            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
-              Pipeline Status
-            </h2>
-            <form action={updateStatus} className="space-y-3">
-              <select
-                name="status"
-                defaultValue={lead.status}
-                className="w-full border border-gray-200 px-3 py-2 text-sm font-sans rounded"
-              >
-                {LEAD_STATUS_ORDER.map((s) => (
-                  <option key={s} value={s}>{LEAD_STATUS_LABELS[s]}</option>
-                ))}
-              </select>
-              <button
-                type="submit"
-                className="w-full bg-brand-orange-700 text-white text-sm font-sans py-2 rounded hover:bg-brand-orange-800"
-              >
-                Update status
-              </button>
-            </form>
-          </div>
-
-          <div className="bg-white p-6 space-y-3">
-            <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400">
-              Quick Actions
-            </h2>
-            <a
-              href={`mailto:${lead.email}?subject=Re: Your wedding planning inquiry – The Wild Flower Vault`}
-              className="block w-full text-center bg-white border border-brand-orange-700 text-brand-orange-700 text-sm font-sans py-2 rounded hover:bg-brand-orange-50"
-            >
-              Reply via Email
-            </a>
-            {lead.phone && (
-              <a
-                href={`tel:${lead.phone}`}
-                className="block w-full text-center bg-white border border-gray-200 text-gray-600 text-sm font-sans py-2 rounded hover:bg-gray-50"
-              >
-                Call {lead.phone}
-              </a>
-            )}
-            <Link
-              href={`/admin/consultations/new?leadId=${lead.id}`}
-              className="block w-full text-center bg-white border border-gray-200 text-gray-600 text-sm font-sans py-2 rounded hover:bg-gray-50"
-            >
-              Schedule consultation
-            </Link>
-            {lead.wedding ? (
-              <Link
-                href={`/admin/weddings/${lead.wedding.id}`}
-                className="block w-full text-center bg-brand-orange-700 text-white text-sm font-sans py-2 rounded hover:bg-brand-orange-800"
-              >
-                Open wedding workspace →
-              </Link>
-            ) : (
-              <form action={convertToClient}>
-                <button
-                  type="submit"
-                  className="w-full bg-brand-pink-500 text-white text-sm font-sans py-2 rounded hover:bg-brand-pink-600"
-                >
-                  Convert to client
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

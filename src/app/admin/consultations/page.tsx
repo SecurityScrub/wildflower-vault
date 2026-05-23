@@ -51,14 +51,15 @@ export default async function AdminConsultationsPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-orange-700">Consultations</h1>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700">Consultations</h1>
         <Link
           href="/admin/consultations/new"
-          className="bg-brand-orange-700 text-white text-xs font-sans px-4 py-2 rounded hover:bg-brand-orange-800"
+          className="bg-brand-orange-700 text-white text-xs font-sans px-3 sm:px-4 py-2 rounded hover:bg-brand-orange-800 shrink-0"
         >
-          + Book consultation
+          <span className="hidden sm:inline">+ Book consultation</span>
+          <span className="sm:hidden">+ New</span>
         </Link>
       </div>
 
@@ -108,26 +109,26 @@ function ConsultationRow({
 }) {
   const name = c.lead?.partnerName ? `${c.lead.name} & ${c.lead.partnerName}` : c.name;
   return (
-    <div className="bg-white p-4 flex items-center justify-between gap-4">
+    <div className="bg-white p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <p className="font-sans text-sm font-semibold">{name}</p>
-          <span className={`text-xs px-2 py-0.5 rounded ${STATUS_COLORS[c.status]}`}>
+          <span className={`text-[10px] sm:text-xs px-2 py-0.5 rounded ${STATUS_COLORS[c.status]}`}>
             {CONSULTATION_STATUS_LABELS[c.status]}
           </span>
         </div>
         <p className="font-sans text-xs text-gray-400 mt-0.5">
           {formatWhen(c.scheduledAt)} · {c.durationMin}min · {c.location ?? "—"}
         </p>
-        <p className="font-sans text-xs text-gray-400 mt-0.5">{c.email}</p>
+        <p className="font-sans text-xs text-gray-400 mt-0.5 break-all">{c.email}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <form action={updateStatus} className="inline-flex">
+      <div className="flex items-center gap-2 shrink-0">
+        <form action={updateStatus} className="inline-flex flex-1 sm:flex-none">
           <input type="hidden" name="id" value={c.id} />
           <select
             name="status"
             defaultValue={c.status}
-            className="border border-gray-200 text-xs font-sans px-2 py-1 rounded"
+            className="border border-gray-200 text-xs font-sans px-2 py-1.5 rounded w-full sm:w-auto"
             onChange={(e) => e.currentTarget.form?.requestSubmit()}
           >
             {Object.entries(CONSULTATION_STATUS_LABELS).map(([k, v]) => (
@@ -140,7 +141,7 @@ function ConsultationRow({
         {c.lead && (
           <Link
             href={`/admin/wedding-planning-leads/${c.lead.id}`}
-            className="text-xs font-sans text-brand-orange-700 hover:underline"
+            className="text-xs font-sans text-brand-orange-700 hover:underline px-2 py-1.5"
           >
             Lead →
           </Link>

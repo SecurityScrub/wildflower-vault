@@ -56,38 +56,38 @@ export default async function AdminDashboard() {
   const revenue = Number(revenueResult._sum.paidAmount ?? 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       <div>
-        <h1 className="font-serif text-3xl text-brand-orange-700">Dashboard</h1>
-        <p className="text-sm text-gray-400 mt-1">
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700">Dashboard</h1>
+        <p className="text-xs sm:text-sm text-gray-400 mt-1">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
         </p>
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {[
           { label: "Total Bookings", value: totalBookings.toString(), icon: <Calendar size={20} />, color: "text-blue-600" },
           { label: "Pending Review", value: pendingCount.toString(), icon: <Clock size={20} />, color: "text-yellow-600", href: "/admin/orders?status=PENDING" },
           { label: "Confirmed Events", value: confirmedCount.toString(), icon: <TrendingUp size={20} />, color: "text-green-600" },
           { label: "Revenue Collected", value: formatCurrency(revenue), icon: <DollarSign size={20} />, color: "text-brand-pink-600" },
         ].map((kpi) => (
-          <div key={kpi.label} className={`bg-white p-6 ${kpi.href ? "hover:shadow-md transition-shadow cursor-pointer" : ""}`}>
+          <div key={kpi.label} className={`bg-white p-4 sm:p-6 ${kpi.href ? "hover:shadow-md transition-shadow cursor-pointer" : ""}`}>
             {kpi.href ? (
               <Link href={kpi.href} className="block">
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-2 sm:mb-3">
                   <span className={kpi.color}>{kpi.icon}</span>
                 </div>
-                <p className={`font-serif text-3xl ${kpi.color}`}>{kpi.value}</p>
-                <p className="font-sans text-xs text-gray-400 mt-1 uppercase tracking-wider">{kpi.label}</p>
+                <p className={`font-serif text-2xl sm:text-3xl ${kpi.color}`}>{kpi.value}</p>
+                <p className="font-sans text-[10px] sm:text-xs text-gray-400 mt-1 uppercase tracking-wider">{kpi.label}</p>
               </Link>
             ) : (
               <>
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-2 sm:mb-3">
                   <span className={kpi.color}>{kpi.icon}</span>
                 </div>
-                <p className={`font-serif text-3xl ${kpi.color}`}>{kpi.value}</p>
-                <p className="font-sans text-xs text-gray-400 mt-1 uppercase tracking-wider">{kpi.label}</p>
+                <p className={`font-serif text-2xl sm:text-3xl ${kpi.color}`}>{kpi.value}</p>
+                <p className="font-sans text-[10px] sm:text-xs text-gray-400 mt-1 uppercase tracking-wider">{kpi.label}</p>
               </>
             )}
           </div>
@@ -106,11 +106,11 @@ export default async function AdminDashboard() {
         </Link>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Upcoming events */}
         <div className="bg-white">
-          <div className="flex items-center justify-between p-5 border-b border-gray-100">
-            <h2 className="font-sans font-semibold text-sm text-gray-700 uppercase tracking-wider">
+          <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100">
+            <h2 className="font-sans font-semibold text-xs sm:text-sm text-gray-700 uppercase tracking-wider">
               Upcoming Events
             </h2>
             <Link href="/admin/calendar" className="text-xs text-brand-orange-700 hover:underline">
@@ -122,20 +122,24 @@ export default async function AdminDashboard() {
           ) : (
             <div className="divide-y divide-gray-50">
               {upcomingBookings.map((b) => (
-                <Link key={b.id} href={`/admin/orders?id=${b.id}`} className="flex items-center justify-between p-5 hover:bg-gray-50">
-                  <div>
-                    <p className="font-sans text-sm font-medium text-brand-orange-700">
+                <Link
+                  key={b.id}
+                  href={`/admin/orders?id=${b.id}`}
+                  className="flex items-center justify-between gap-3 p-4 sm:p-5 hover:bg-gray-50 active:bg-gray-100"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="font-sans text-sm font-medium text-brand-orange-700 truncate">
                       {b.guestName}
                     </p>
-                    <p className="font-sans text-xs text-gray-400 mt-0.5">
+                    <p className="font-sans text-xs text-gray-400 mt-0.5 truncate">
                       {b.items.map((i) => i.rentalItem.name).join(", ")}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className="font-sans text-sm font-semibold text-brand-pink-600">
                       {formatShortDate(b.eventDate)}
                     </p>
-                    <span className={`font-sans text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>
+                    <span className={`font-sans text-[10px] sm:text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>
                       {b.status.replace("_", " ")}
                     </span>
                   </div>
@@ -147,8 +151,8 @@ export default async function AdminDashboard() {
 
         {/* Recent bookings */}
         <div className="bg-white">
-          <div className="flex items-center justify-between p-5 border-b border-gray-100">
-            <h2 className="font-sans font-semibold text-sm text-gray-700 uppercase tracking-wider">
+          <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100">
+            <h2 className="font-sans font-semibold text-xs sm:text-sm text-gray-700 uppercase tracking-wider">
               Recent Bookings
             </h2>
             <Link href="/admin/orders" className="text-xs text-brand-orange-700 hover:underline">
@@ -157,18 +161,18 @@ export default async function AdminDashboard() {
           </div>
           <div className="divide-y divide-gray-50">
             {recentBookings.map((b) => (
-              <div key={b.id} className="flex items-center justify-between p-5">
-                <div>
-                  <p className="font-sans text-sm font-medium">{b.guestName ?? b.user?.name}</p>
-                  <p className="font-sans text-xs text-gray-400 mt-0.5">
+              <div key={b.id} className="flex items-center justify-between gap-3 p-4 sm:p-5">
+                <div className="min-w-0 flex-1">
+                  <p className="font-sans text-sm font-medium truncate">{b.guestName ?? b.user?.name}</p>
+                  <p className="font-sans text-xs text-gray-400 mt-0.5 truncate">
                     #{b.bookingNumber} · {formatShortDate(b.eventDate)}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-3 shrink-0">
                   <span className="font-sans text-sm text-brand-pink-600">
                     {formatCurrency(Number(b.totalAmount))}
                   </span>
-                  <span className={`font-sans text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>
+                  <span className={`font-sans text-[10px] sm:text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[b.status] ?? ""}`}>
                     {b.status.replace("_", " ")}
                   </span>
                 </div>

@@ -21,24 +21,24 @@ export default async function AdminNewConsultationPage(props: {
         >
           ← Back
         </Link>
-        <h1 className="font-serif text-3xl text-brand-orange-700 mt-2">
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700 mt-2 break-words">
           Book consultation
           {lead && (
             <>
               {" "}
-              <span className="text-gray-400 text-xl">
+              <span className="text-gray-400 text-base sm:text-xl">
                 for {lead.name}
                 {lead.partnerName ? ` & ${lead.partnerName}` : ""}
               </span>
             </>
           )}
         </h1>
-        <p className="font-sans text-sm text-gray-500 mt-1">
+        <p className="font-sans text-xs sm:text-sm text-gray-500 mt-1">
           A confirmation email with a calendar invite (.ics + Google Calendar) will be sent to the couple.
         </p>
       </div>
 
-      <div className="bg-white p-6 sm:p-8">
+      <div className="bg-white p-4 sm:p-8">
         <ConsultationForm
           defaultName={lead?.name ?? ""}
           defaultPartnerName={lead?.partnerName ?? ""}

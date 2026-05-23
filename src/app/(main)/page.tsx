@@ -74,7 +74,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-12 sm:pt-28 sm:pb-16">
         <div className="absolute inset-0 bg-brand-orange-900/60 z-10" />
         <Image
           src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=90"
@@ -83,58 +83,45 @@ export default async function HomePage() {
           priority
           className="object-cover object-center"
         />
-        <div className="relative z-20 text-center text-white px-6 max-w-5xl mx-auto animate-fade-in">
-          <p className="font-sans text-xs tracking-[0.4em] uppercase text-brand-pink-300 mb-6">
+        <div className="relative z-20 text-center text-white px-5 sm:px-6 max-w-5xl mx-auto w-full animate-fade-in">
+          <p className="font-sans text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-brand-pink-300 mb-4 sm:mb-6">
             Wedding &amp; Event Rentals · Des Moines, Iowa
           </p>
-          <h1 className="font-serif text-6xl md:text-8xl font-light leading-none mb-6">
+          <h1 className="font-serif text-5xl sm:text-6xl md:text-8xl font-light leading-[1.05] sm:leading-none mb-4 sm:mb-6">
             The Wild Flower <br />
             <em className="text-brand-pink-300">Vault</em>
           </h1>
-          <p className="font-sans text-lg text-white/80 max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="font-sans text-base sm:text-lg text-white/85 max-w-xl mx-auto mb-7 sm:mb-10 leading-relaxed">
             Wedding planning, event coordination, and stunning rental pieces —
             flower walls, photo booths, and backdrops that transform any occasion.
           </p>
-          <div className="mb-6 inline-flex flex-col items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-5 max-w-md">
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-pink-300">
-              Planning a Wedding?
-            </p>
-            <p className="font-serif text-lg text-white/90 leading-snug">
-              Full-service planning &amp; coordination in Iowa.
-            </p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Link
-              href="/wedding-planning"
-              className="font-sans text-xs tracking-[0.2em] uppercase text-brand-pink-300 hover:text-white inline-flex items-center gap-1.5 transition-colors"
+              href="/wedding-planning#inquire"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
             >
-              Inquire About Wedding Planning <ArrowRight size={12} />
+              Plan My Wedding <ArrowRight size={14} />
             </Link>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/rentals" className="btn-gold">
+            <Link
+              href="/rentals"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-orange-700 hover:bg-brand-orange-800 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none"
+            >
               View Rentals
             </Link>
             <Link
               href="/book"
-              className="inline-flex items-center justify-center px-8 py-3.5 border border-white/60 text-white font-sans text-sm font-medium tracking-widest uppercase hover:bg-white/10 transition-colors rounded-none"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 border border-white/60 text-white font-sans text-sm font-medium tracking-widest uppercase hover:bg-white/10 transition-colors rounded-none"
             >
               Book Your Date
             </Link>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white/60">
-          <span className="font-sans text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-px h-12 bg-white/30 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1/2 bg-white/60 animate-bounce" />
-          </div>
-        </div>
       </section>
 
       {/* ─── Intro strip ─────────────────────────────────────────────────── */}
-      <section className="bg-brand-orange-700 text-white py-6">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 text-center">
+      <section className="bg-brand-orange-700 text-white py-5 sm:py-6">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 md:gap-16 text-center">
             {[
               { icon: <Calendar size={18} />, label: "Easy Online Booking" },
               { icon: <Shield size={18} />, label: "Secure Square Payments" },
@@ -142,7 +129,7 @@ export default async function HomePage() {
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
                 <span className="text-brand-pink-400">{item.icon}</span>
-                <span className="font-sans text-xs tracking-[0.2em] uppercase">{item.label}</span>
+                <span className="font-sans text-[11px] sm:text-xs tracking-[0.2em] uppercase">{item.label}</span>
               </div>
             ))}
           </div>
@@ -150,9 +137,9 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Featured Rentals ─────────────────────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-white">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Our Collection</p>
             <h2 className="section-title">Rental Pieces That Tell Your Story</h2>
             <p className="mt-4 text-gray-500 max-w-xl mx-auto font-sans text-sm leading-relaxed">
@@ -162,7 +149,7 @@ export default async function HomePage() {
           </div>
 
           {featured.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {featured.map((item) => (
                 <Link
                   key={item.id}
@@ -211,7 +198,7 @@ export default async function HomePage() {
             </div>
           ) : (
             // Placeholder cards when no rentals are seeded yet
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {[
                 { name: "Garden Rose Flower Wall", price: 350, desc: "Lush roses in blush and cream, perfect for wedding ceremonies and receptions." },
                 { name: "Greenery & Eucalyptus Wall", price: 325, desc: "Cascading greenery with eucalyptus for a romantic, garden-inspired feel." },
@@ -243,7 +230,7 @@ export default async function HomePage() {
             </div>
           )}
 
-          <div className="text-center mt-14">
+          <div className="text-center mt-10 sm:mt-14">
             <Link href="/rentals" className="btn-secondary inline-flex items-center gap-2">
               Browse All Rentals <ArrowRight size={14} />
             </Link>
@@ -252,22 +239,22 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Services ──────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-white">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Our Services</p>
             <h2 className="section-title">More Than Just Rentals</h2>
             <p className="mt-4 text-gray-500 max-w-xl mx-auto font-sans text-sm leading-relaxed">
               From full-service planning to day-of coordination, we bring your vision to life.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: <Heart size={24} />,
                 title: "Wedding Planning",
                 desc: "Full-service and partial planning for your big day — venue selection, vendor coordination, timeline management, and day-of direction.",
-                href: "/wedding-planning",
+                href: "/wedding-planning#inquire",
                 cta: "Plan My Wedding",
               },
               {
@@ -285,7 +272,7 @@ export default async function HomePage() {
                 cta: "Get a Quote",
               },
             ].map((s) => (
-              <div key={s.title} className="bg-brand-cream p-8 text-center card-hover">
+              <div key={s.title} className="bg-brand-cream p-6 sm:p-8 text-center card-hover">
                 <div className="w-14 h-14 rounded-full bg-brand-orange-100 flex items-center justify-center mx-auto mb-5 text-brand-orange-700">
                   {s.icon}
                 </div>
@@ -301,13 +288,13 @@ export default async function HomePage() {
       </section>
 
       {/* ─── How It Works ─────────────────────────────────────────────────── */}
-      <section className="py-24 bg-brand-cream">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-brand-cream">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Simple Process</p>
             <h2 className="section-title">Your Perfect Day Made Easy</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {howItWorks.map((step, i) => (
               <div key={step.step} className="relative">
                 {i < howItWorks.length - 1 && (
@@ -327,7 +314,7 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Full-bleed CTA ───────────────────────────────────────────────── */}
-      <section className="relative py-32 overflow-hidden">
+      <section className="relative py-20 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-brand-orange-800/80 z-10" />
         <Image
           src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1400&q=85"
@@ -335,39 +322,42 @@ export default async function HomePage() {
           fill
           className="object-cover object-center"
         />
-        <div className="relative z-20 container mx-auto px-6 max-w-3xl text-center text-white">
-          <p className="section-subtitle text-brand-pink-400 mb-6">Reserve Your Date</p>
-          <h2 className="font-serif text-5xl md:text-6xl font-light leading-tight mb-6">
+        <div className="relative z-20 container mx-auto px-5 sm:px-6 max-w-3xl text-center text-white">
+          <p className="section-subtitle text-brand-pink-400 mb-5 sm:mb-6">Reserve Your Date</p>
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light leading-tight mb-5 sm:mb-6">
             Your Story Deserves a Beautiful Backdrop
           </h2>
-          <p className="font-sans text-white/70 mb-10 text-sm leading-relaxed max-w-xl mx-auto">
+          <p className="font-sans text-white/75 mb-8 sm:mb-10 text-sm leading-relaxed max-w-xl mx-auto">
             Limited dates available. Secure your rental now before your date is gone.
           </p>
 
-          <div className="mb-12 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border border-white/20 px-8 py-7">
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-brand-pink-300 mb-3">
+          <div className="mb-10 sm:mb-12 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border border-white/20 px-5 sm:px-8 py-6 sm:py-7">
+            <p className="font-sans text-[10px] sm:text-xs tracking-[0.3em] uppercase text-brand-pink-300 mb-3">
               Planning a Wedding?
             </p>
-            <h3 className="font-serif text-2xl md:text-3xl text-white mb-3 leading-snug">
+            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-white mb-3 leading-snug">
               Let us plan the day you&apos;ve dreamed about
             </h3>
-            <p className="font-sans text-sm text-white/70 leading-relaxed mb-6 max-w-lg mx-auto">
+            <p className="font-sans text-sm text-white/75 leading-relaxed mb-5 sm:mb-6 max-w-lg mx-auto">
               From venue selection to day-of coordination, our wedding planning team handles
               every detail. Free consultation, no obligation.
             </p>
             <Link
-              href="/wedding-planning"
-              className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
+              href="/wedding-planning#inquire"
+              className="inline-flex w-full sm:w-auto items-center justify-center px-6 sm:px-8 py-3.5 bg-brand-pink-500 hover:bg-brand-pink-600 text-white font-sans text-sm font-medium tracking-widest uppercase transition-colors rounded-none gap-2"
             >
-              Inquire About Wedding Planning <ArrowRight size={14} />
+              Plan My Wedding <ArrowRight size={14} />
             </Link>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Link href="/book" className="btn-gold">
               Book Your Date
             </Link>
-            <Link href="/inquiry" className="inline-flex items-center justify-center px-8 py-3.5 border border-white/50 text-white/90 font-sans text-sm font-medium tracking-widest uppercase hover:border-white hover:text-white transition-colors rounded-none">
+            <Link
+              href="/inquiry"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3.5 border border-white/50 text-white/90 font-sans text-sm font-medium tracking-widest uppercase hover:border-white hover:text-white transition-colors rounded-none"
+            >
               Ask a Question
             </Link>
           </div>
@@ -375,15 +365,15 @@ export default async function HomePage() {
       </section>
 
       {/* ─── Testimonials ─────────────────────────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-white">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Love Stories</p>
             <h2 className="section-title">What Couples Are Saying</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {testimonials.map((t) => (
-              <div key={t.author} className="bg-brand-cream p-8 relative">
+              <div key={t.author} className="bg-brand-cream p-6 sm:p-8 relative">
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star key={i} size={14} className="fill-brand-pink-500 text-brand-pink-500" />

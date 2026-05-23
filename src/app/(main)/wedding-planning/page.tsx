@@ -57,7 +57,7 @@ export default function WeddingPlanningPage() {
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-28 pb-16 sm:pt-32 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-brand-orange-900/65 z-10" />
         <Image
           src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1600&q=85"
@@ -66,41 +66,57 @@ export default function WeddingPlanningPage() {
           priority
           className="object-cover object-center"
         />
-        <div className="relative z-20 container mx-auto px-6 max-w-4xl text-center text-white">
-          <p className="font-sans text-xs tracking-[0.4em] uppercase text-brand-pink-300 mb-5">
+        <div className="relative z-20 container mx-auto px-5 sm:px-6 max-w-4xl text-center text-white">
+          <p className="font-sans text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-brand-pink-300 mb-4 sm:mb-5">
             Wedding Planning &amp; Coordination
           </p>
-          <h1 className="font-serif text-5xl md:text-7xl font-light leading-tight mb-6">
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl font-light leading-tight mb-5 sm:mb-6">
             Your Day, <em className="text-brand-pink-300">Beautifully</em> Planned
           </h1>
-          <p className="font-sans text-white/80 max-w-2xl mx-auto text-base leading-relaxed mb-10">
+          <p className="font-sans text-white/85 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed mb-7 sm:mb-10">
             From the first vision board to the final send-off, The Wild Flower Vault
             handles every detail so you can be present for every moment.
           </p>
-          <a
-            href="#inquire"
-            className="btn-gold inline-flex"
-          >
+          <a href="#inquire" className="btn-gold inline-flex">
             Request a Consultation
           </a>
         </div>
       </section>
 
+      {/* ─── Inquiry form (moved to top so /wedding-planning#inquire lands here) ─ */}
+      <section id="inquire" className="py-12 sm:py-20 bg-white scroll-mt-20">
+        <div className="container mx-auto px-5 sm:px-6 max-w-2xl">
+          <div className="text-center mb-8 sm:mb-12">
+            <p className="section-subtitle">Let&apos;s Talk</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-brand-orange-700 font-light">
+              Tell Us About Your Wedding
+            </h2>
+            <p className="mt-4 text-gray-500 max-w-md mx-auto font-sans text-sm leading-relaxed">
+              Share a few details and we&apos;ll be in touch within 24&ndash;48 hours
+              to schedule your complimentary consultation.
+            </p>
+          </div>
+          <div className="bg-brand-cream p-5 sm:p-8 md:p-10 shadow-sm">
+            <WeddingPlanningForm />
+          </div>
+        </div>
+      </section>
+
       {/* ─── Why us ──────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-brand-cream">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Why The Wild Flower Vault</p>
             <h2 className="section-title">Planning That Feels Effortless</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {highlights.map((h) => (
               <div key={h.title} className="text-center">
-                <div className="w-14 h-14 rounded-full bg-brand-orange-100 flex items-center justify-center mx-auto mb-5 text-brand-orange-700">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-orange-100 flex items-center justify-center mx-auto mb-4 sm:mb-5 text-brand-orange-700">
                   {h.icon}
                 </div>
-                <h3 className="font-serif text-lg text-brand-orange-700 mb-3">{h.title}</h3>
-                <p className="font-sans text-sm text-gray-500 leading-relaxed">{h.desc}</p>
+                <h3 className="font-serif text-base sm:text-lg text-brand-orange-700 mb-2 sm:mb-3">{h.title}</h3>
+                <p className="font-sans text-xs sm:text-sm text-gray-500 leading-relaxed">{h.desc}</p>
               </div>
             ))}
           </div>
@@ -108,19 +124,19 @@ export default function WeddingPlanningPage() {
       </section>
 
       {/* ─── Packages ─────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-brand-cream">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
+      <section className="py-16 sm:py-24 bg-white">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="text-center mb-10 sm:mb-16">
             <p className="section-subtitle">Planning Packages</p>
             <h2 className="section-title">Pick the Level of Support You Need</h2>
             <p className="mt-4 text-gray-500 max-w-xl mx-auto font-sans text-sm leading-relaxed">
               Three core packages, each fully customizable to your wedding.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {packages.map((p) => (
-              <div key={p.name} className="bg-white p-8 card-hover flex flex-col">
-                <h3 className="font-serif text-2xl text-brand-orange-700 mb-2">{p.name}</h3>
+              <div key={p.name} className="bg-brand-cream p-6 sm:p-8 card-hover flex flex-col">
+                <h3 className="font-serif text-xl sm:text-2xl text-brand-orange-700 mb-2">{p.name}</h3>
                 <p className="font-sans text-xs tracking-widest uppercase text-brand-pink-500 mb-4">
                   {p.tagline}
                 </p>
@@ -132,32 +148,18 @@ export default function WeddingPlanningPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ─── Inquiry form ─────────────────────────────────────────────────── */}
-      <section id="inquire" className="py-20 bg-white scroll-mt-24">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <div className="text-center mb-12">
-            <p className="section-subtitle">Let&apos;s Talk</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-brand-orange-700 font-light">
-              Tell Us About Your Wedding
-            </h2>
-            <p className="mt-4 text-gray-500 max-w-md mx-auto font-sans text-sm leading-relaxed">
-              Share a few details and we&apos;ll be in touch within 24&ndash;48 hours
-              to schedule your complimentary consultation.
-            </p>
-          </div>
-          <div className="bg-brand-cream p-8 md:p-10 shadow-sm">
-            <WeddingPlanningForm />
+          <div className="text-center mt-10 sm:mt-12">
+            <a href="#inquire" className="btn-primary inline-flex">
+              Get Your Free Consultation
+            </a>
           </div>
         </div>
       </section>
 
       {/* ─── Trust strip ──────────────────────────────────────────────────── */}
-      <section className="py-12 bg-brand-orange-700 text-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <section className="py-10 sm:py-12 bg-brand-orange-700 text-white">
+        <div className="container mx-auto px-5 sm:px-6 max-w-7xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-center">
             <div>
               <p className="font-serif text-2xl mb-1">Free</p>
               <p className="font-sans text-xs tracking-[0.2em] uppercase text-white/60">

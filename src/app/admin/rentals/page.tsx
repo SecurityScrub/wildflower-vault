@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
-import { Loader2, Plus, Edit2, Eye, EyeOff, Star, Upload, X, GripVertical } from "lucide-react";
+import { Loader2, Plus, Edit2, Eye, EyeOff, Star, Upload, X } from "lucide-react";
 import type { RentalItem } from "@prisma/client";
 
 interface RentalWithCount extends RentalItem {
@@ -208,18 +208,77 @@ export default function AdminRentalsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-brand-orange-700">Rentals</h1>
+    <div className="space-y-5 sm:space-y-6">
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700">Rentals</h1>
         <button
           onClick={() => setEditing({ isActive: true, isFeatured: false, depositPct: 50, category: "general", features: [], images: [], sortOrder: 0 })}
-          className="btn-primary py-2.5 px-5 text-xs flex items-center gap-2"
+          className="btn-primary py-2 sm:py-2.5 px-3 sm:px-5 text-xs flex items-center gap-1.5 sm:gap-2 shrink-0"
         >
-          <Plus size={14} /> New Rental
+          <Plus size={14} /> <span className="hidden sm:inline">New Rental</span><span className="sm:hidden">New</span>
         </button>
       </div>
 
-      <div className="bg-white overflow-hidden">
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-3">
+        {rentals.length === 0 ? (
+          <div className="bg-white p-8 text-center text-sm text-gray-400">No rentals yet</div>
+        ) : (
+          rentals.map((rental) => (
+            <div key={rental.id} className="bg-white p-4">
+              <div className="flex items-start gap-3">
+                {rental.images[0] ? (
+                  <div className="w-14 h-14 relative overflow-hidden shrink-0">
+                    <Image src={rental.images[0]} alt={rental.name} fill className="object-cover" unoptimized />
+                  </div>
+                ) : (
+                  <div className="w-14 h-14 bg-brand-orange-100 flex items-center justify-center shrink-0">
+                    <span className="text-brand-orange-400 text-xs">img</span>
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-sans text-sm font-semibold truncate">{rental.name}</p>
+                  <p className="font-sans text-[11px] text-gray-400 truncate">{rental.category} · {rental.slug}</p>
+                  <p className="font-sans text-sm text-brand-pink-600 font-semibold mt-0.5">
+                    {formatCurrency(Number(rental.price))}
+                    <span className="text-gray-400 font-normal"> · {rental._count.bookingItems} bookings</span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => setEditing({ ...rental, features: rental.features, images: rental.images })}
+                  className="text-brand-orange-700 hover:text-brand-pink-500 p-2 -m-1 shrink-0"
+                  aria-label="Edit"
+                >
+                  <Edit2 size={16} />
+                </button>
+              </div>
+              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-50">
+                <button
+                  onClick={() => toggleFeatured(rental.id, rental.isFeatured)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans rounded ${
+                    rental.isFeatured ? "bg-brand-pink-50 text-brand-pink-700" : "bg-gray-50 text-gray-500"
+                  }`}
+                >
+                  <Star size={14} className={rental.isFeatured ? "fill-brand-pink-500 text-brand-pink-500" : ""} />
+                  {rental.isFeatured ? "Featured" : "Feature"}
+                </button>
+                <button
+                  onClick={() => toggleActive(rental.id, rental.isActive)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans rounded ${
+                    rental.isActive ? "bg-green-50 text-green-700" : "bg-gray-50 text-gray-500"
+                  }`}
+                >
+                  {rental.isActive ? <Eye size={14} /> : <EyeOff size={14} />}
+                  {rental.isActive ? "Active" : "Hidden"}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block bg-white overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
@@ -282,12 +341,18 @@ export default function AdminRentalsPage() {
       {/* Edit / Create panel */}
       {editing && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-start justify-end" onClick={() => setEditing(null)}>
-          <div className="bg-white w-full max-w-lg h-full overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-serif text-2xl text-brand-orange-700">
+          <div className="bg-white w-full max-w-lg h-full overflow-y-auto p-5 sm:p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-5 sm:mb-6 sticky top-0 bg-white -mt-5 sm:-mt-6 pt-5 sm:pt-6 -mx-5 sm:-mx-6 px-5 sm:px-6 pb-3 border-b border-gray-100">
+              <h2 className="font-serif text-xl sm:text-2xl text-brand-orange-700">
                 {editing.id ? "Edit Rental" : "New Rental"}
               </h2>
-              <button onClick={() => setEditing(null)} className="text-gray-400">&#x2715;</button>
+              <button
+                onClick={() => setEditing(null)}
+                className="text-gray-400 hover:text-gray-600 p-2 -m-2 text-lg"
+                aria-label="Close"
+              >
+                &#x2715;
+              </button>
             </div>
 
             <div className="space-y-4">
@@ -352,12 +417,12 @@ export default function AdminRentalsPage() {
                 </label>
               </div>
 
-              <div className="flex gap-3 pt-2">
-                <button onClick={saveRental} disabled={saving} className="btn-primary flex items-center gap-2">
+              <div className="flex gap-3 pt-2 sticky bottom-0 bg-white -mx-5 sm:-mx-6 px-5 sm:px-6 py-4 border-t border-gray-100">
+                <button onClick={saveRental} disabled={saving} className="btn-primary flex-1 sm:flex-none flex items-center justify-center gap-2 py-3">
                   {saving ? <Loader2 size={14} className="animate-spin" /> : null}
                   {saving ? "Saving..." : "Save"}
                 </button>
-                <button onClick={() => setEditing(null)} className="btn-secondary">Cancel</button>
+                <button onClick={() => setEditing(null)} className="btn-secondary flex-1 sm:flex-none py-3">Cancel</button>
               </div>
             </div>
           </div>

@@ -107,14 +107,14 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
   }, {});
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
         <Link href="/admin/weddings" className="font-sans text-xs text-gray-400 hover:text-brand-orange-700">
           ← All weddings
         </Link>
-        <div className="flex items-baseline justify-between mt-2">
-          <h1 className="font-serif text-3xl text-brand-orange-700">{couple}</h1>
-          <p className="font-sans text-sm text-gray-500">
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-3 mt-2">
+          <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700 break-words">{couple}</h1>
+          <p className="font-sans text-xs sm:text-sm text-gray-500">
             {wedding.weddingDate ? formatShortDate(wedding.weddingDate) : "Date TBD"} ·{" "}
             {WEDDING_STATUS_LABELS[wedding.status]}
           </p>
@@ -122,7 +122,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <StatCard label="Tasks" value={`${taskDone} / ${taskTotal}`} subtitle="done" />
         <StatCard
           label="Budget"
@@ -137,8 +137,8 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
         />
       </div>
 
-      {/* Nav */}
-      <div className="flex flex-wrap gap-2 text-xs font-sans border-b border-gray-100 pb-3 sticky top-14 bg-gray-50 z-10">
+      {/* Section nav (horizontal scroll on mobile) */}
+      <div className="flex gap-2 text-xs font-sans border-b border-gray-100 pb-3 sticky top-14 bg-gray-50 z-10 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
         {[
           ["Overview", "#overview"],
           ["Timeline", "#tasks"],
@@ -147,14 +147,14 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
           ["Guests", "#guests"],
           ["Messages", "#messages"],
         ].map(([label, hash]) => (
-          <a key={hash} href={hash} className="px-3 py-1.5 bg-white rounded hover:bg-brand-orange-50">
+          <a key={hash} href={hash} className="shrink-0 px-3 py-2 bg-white rounded hover:bg-brand-orange-50">
             {label}
           </a>
         ))}
       </div>
 
       {/* ── Overview ────────────────────────────────────────────────────────── */}
-      <section id="overview" className="bg-white p-6">
+      <section id="overview" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">Overview</h2>
         <form action={updateWeddingHere} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <Field label="Partner 1 Name">
@@ -218,7 +218,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
       </section>
 
       {/* ── Timeline / Tasks ──────────────────────────────────────────────── */}
-      <section id="tasks" className="bg-white p-6">
+      <section id="tasks" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400">Timeline ({taskTotal})</h2>
           {taskTotal === 0 && (
@@ -310,7 +310,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
       </section>
 
       {/* ── Vendors ──────────────────────────────────────────────────────── */}
-      <section id="vendors" className="bg-white p-6">
+      <section id="vendors" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
           Vendors ({wedding.vendors.length})
         </h2>
@@ -389,7 +389,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
       </section>
 
       {/* ── Budget ───────────────────────────────────────────────────────── */}
-      <section id="budget" className="bg-white p-6">
+      <section id="budget" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400">
             Budget ({wedding.budgetItems.length} items)
@@ -417,45 +417,47 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
         {wedding.budgetItems.length === 0 ? (
           <p className="text-xs text-gray-400 font-sans">No budget items yet.</p>
         ) : (
-          <table className="w-full text-xs font-sans">
-            <thead>
-              <tr className="text-gray-400 border-b border-gray-100">
-                <th className="text-left py-2">Category</th>
-                <th className="text-left py-2">Description</th>
-                <th className="text-right py-2">Estimated</th>
-                <th className="text-right py-2">Actual</th>
-                <th className="text-right py-2">Paid</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {wedding.budgetItems.map((b) => {
-                const deleteAction = async () => {
-                  "use server";
-                  await deleteBudgetItem(id, b.id);
-                };
-                return (
-                  <tr key={b.id} className="border-b border-gray-50">
-                    <td className="py-2">{b.category}</td>
-                    <td className="py-2">{b.description}</td>
-                    <td className="text-right py-2">{fmtMoney(Number(b.estimated))}</td>
-                    <td className="text-right py-2">{b.actual ? fmtMoney(Number(b.actual)) : "—"}</td>
-                    <td className="text-right py-2">{fmtMoney(Number(b.paid))}</td>
-                    <td className="text-right py-2">
-                      <form action={deleteAction}>
-                        <button className="text-gray-300 hover:text-red-500">×</button>
-                      </form>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full text-xs font-sans min-w-[520px]">
+              <thead>
+                <tr className="text-gray-400 border-b border-gray-100">
+                  <th className="text-left py-2 px-4 sm:px-0">Category</th>
+                  <th className="text-left py-2">Description</th>
+                  <th className="text-right py-2">Est.</th>
+                  <th className="text-right py-2">Actual</th>
+                  <th className="text-right py-2">Paid</th>
+                  <th className="px-4 sm:px-0"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {wedding.budgetItems.map((b) => {
+                  const deleteAction = async () => {
+                    "use server";
+                    await deleteBudgetItem(id, b.id);
+                  };
+                  return (
+                    <tr key={b.id} className="border-b border-gray-50">
+                      <td className="py-2 px-4 sm:px-0">{b.category}</td>
+                      <td className="py-2">{b.description}</td>
+                      <td className="text-right py-2">{fmtMoney(Number(b.estimated))}</td>
+                      <td className="text-right py-2">{b.actual ? fmtMoney(Number(b.actual)) : "—"}</td>
+                      <td className="text-right py-2">{fmtMoney(Number(b.paid))}</td>
+                      <td className="text-right py-2 px-4 sm:px-0">
+                        <form action={deleteAction}>
+                          <button className="text-gray-300 hover:text-red-500 p-1">×</button>
+                        </form>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
 
       {/* ── Guests ───────────────────────────────────────────────────────── */}
-      <section id="guests" className="bg-white p-6">
+      <section id="guests" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
           Guests ({wedding.guests.length}) · {guestsAttending} attending · {guestsDeclined} declined · {guestsPending} pending
         </h2>
@@ -478,18 +480,19 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
         {wedding.guests.length === 0 ? (
           <p className="text-xs text-gray-400 font-sans">No guests yet.</p>
         ) : (
-          <table className="w-full text-xs font-sans">
-            <thead>
-              <tr className="text-gray-400 border-b border-gray-100">
-                <th className="text-left py-2">Name</th>
-                <th className="text-left py-2">Party</th>
-                <th className="text-left py-2">Email</th>
-                <th className="text-left py-2">RSVP</th>
-                <th className="text-left py-2">Dietary</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full text-xs font-sans min-w-[640px]">
+              <thead>
+                <tr className="text-gray-400 border-b border-gray-100">
+                  <th className="text-left py-2 px-4 sm:px-0">Name</th>
+                  <th className="text-left py-2">Party</th>
+                  <th className="text-left py-2">Email</th>
+                  <th className="text-left py-2">RSVP</th>
+                  <th className="text-left py-2">Dietary</th>
+                  <th className="px-4 sm:px-0"></th>
+                </tr>
+              </thead>
+              <tbody>
               {wedding.guests.map((g) => {
                 const updateAction = async (formData: FormData) => {
                   "use server";
@@ -501,7 +504,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                 };
                 return (
                   <tr key={g.id} className="border-b border-gray-50">
-                    <td className="py-2">
+                    <td className="py-2 px-4 sm:px-0">
                       {g.firstName} {g.lastName ?? ""}
                       {g.plusOne && <span className="ml-1 text-brand-orange-700">+1</span>}
                     </td>
@@ -512,7 +515,7 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                         <select
                           name="rsvp"
                           defaultValue={g.rsvp}
-                          className="border border-gray-200 rounded px-2 py-0.5 text-xs"
+                          className="border border-gray-200 rounded px-2 py-1 text-xs"
                           onChange={(e) => e.currentTarget.form?.requestSubmit()}
                         >
                           {RSVP_STATUSES.map((s) => (
@@ -522,21 +525,22 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                       </form>
                     </td>
                     <td className="py-2 text-gray-500">{g.dietary ?? "—"}</td>
-                    <td className="py-2 text-right">
+                    <td className="py-2 text-right px-4 sm:px-0">
                       <form action={deleteAction}>
-                        <button className="text-gray-300 hover:text-red-500">×</button>
+                        <button className="text-gray-300 hover:text-red-500 p-1">×</button>
                       </form>
                     </td>
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
 
       {/* ── Messages ─────────────────────────────────────────────────────── */}
-      <section id="messages" className="bg-white p-6">
+      <section id="messages" className="bg-white p-4 sm:p-6 scroll-mt-32">
         <h2 className="font-sans text-xs uppercase tracking-wider text-gray-400 mb-4">
           Messages with couple
         </h2>

@@ -149,27 +149,27 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="space-y-6 sm:space-y-8 max-w-3xl">
       <div>
-        <h1 className="font-serif text-3xl text-brand-orange-700">Settings</h1>
-        <p className="text-sm text-gray-400 mt-1">
+        <h1 className="font-serif text-2xl sm:text-3xl text-brand-orange-700">Settings</h1>
+        <p className="text-xs sm:text-sm text-gray-400 mt-1">
           Configure integrations and business settings. Changes take effect immediately.
         </p>
       </div>
 
       {SETTING_GROUPS.map((group) => (
         <div key={group.group} className="bg-white">
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 sm:p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <span className="text-2xl">{group.icon}</span>
-              <div>
-                <h2 className="font-serif text-xl text-brand-orange-700">{group.title}</h2>
+              <div className="min-w-0">
+                <h2 className="font-serif text-lg sm:text-xl text-brand-orange-700">{group.title}</h2>
                 <p className="font-sans text-xs text-gray-400 mt-0.5">{group.description}</p>
               </div>
             </div>
           </div>
 
-          <div className="p-6 space-y-5">
+          <div className="p-4 sm:p-6 space-y-5">
             {group.fields.map((field) => (
               <div key={field.key}>
                 <label className="label">{field.label}</label>
@@ -219,7 +219,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={() => saveGroup(group.group)}
                 disabled={saving === group.group}
-                className="btn-primary py-2.5 px-6 flex items-center gap-2 text-xs"
+                className="btn-primary py-3 px-6 flex items-center justify-center gap-2 text-xs w-full sm:w-auto"
               >
                 {saving === group.group ? (
                   <Loader2 size={14} className="animate-spin" />

@@ -36,20 +36,32 @@ export function Header() {
     >
       <nav className="container mx-auto px-6 max-w-7xl" aria-label="Main navigation">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {/* Logo: image tile when scrolled (white bg), wordmark when transparent
+              so the pink-background tile doesn't sit on top of the hero text. */}
           <Link
             href="/"
             className="flex items-center"
             aria-label="The Wild Flower Vault – Home"
           >
-            <Image
-              src="/images/logo.png"
-              alt="The Wildflower Vault"
-              width={160}
-              height={160}
-              className="h-14 w-14 rounded-md object-cover transition-opacity"
-              priority
-            />
+            {scrolled ? (
+              <Image
+                src="/images/logo.png"
+                alt="The Wildflower Vault"
+                width={160}
+                height={160}
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-md object-cover"
+                priority
+              />
+            ) : (
+              <div className="leading-none">
+                <div className="font-serif text-base sm:text-lg tracking-[0.18em] text-white">
+                  WILD FLOWER
+                </div>
+                <div className="font-sans text-[10px] sm:text-xs tracking-[0.4em] uppercase text-brand-pink-300 mt-1">
+                  Vault
+                </div>
+              </div>
+            )}
           </Link>
 
           {/* Desktop nav */}

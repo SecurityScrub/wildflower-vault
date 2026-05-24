@@ -15,6 +15,14 @@ if [ -n "$DATABASE_URL" ]; then
   node /app/node_modules/prisma/build/index.js db push --skip-generate --accept-data-loss || {
     echo "[entrypoint] WARNING: prisma db push failed. Continuing startup so the app can still serve; investigate the schema drift."
   }
+
+  # Force-upsert the primary admin user from ADMIN_EMAIL + ADMIN_PASSWORD.
+  # This means changing either env var in Railway and redeploying is enough
+  # to rotate the credentials — guarantees a backdoor while in active dev.
+  echo "[entrypoint] Syncing primary admin from env..."
+  node /app/prisma/bootstrap-admin.mjs || {
+    echo "[entrypoint] WARNING: admin bootstrap failed. Continuing startup."
+  }
 else
   echo "[entrypoint] DATABASE_URL not set — skipping schema sync."
 fi

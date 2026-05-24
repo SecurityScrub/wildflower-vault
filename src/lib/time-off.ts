@@ -16,15 +16,15 @@ export async function findBlockingTimeOff(
   const windowEnd = end ?? start;
 
   // Pull rows that could plausibly overlap: any one-time row whose window
-  // intersects, plus any weekly recurrence whose recurUntil is unset or
-  // still in the future. This is a cheap superset — we walk it in JS to do
-  // the precise weekday + time-of-day match.
+  // intersects, plus any recurring row whose recurUntil is unset or still in
+  // the future. We walk the result in JS to do the precise match for each
+  // recurrence type.
   const candidates = await prisma.timeOff.findMany({
     where: {
       OR: [
         { recurrence: "NONE", startAt: { lte: windowEnd }, endAt: { gt: start } },
         {
-          recurrence: "WEEKLY",
+          recurrence: { in: ["WEEKLY", "MONTHLY", "YEARLY"] },
           startAt: { lte: windowEnd },
           OR: [{ recurUntil: null }, { recurUntil: { gte: start } }],
         },
@@ -42,19 +42,17 @@ function overlaps(t: TimeOff, start: Date, end: Date): boolean {
   if (t.recurrence === "NONE") {
     return t.startAt < end && t.endAt > start;
   }
-  // WEEKLY
-  if (t.recurDays.length === 0) return false;
   if (t.startAt > end) return false;
   if (t.recurUntil && t.recurUntil < start) return false;
 
-  // Walk each day in [start, end] (cap at a year to avoid pathological loops)
-  // and check whether that day's weekday is in recurDays, and whether the
-  // time-of-day window overlaps. allDay = whole day blocked.
+  // Walk each day in [start, end] (cap at ~370 days to avoid pathological
+  // loops) and ask: does this recurrence fire on `day`? If yes, check time-
+  // of-day overlap (allDay = the whole day is blocked).
   const firstDay = startOfLocalDay(start);
   const lastDay = startOfLocalDay(end);
   const dayCount = Math.min(
     Math.round((lastDay.getTime() - firstDay.getTime()) / MS_PER_DAY) + 1,
-    366,
+    370,
   );
   const startTime = timeOfDayMin(t.startAt);
   const endTime = timeOfDayMin(t.endAt);
@@ -63,14 +61,32 @@ function overlaps(t: TimeOff, start: Date, end: Date): boolean {
     const day = new Date(firstDay.getTime() + i * MS_PER_DAY);
     if (t.recurUntil && day > t.recurUntil) break;
     if (day.getTime() + MS_PER_DAY <= t.startAt.getTime()) continue;
-    if (!t.recurDays.includes(day.getDay())) continue;
+    if (!firesOnDay(t, day)) continue;
     if (t.allDay) return true;
-    // Build today's blocked window and check overlap with [start, end].
     const blockStart = new Date(day.getTime() + startTime * 60 * 1000);
     const blockEnd = new Date(day.getTime() + endTime * 60 * 1000);
     if (blockStart < end && blockEnd > start) return true;
   }
   return false;
+}
+
+/** Does this recurring block fire on the given local day? */
+function firesOnDay(t: TimeOff, day: Date): boolean {
+  switch (t.recurrence) {
+    case "WEEKLY":
+      return t.recurDays.length > 0 && t.recurDays.includes(day.getDay());
+    case "MONTHLY":
+      // Same day-of-month as the anchor. Months with fewer days simply skip
+      // (e.g. an anchor on the 31st won't fire in February).
+      return day.getDate() === t.startAt.getDate();
+    case "YEARLY":
+      return (
+        day.getMonth() === t.startAt.getMonth() &&
+        day.getDate() === t.startAt.getDate()
+      );
+    default:
+      return false;
+  }
 }
 
 function startOfLocalDay(d: Date): Date {
@@ -104,19 +120,23 @@ export function expandTimeOffForRange(
       });
       continue;
     }
-    if (t.recurDays.length === 0) continue;
+    if (t.recurrence === "WEEKLY" && t.recurDays.length === 0) continue;
+
     const firstDay = startOfLocalDay(new Date(Math.max(t.startAt.getTime(), windowStart.getTime())));
     const lastDay = startOfLocalDay(new Date(Math.min(
       t.recurUntil?.getTime() ?? windowEnd.getTime(),
       windowEnd.getTime(),
     )));
     if (lastDay < firstDay) continue;
-    const dayCount = Math.round((lastDay.getTime() - firstDay.getTime()) / MS_PER_DAY) + 1;
+    const dayCount = Math.min(
+      Math.round((lastDay.getTime() - firstDay.getTime()) / MS_PER_DAY) + 1,
+      370,
+    );
     const startTime = timeOfDayMin(t.startAt);
     const endTime = timeOfDayMin(t.endAt);
     for (let i = 0; i < dayCount; i++) {
       const day = new Date(firstDay.getTime() + i * MS_PER_DAY);
-      if (!t.recurDays.includes(day.getDay())) continue;
+      if (!firesOnDay(t, day)) continue;
       out.push({
         id: `${t.id}-${day.toISOString().slice(0, 10)}`,
         start: t.allDay ? day : new Date(day.getTime() + startTime * 60 * 1000),

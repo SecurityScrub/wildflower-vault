@@ -14,8 +14,8 @@ const CreateSchema = z.object({
   allDay: z.boolean().default(false),
   startAt: z.string().min(1),
   endAt: z.string().min(1),
-  recurrence: z.enum(["NONE", "WEEKLY"]).default("NONE"),
-  // 0=Sun..6=Sat
+  recurrence: z.enum(["NONE", "WEEKLY", "MONTHLY", "YEARLY"]).default("NONE"),
+  // 0=Sun..6=Sat (weekly-only)
   recurDays: z.array(z.number().int().min(0).max(6)).default([]),
   recurUntil: z.string().nullable().optional(),
 });

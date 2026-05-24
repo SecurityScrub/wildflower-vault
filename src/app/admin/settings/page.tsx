@@ -58,22 +58,6 @@ const SETTING_GROUPS: Array<{
     ],
   },
   {
-    group: "calendar",
-    title: "Google Calendar",
-    description: "Sync bookings to your Google Calendar automatically.",
-    icon: "📅",
-    fields: [
-      { key: "google_calendar_enabled", label: "Enable Google Calendar Sync", type: "select", options: ["false", "true"] },
-      { key: "google_calendar_id", label: "Calendar ID", placeholder: "your-calendar@group.calendar.google.com" },
-      {
-        key: "google_service_account_json",
-        label: "Service Account JSON (base64-encoded)",
-        isSecret: true,
-        hint: "Base64-encode your service account JSON: btoa(JSON.stringify(serviceAccount))",
-      },
-    ],
-  },
-  {
     group: "business",
     title: "Business Info",
     description: "Basic business information used in emails and SEO.",

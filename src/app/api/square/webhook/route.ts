@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSquareConfig } from "@/lib/settings";
 import { verifyWebhookSignature } from "@/lib/square";
-import { updateCalendarEvent } from "@/lib/google-calendar";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -29,7 +28,6 @@ export async function POST(req: NextRequest) {
 
     const booking = await prisma.booking.findFirst({
       where: { squareOrderId: payment.order_id },
-      include: { items: { include: { rentalItem: true } } },
     });
 
     if (booking) {
@@ -48,14 +46,6 @@ export async function POST(req: NextRequest) {
           paidAmount,
         },
       });
-
-      // Update Google Calendar event title to confirmed
-      if (booking.googleEventId) {
-        const itemNames = booking.items.map((i) => i.rentalItem.name).join(", ");
-        await updateCalendarEvent(booking.googleEventId, {
-          title: `✓ ${booking.guestName} – ${itemNames}`,
-        }).catch(console.error);
-      }
     }
   }
 

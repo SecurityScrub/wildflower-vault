@@ -4,7 +4,6 @@ import type { Session } from "next-auth";
 import { BookingStatus } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { updateCalendarEvent } from "@/lib/google-calendar";
 import { z } from "zod";
 
 function isAdmin(session: Session | null) {
@@ -63,13 +62,6 @@ export async function PATCH(req: NextRequest) {
       ...(adminNotes !== undefined ? { adminNotes } : {}),
     },
   });
-
-  // Sync calendar event title if status changed to confirmed
-  if (status === "CONFIRMED" && booking.googleEventId) {
-    updateCalendarEvent(booking.googleEventId, {
-      title: `✓ ${booking.guestName} – Confirmed`,
-    }).catch(console.error);
-  }
 
   return NextResponse.json(booking);
 }

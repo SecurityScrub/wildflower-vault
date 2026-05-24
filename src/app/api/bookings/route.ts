@@ -7,9 +7,7 @@ import {
   sendBookingConfirmation,
   sendBookingNotificationToAdmin,
 } from "@/lib/email";
-import {
-  createCalendarEvent,
-} from "@/lib/google-calendar";
+import { buildICS } from "@/lib/ics";
 import { generateBookingNumber, formatCurrency } from "@/lib/utils";
 import { z } from "zod";
 
@@ -131,6 +129,26 @@ export async function POST(req: NextRequest) {
       // Don't fail the booking if Square fails — admin can handle manually
     }
 
+    // Build a single .ics invite to attach to both the customer confirmation
+    // and the admin notification — that's how the planner gets the event on
+    // their personal calendar without our service syncing to Google.
+    const eventEnd = new Date(eventDate.getTime() + 8 * 60 * 60 * 1000);
+    const venueLine = [data.venueName, data.venueAddress, data.venueCity, data.venueState]
+      .filter(Boolean)
+      .join(", ");
+    const itemsLine = data.items.map((i) => i.name).join(", ");
+    const ics = buildICS({
+      uid: `booking-${booking.id}@thewildflowervault.com`,
+      summary: `[PENDING] ${data.name} – ${itemsLine}`,
+      description: `Booking #${bookingNumber}\n${data.email} · ${data.phone}\nVenue: ${venueLine}\nItems: ${itemsLine}\nTotal: ${formatCurrency(data.totalAmount)}`,
+      location: venueLine,
+      start: eventDate,
+      end: eventEnd,
+      organizerName: "The Wild Flower Vault",
+      attendeeName: data.name,
+      attendeeEmail: data.email,
+    });
+
     // Send emails (non-blocking)
     Promise.all([
       sendBookingConfirmation({
@@ -141,6 +159,7 @@ export async function POST(req: NextRequest) {
         items: data.items.map((i) => i.name),
         total: formatCurrency(data.totalAmount),
         depositAmount: formatCurrency(data.depositAmount),
+        ics,
       }),
       sendBookingNotificationToAdmin({
         bookingNumber,
@@ -149,26 +168,9 @@ export async function POST(req: NextRequest) {
         eventDate,
         items: data.items.map((i) => i.name),
         total: formatCurrency(data.totalAmount),
+        ics,
       }),
     ]).catch(console.error);
-
-    // Create Google Calendar event (non-blocking)
-    createCalendarEvent({
-      title: `[PENDING] ${data.name} – ${data.items.map((i) => i.name).join(", ")}`,
-      description: `Booking #${bookingNumber}\n${data.email} · ${data.phone}\nVenue: ${data.venueName}, ${data.venueCity}`,
-      startDate: eventDate,
-      endDate: new Date(eventDate.getTime() + 8 * 60 * 60 * 1000),
-      location: `${data.venueAddress}, ${data.venueCity}, ${data.venueState}`,
-    })
-      .then((eventId) => {
-        if (eventId) {
-          return prisma.booking.update({
-            where: { id: booking.id },
-            data: { googleEventId: eventId },
-          });
-        }
-      })
-      .catch(console.error);
 
     return NextResponse.json({
       bookingId: booking.id,

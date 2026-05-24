@@ -94,12 +94,3 @@ export async function getTurnstileConfig() {
   };
 }
 
-export async function getGoogleCalendarConfig() {
-  return {
-    calendarId: (await getSetting("google_calendar_id")) ?? "",
-    serviceAccountJson:
-      (await getSetting("google_service_account_json")) ??
-      process.env.GOOGLE_SERVICE_ACCOUNT_JSON ?? "",
-    enabled: (await getSetting("google_calendar_enabled")) === "true",
-  };
-}

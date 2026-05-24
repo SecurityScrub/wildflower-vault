@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { createCalendarEvent } from "@/lib/google-calendar";
 import { buildICS, icsToBase64 } from "@/lib/ics";
 import {
   sendConsultationConfirmation,
@@ -94,31 +93,11 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Side-effects: Google Calendar event, ICS email confirmation. Best-effort.
-    const couple = data.partnerName ? `${data.name} & ${data.partnerName}` : data.name;
-    const calendarEnabled = process.env.NODE_ENV !== "test";
-    const calendarPromise = calendarEnabled
-      ? createCalendarEvent({
-          title: `Consultation — ${couple}`,
-          description: `Wedding planning consultation\n\nClient: ${couple}\nEmail: ${data.email}${data.phone ? `\nPhone: ${data.phone}` : ""}${data.notes ? `\n\nNotes:\n${data.notes}` : ""}`,
-          startDate: scheduledAt,
-          endDate: endsAt,
-          location: consultation.location ?? undefined,
-        }).catch((err) => {
-          console.error("[consultation] google calendar create failed", err);
-          return null;
-        })
-      : Promise.resolve(null);
-
-    const googleEventId = await calendarPromise;
-    if (googleEventId) {
-      await prisma.consultation.update({
-        where: { id: consultation.id },
-        data: { googleEventId },
-      });
-    }
-
+    // Build .ics calendar invite. The same invite is attached to the customer
+    // confirmation AND the planner notification so both can drop the
+    // consultation into their own calendar.
     const config = getZeptoMailConfig();
+    const couple = data.partnerName ? `${data.name} & ${data.partnerName}` : data.name;
     const ics = buildICS({
       uid: `consultation-${consultation.id}@thewildflowervault.com`,
       summary: `Wedding planning consultation — The Wild Flower Vault`,
@@ -155,6 +134,7 @@ export async function POST(req: NextRequest) {
         location: consultation.location,
         notes: data.notes,
         leadId: verifiedLeadId,
+        icsBase64,
       }),
     ]).catch((err) => console.error("[consultation] email send failed", err));
 

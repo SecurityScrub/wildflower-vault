@@ -1,38 +1,7 @@
-import nodemailer from "nodemailer";
-import { getEmailConfig } from "./settings";
+// Transactional emails for bookings + inquiries. All sent over the ZeptoMail
+// HTTP API (the SMTP path was removed because Railway blocks outbound SMTP).
 
-async function getTransporter() {
-  const config = await getEmailConfig();
-  return nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.port === 465,
-    auth: { user: config.user, pass: config.pass },
-  });
-}
-
-interface SendMailAttachment {
-  filename: string;
-  content: string;
-  contentType: string;
-}
-
-async function sendMail(
-  to: string,
-  subject: string,
-  html: string,
-  attachments?: SendMailAttachment[],
-) {
-  const config = await getEmailConfig();
-  const transporter = await getTransporter();
-  await transporter.sendMail({
-    from: `"${config.fromName}" <${config.fromEmail}>`,
-    to,
-    subject,
-    html,
-    attachments,
-  });
-}
+import { sendZeptoMail, getZeptoMailConfig, icsAttachment } from "./zeptomail";
 
 export async function sendBookingConfirmation(params: {
   to: string;
@@ -73,17 +42,19 @@ export async function sendBookingConfirmation(params: {
               <td style="padding: 8px 0; font-weight: 600; color: #c9a84c;">${params.depositAmount}</td></tr>
         </table>
         <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-        <p style="font-size: 14px; color: #666;">Questions? Reply to this email or visit your <a href="${process.env.NEXT_PUBLIC_SITE_URL}/portal" style="color: #2d5016;">customer portal</a> to manage your booking.</p>
+        <p style="font-size: 14px; color: #666;">Questions? Reply to this email or visit your <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/portal" style="color: #2d5016;">customer portal</a> to manage your booking.</p>
       </div>
       <div style="background: #1a1a1a; padding: 20px; text-align: center;">
         <p style="color: #888; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} The Wild Flower Vault · Des Moines, Iowa</p>
       </div>
     </div>
   `;
-  const attachments = params.ics
-    ? [{ filename: "event.ics", content: params.ics, contentType: "text/calendar; method=REQUEST" }]
-    : undefined;
-  await sendMail(params.to, subject, html, attachments);
+  await sendZeptoMail({
+    to: { address: params.to, name: params.name },
+    subject,
+    html,
+    attachments: params.ics ? [icsAttachment(params.ics, "event.ics")] : undefined,
+  });
 }
 
 export async function sendBookingNotificationToAdmin(params: {
@@ -95,7 +66,9 @@ export async function sendBookingNotificationToAdmin(params: {
   total: string;
   ics?: string;
 }) {
-  const adminEmail = process.env.ADMIN_EMAIL!;
+  const config = getZeptoMailConfig();
+  if (!config.adminEmail) return;
+
   const subject = `New Booking: ${params.bookingNumber} – ${params.guestName}`;
   const html = `
     <h2>New Booking Received</h2>
@@ -105,12 +78,15 @@ export async function sendBookingNotificationToAdmin(params: {
     <p><strong>Event Date:</strong> ${params.eventDate.toDateString()}</p>
     <p><strong>Items:</strong> ${params.items.join(", ")}</p>
     <p><strong>Total:</strong> ${params.total}</p>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/orders" style="background:#2d5016;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block;margin-top:16px;">View in Admin</a>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/admin/orders" style="background:#2d5016;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block;margin-top:16px;">View in Admin</a>
   `;
-  const attachments = params.ics
-    ? [{ filename: "event.ics", content: params.ics, contentType: "text/calendar; method=REQUEST" }]
-    : undefined;
-  await sendMail(adminEmail, subject, html, attachments);
+  await sendZeptoMail({
+    to: { address: config.adminEmail },
+    replyTo: { address: params.guestEmail, name: params.guestName },
+    subject,
+    html,
+    attachments: params.ics ? [icsAttachment(params.ics, "event.ics")] : undefined,
+  });
 }
 
 export async function sendCancellationEmail(params: {
@@ -132,7 +108,11 @@ export async function sendCancellationEmail(params: {
       </div>
     </div>
   `;
-  await sendMail(params.to, subject, html);
+  await sendZeptoMail({
+    to: { address: params.to, name: params.name },
+    subject,
+    html,
+  });
 }
 
 export async function sendInquiryAck(params: { to: string; name: string }) {
@@ -149,5 +129,9 @@ export async function sendInquiryAck(params: { to: string; name: string }) {
       </div>
     </div>
   `;
-  await sendMail(params.to, subject, html);
+  await sendZeptoMail({
+    to: { address: params.to, name: params.name },
+    subject,
+    html,
+  });
 }

@@ -65,25 +65,6 @@ export async function getSquareConfig() {
   };
 }
 
-export async function getEmailConfig() {
-  return {
-    host:
-      (await getSetting("smtp_host")) ?? process.env.ZEPTOMAIL_SMTP_HOST ?? "smtp.zeptomail.com",
-    port:
-      Number((await getSetting("smtp_port")) ?? process.env.ZEPTOMAIL_SMTP_PORT ?? "587"),
-    user:
-      (await getSetting("smtp_user")) ?? process.env.ZEPTOMAIL_SMTP_USER ?? "emailapikey",
-    pass:
-      (await getSetting("smtp_pass")) ?? process.env.ZEPTOMAIL_SMTP_PASS ?? "",
-    fromEmail:
-      (await getSetting("from_email")) ?? process.env.ZEPTOMAIL_FROM_EMAIL ?? "",
-    fromName:
-      (await getSetting("from_name")) ??
-      process.env.ZEPTOMAIL_FROM_NAME ??
-      "The Wild Flower Vault",
-  };
-}
-
 export async function getTurnstileConfig() {
   return {
     siteKey:

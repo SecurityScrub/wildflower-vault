@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendCancellationEmail } from "@/lib/email";
-import { deleteCalendarEvent } from "@/lib/google-calendar";
 
 interface Params { params: Promise<{ id: string }> }
 
@@ -54,11 +53,6 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     where: { id },
     data: { status: "CANCELLED", cancelledAt: new Date() },
   });
-
-  // Cleanup calendar event
-  if (booking.googleEventId) {
-    deleteCalendarEvent(booking.googleEventId).catch(console.error);
-  }
 
   // Send cancellation email
   const email = booking.guestEmail ?? "";

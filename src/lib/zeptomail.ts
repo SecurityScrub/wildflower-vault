@@ -354,7 +354,9 @@ export async function sendMfaCode(toEmail: string, code: string, name?: string |
 
 // ─── Admin notification when a consultation is booked ────────────────────────
 
-export async function sendConsultationAdminNotice(params: ConsultationEmailParams & { leadId?: string | null }): Promise<void> {
+export async function sendConsultationAdminNotice(
+  params: ConsultationEmailParams & { leadId?: string | null; icsBase64?: string },
+): Promise<void> {
   const config = getZeptoMailConfig();
   if (!config.adminEmail) return;
 
@@ -372,7 +374,7 @@ export async function sendConsultationAdminNotice(params: ConsultationEmailParam
   const html = `
     <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #2d5016; margin: 0 0 8px;">New Consultation Booked</h2>
-      <p style="color: #666; margin: 0 0 16px;">${escapeHtml(couple)} just booked a consultation.</p>
+      <p style="color: #666; margin: 0 0 16px;">${escapeHtml(couple)} just booked a consultation. The attached .ics will drop this on your calendar.</p>
       <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
         <tr><td style="padding: 6px 12px 6px 0; color: #666;">When</td><td>${escapeHtml(when)}</td></tr>
         <tr><td style="padding: 6px 12px 6px 0; color: #666;">Duration</td><td>${params.durationMin} min</td></tr>
@@ -387,10 +389,15 @@ export async function sendConsultationAdminNotice(params: ConsultationEmailParam
     </div>
   `;
 
+  const attachments = params.icsBase64
+    ? [{ content: params.icsBase64, mimeType: "text/calendar; method=REQUEST", name: "consultation.ics" }]
+    : undefined;
+
   await sendZeptoMail({
     to: { address: config.adminEmail },
     replyTo: { address: params.email, name: couple },
     subject: `Consultation booked: ${couple} — ${when}`,
     html,
+    attachments,
   });
 }

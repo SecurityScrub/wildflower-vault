@@ -11,7 +11,18 @@ async function getTransporter() {
   });
 }
 
-async function sendMail(to: string, subject: string, html: string) {
+interface SendMailAttachment {
+  filename: string;
+  content: string;
+  contentType: string;
+}
+
+async function sendMail(
+  to: string,
+  subject: string,
+  html: string,
+  attachments?: SendMailAttachment[],
+) {
   const config = await getEmailConfig();
   const transporter = await getTransporter();
   await transporter.sendMail({
@@ -19,6 +30,7 @@ async function sendMail(to: string, subject: string, html: string) {
     to,
     subject,
     html,
+    attachments,
   });
 }
 
@@ -30,6 +42,7 @@ export async function sendBookingConfirmation(params: {
   items: string[];
   total: string;
   depositAmount: string;
+  ics?: string;
 }) {
   const subject = `Booking Confirmation – ${params.bookingNumber}`;
   const html = `
@@ -67,7 +80,10 @@ export async function sendBookingConfirmation(params: {
       </div>
     </div>
   `;
-  await sendMail(params.to, subject, html);
+  const attachments = params.ics
+    ? [{ filename: "event.ics", content: params.ics, contentType: "text/calendar; method=REQUEST" }]
+    : undefined;
+  await sendMail(params.to, subject, html, attachments);
 }
 
 export async function sendBookingNotificationToAdmin(params: {
@@ -77,11 +93,13 @@ export async function sendBookingNotificationToAdmin(params: {
   eventDate: Date;
   items: string[];
   total: string;
+  ics?: string;
 }) {
   const adminEmail = process.env.ADMIN_EMAIL!;
   const subject = `New Booking: ${params.bookingNumber} – ${params.guestName}`;
   const html = `
     <h2>New Booking Received</h2>
+    <p>The attached .ics will drop this on your calendar.</p>
     <p><strong>Booking #:</strong> ${params.bookingNumber}</p>
     <p><strong>Customer:</strong> ${params.guestName} (${params.guestEmail})</p>
     <p><strong>Event Date:</strong> ${params.eventDate.toDateString()}</p>
@@ -89,7 +107,10 @@ export async function sendBookingNotificationToAdmin(params: {
     <p><strong>Total:</strong> ${params.total}</p>
     <a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/orders" style="background:#2d5016;color:#fff;padding:12px 24px;border-radius:4px;text-decoration:none;display:inline-block;margin-top:16px;">View in Admin</a>
   `;
-  await sendMail(adminEmail, subject, html);
+  const attachments = params.ics
+    ? [{ filename: "event.ics", content: params.ics, contentType: "text/calendar; method=REQUEST" }]
+    : undefined;
+  await sendMail(adminEmail, subject, html, attachments);
 }
 
 export async function sendCancellationEmail(params: {

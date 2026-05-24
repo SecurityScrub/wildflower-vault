@@ -11,6 +11,7 @@ import {
   WEDDING_STATUS_LABELS,
 } from "@/lib/wedding-planning";
 import type { TaskStatus } from "@prisma/client";
+import { AutoSubmitSelect } from "@/components/admin/AutoSubmitSelect";
 
 export const dynamic = "force-dynamic";
 
@@ -207,16 +208,15 @@ export default async function MyWeddingPage() {
                       <li key={t.id} className="flex items-center gap-3 text-sm font-sans py-1 border-b border-gray-50">
                         <form action={updateMyTaskStatus}>
                           <input type="hidden" name="taskId" value={t.id} />
-                          <select
+                          <AutoSubmitSelect
                             name="status"
                             defaultValue={t.status}
                             className="text-xs border border-gray-200 rounded px-1.5 py-1"
-                            onChange={(e) => e.currentTarget.form?.requestSubmit()}
                           >
                             {TASK_STATUSES.map((s) => (
                               <option key={s} value={s}>{TASK_STATUS_LABELS[s]}</option>
                             ))}
-                          </select>
+                          </AutoSubmitSelect>
                         </form>
                         <span className={`flex-1 ${t.status === "DONE" ? "line-through text-gray-400" : ""}`}>
                           {t.title}

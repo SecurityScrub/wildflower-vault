@@ -33,6 +33,7 @@ import type {
   RSVPStatus,
   WeddingStatus,
 } from "@prisma/client";
+import { AutoSubmitSelect } from "@/components/admin/AutoSubmitSelect";
 
 export const dynamic = "force-dynamic";
 
@@ -272,16 +273,15 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                       return (
                         <li key={t.id} className="flex items-center gap-3 text-sm font-sans py-1.5 border-b border-gray-50">
                           <form action={updateAction}>
-                            <select
+                            <AutoSubmitSelect
                               name="status"
                               defaultValue={t.status}
                               className="text-xs border border-gray-200 rounded px-1.5 py-1"
-                              onChange={(e) => e.currentTarget.form?.requestSubmit()}
                             >
                               {TASK_STATUSES.map((s) => (
                                 <option key={s} value={s}>{TASK_STATUS_LABELS[s]}</option>
                               ))}
-                            </select>
+                            </AutoSubmitSelect>
                           </form>
                           <span className={`flex-1 ${t.status === "DONE" ? "line-through text-gray-400" : ""}`}>
                             {t.title}
@@ -355,16 +355,15 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                     </div>
                     <div className="flex items-center gap-2">
                       <form action={updateAction}>
-                        <select
+                        <AutoSubmitSelect
                           name="status"
                           defaultValue={v.status}
                           className="text-xs border border-gray-200 rounded px-2 py-1"
-                          onChange={(e) => e.currentTarget.form?.requestSubmit()}
                         >
                           {VENDOR_STATUSES.map((s) => (
                             <option key={s} value={s}>{VENDOR_STATUS_LABELS[s]}</option>
                           ))}
-                        </select>
+                        </AutoSubmitSelect>
                       </form>
                       <form action={deleteAction}>
                         <button className="text-gray-300 hover:text-red-500 text-xs">×</button>
@@ -512,16 +511,15 @@ export default async function WeddingWorkspacePage(props: { params: Promise<{ id
                     <td className="py-2 text-gray-500">{g.email ?? "—"}</td>
                     <td className="py-2">
                       <form action={updateAction}>
-                        <select
+                        <AutoSubmitSelect
                           name="rsvp"
                           defaultValue={g.rsvp}
                           className="border border-gray-200 rounded px-2 py-1 text-xs"
-                          onChange={(e) => e.currentTarget.form?.requestSubmit()}
                         >
                           {RSVP_STATUSES.map((s) => (
                             <option key={s} value={s}>{RSVP_STATUS_LABELS[s]}</option>
                           ))}
-                        </select>
+                        </AutoSubmitSelect>
                       </form>
                     </td>
                     <td className="py-2 text-gray-500">{g.dietary ?? "—"}</td>

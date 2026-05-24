@@ -31,6 +31,21 @@ export interface ZeptoMailMessage {
   attachments?: { content: string; mimeType: string; name: string }[];
 }
 
+/** Wrap a raw .ics string into the ZeptoMail attachment shape. Accepts either
+ * a raw ics string or an already base64-encoded payload. */
+export function icsAttachment(
+  ics: string,
+  filename = "event.ics",
+  alreadyBase64 = false,
+): { content: string; mimeType: string; name: string } {
+  const content = alreadyBase64 ? ics : Buffer.from(ics, "utf8").toString("base64");
+  return {
+    content,
+    mimeType: "text/calendar; method=REQUEST",
+    name: filename,
+  };
+}
+
 export function getZeptoMailConfig() {
   return {
     apiUrl: process.env.ZEPTOMAIL_API_URL ?? "https://api.zeptomail.com/v1.1/email",

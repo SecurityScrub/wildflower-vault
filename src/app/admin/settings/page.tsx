@@ -34,20 +34,6 @@ const SETTING_GROUPS: Array<{
     ],
   },
   {
-    group: "email",
-    title: "ZeptoMail / Email",
-    description: "Configure transactional email via ZeptoMail SMTP.",
-    icon: "📧",
-    fields: [
-      { key: "smtp_host", label: "SMTP Host", placeholder: "smtp.zeptomail.com" },
-      { key: "smtp_port", label: "SMTP Port", placeholder: "587" },
-      { key: "smtp_user", label: "SMTP User", placeholder: "emailapikey" },
-      { key: "smtp_pass", label: "SMTP Password / API Key", isSecret: true },
-      { key: "from_email", label: "From Email", placeholder: "noreply@thewildflowervault.com" },
-      { key: "from_name", label: "From Name", placeholder: "The Wild Flower Vault" },
-    ],
-  },
-  {
     group: "turnstile",
     title: "Cloudflare Turnstile",
     description: "Bot protection for your inquiry form.",

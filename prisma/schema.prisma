@@ -482,6 +482,8 @@ model WeddingFile {
 enum TimeOffRecurrence {
   NONE
   WEEKLY
+  MONTHLY
+  YEARLY
 }
 
 model TimeOff {

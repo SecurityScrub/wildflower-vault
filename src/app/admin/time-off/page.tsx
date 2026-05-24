@@ -3,7 +3,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, Plus, Trash2, Calendar as CalIcon, Repeat } from "lucide-react";
 
-type Recurrence = "NONE" | "WEEKLY";
+type Recurrence = "NONE" | "WEEKLY" | "MONTHLY" | "YEARLY";
+
+const ORDINAL = (n: number): string => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 interface TimeOffRow {
   id: string;
@@ -45,10 +53,24 @@ function formatRow(row: TimeOffRow): string {
     hour: "numeric",
     minute: "2-digit",
   };
+  const untilSuffix = row.recurUntil
+    ? ` (until ${new Date(row.recurUntil).toLocaleDateString()})`
+    : "";
+
   if (row.recurrence === "WEEKLY") {
     const days = row.recurDays.map((d) => DAY_LABELS[d]).join(", ");
-    if (row.allDay) return `${days}, all day${row.recurUntil ? ` (until ${new Date(row.recurUntil).toLocaleDateString()})` : ""}`;
-    return `${days}, ${start.toLocaleTimeString("en-US", timeOpts)} – ${end.toLocaleTimeString("en-US", timeOpts)}${row.recurUntil ? ` (until ${new Date(row.recurUntil).toLocaleDateString()})` : ""}`;
+    if (row.allDay) return `${days}, all day${untilSuffix}`;
+    return `${days}, ${start.toLocaleTimeString("en-US", timeOpts)} – ${end.toLocaleTimeString("en-US", timeOpts)}${untilSuffix}`;
+  }
+  if (row.recurrence === "MONTHLY") {
+    const day = ORDINAL(start.getDate());
+    if (row.allDay) return `${day} of every month, all day${untilSuffix}`;
+    return `${day} of every month, ${start.toLocaleTimeString("en-US", timeOpts)} – ${end.toLocaleTimeString("en-US", timeOpts)}${untilSuffix}`;
+  }
+  if (row.recurrence === "YEARLY") {
+    const md = `${MONTHS[start.getMonth()]} ${start.getDate()}`;
+    if (row.allDay) return `Every ${md}, all day${untilSuffix}`;
+    return `Every ${md}, ${start.toLocaleTimeString("en-US", timeOpts)} – ${end.toLocaleTimeString("en-US", timeOpts)}${untilSuffix}`;
   }
   if (row.allDay) {
     return `${start.toLocaleDateString("en-US", opts)} → ${end.toLocaleDateString("en-US", opts)}`;
@@ -129,7 +151,10 @@ export default function AdminTimeOffPage() {
         endAt,
         recurrence,
         recurDays: recurrence === "WEEKLY" ? recurDays : [],
-        recurUntil: recurrence === "WEEKLY" && recurUntil ? new Date(`${recurUntil}T23:59`).toISOString() : null,
+        recurUntil:
+          recurrence !== "NONE" && recurUntil
+            ? new Date(`${recurUntil}T23:59`).toISOString()
+            : null,
       }),
     });
     setSubmitting(false);
@@ -195,7 +220,9 @@ export default function AdminTimeOffPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="label" htmlFor="to-start-date">{recurrence === "WEEKLY" ? "Recurrence starts" : "Start date"}</label>
+            <label className="label" htmlFor="to-start-date">
+              {recurrence === "NONE" ? "Start date" : "Recurrence starts"}
+            </label>
             <input
               id="to-start-date"
               type="date"
@@ -218,12 +245,10 @@ export default function AdminTimeOffPage() {
             )}
           </div>
           <div>
-            <label className="label" htmlFor="to-end-date">{recurrence === "WEEKLY" ? "(time-of-day end)" : "End date"}</label>
-            {recurrence === "WEEKLY" ? (
-              <div className="flex items-center h-[42px] text-xs text-gray-400">
-                {allDay ? "Weekly blocks are full days." : "Pick the end time below."}
-              </div>
-            ) : (
+            <label className="label" htmlFor="to-end-date">
+              {recurrence === "NONE" ? "End date" : "(time-of-day end)"}
+            </label>
+            {recurrence === "NONE" ? (
               <input
                 id="to-end-date"
                 type="date"
@@ -232,6 +257,10 @@ export default function AdminTimeOffPage() {
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
+            ) : (
+              <div className="flex items-center h-[42px] text-xs text-gray-400">
+                {allDay ? "Recurring blocks fire all day." : "Pick the end time below."}
+              </div>
             )}
             {!allDay && (
               <input
@@ -247,62 +276,76 @@ export default function AdminTimeOffPage() {
 
         <div className="border-t border-gray-100 pt-5">
           <p className="label flex items-center gap-1.5"><Repeat size={12} /> Recurrence</p>
-          <div className="flex gap-2 mb-3">
-            <button
-              type="button"
-              onClick={() => setRecurrence("NONE")}
-              className={`flex-1 px-4 py-2 text-xs font-sans uppercase tracking-wider rounded ${
-                recurrence === "NONE" ? "bg-brand-orange-700 text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              One-time
-            </button>
-            <button
-              type="button"
-              onClick={() => setRecurrence("WEEKLY")}
-              className={`flex-1 px-4 py-2 text-xs font-sans uppercase tracking-wider rounded ${
-                recurrence === "WEEKLY" ? "bg-brand-orange-700 text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              Weekly
-            </button>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+            {([
+              ["NONE", "One-time"],
+              ["WEEKLY", "Weekly"],
+              ["MONTHLY", "Monthly"],
+              ["YEARLY", "Yearly"],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setRecurrence(value)}
+                className={`px-3 py-2.5 text-xs font-sans uppercase tracking-wider rounded transition-colors ${
+                  recurrence === value
+                    ? "bg-brand-orange-700 text-white"
+                    : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
           {recurrence === "WEEKLY" && (
-            <div className="space-y-3">
-              <div>
-                <p className="text-xs text-gray-500 mb-2">Repeat on</p>
-                <div className="flex gap-1.5 flex-wrap">
-                  {DAY_LABELS.map((label, idx) => {
-                    const active = recurDays.includes(idx);
-                    return (
-                      <button
-                        key={label}
-                        type="button"
-                        onClick={() => toggleDay(idx)}
-                        className={`w-12 h-10 rounded text-xs font-sans font-medium transition-colors ${
-                          active
-                            ? "bg-brand-pink-500 text-white"
-                            : "bg-gray-50 text-gray-500 hover:bg-gray-100"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Repeat on</p>
+              <div className="flex gap-1.5 flex-wrap mb-3">
+                {DAY_LABELS.map((label, idx) => {
+                  const active = recurDays.includes(idx);
+                  return (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => toggleDay(idx)}
+                      className={`w-12 h-10 rounded text-xs font-sans font-medium transition-colors ${
+                        active
+                          ? "bg-brand-pink-500 text-white"
+                          : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
-              <div>
-                <label className="label" htmlFor="to-until">Until (optional)</label>
-                <input
-                  id="to-until"
-                  type="date"
-                  className="input-field"
-                  value={recurUntil}
-                  onChange={(e) => setRecurUntil(e.target.value)}
-                />
-                <p className="text-xs text-gray-400 mt-1">Leave blank to repeat indefinitely.</p>
-              </div>
+            </div>
+          )}
+
+          {recurrence === "MONTHLY" && startDate && (
+            <p className="text-xs text-brand-orange-700 bg-brand-orange-50 px-3 py-2 rounded mb-3">
+              Repeats on the <strong>{ORDINAL(new Date(`${startDate}T12:00`).getDate())}</strong> of every month. Months with fewer days are skipped.
+            </p>
+          )}
+
+          {recurrence === "YEARLY" && startDate && (
+            <p className="text-xs text-brand-orange-700 bg-brand-orange-50 px-3 py-2 rounded mb-3">
+              Repeats every <strong>{MONTHS[new Date(`${startDate}T12:00`).getMonth()]} {new Date(`${startDate}T12:00`).getDate()}</strong>.
+            </p>
+          )}
+
+          {recurrence !== "NONE" && (
+            <div>
+              <label className="label" htmlFor="to-until">Until (optional)</label>
+              <input
+                id="to-until"
+                type="date"
+                className="input-field"
+                value={recurUntil}
+                onChange={(e) => setRecurUntil(e.target.value)}
+              />
+              <p className="text-xs text-gray-400 mt-1">Leave blank to repeat indefinitely.</p>
             </div>
           )}
         </div>

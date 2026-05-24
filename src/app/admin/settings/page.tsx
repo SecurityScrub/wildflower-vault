@@ -126,6 +126,8 @@ export default function AdminSettingsPage() {
         </p>
       </div>
 
+      <EmailDiagnostic />
+
       {SETTING_GROUPS.map((group) => (
         <div key={group.group} className="bg-white">
           <div className="p-4 sm:p-6 border-b border-gray-100">
@@ -203,6 +205,86 @@ export default function AdminSettingsPage() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function EmailDiagnostic() {
+  const [to, setTo] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<null | { ok: boolean; message?: string; error?: string; hint?: string; from?: string }>(null);
+
+  async function run() {
+    setBusy(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/admin/email/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: to || undefined }),
+      });
+      const data = (await res.json()) as typeof result;
+      setResult(data);
+    } catch (err) {
+      setResult({ ok: false, error: err instanceof Error ? err.message : "Network error" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="bg-white">
+      <div className="p-4 sm:p-6 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">📨</span>
+          <div className="min-w-0">
+            <h2 className="font-serif text-lg sm:text-xl text-brand-orange-700">Email Diagnostic</h2>
+            <p className="font-sans text-xs text-gray-400 mt-0.5">
+              Send a test email through the ZeptoMail HTTP API and see the actual response. Default recipient is <code>ADMIN_EMAIL</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 sm:p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="email"
+            className="input-field flex-1"
+            placeholder="Override recipient (optional) — defaults to ADMIN_EMAIL"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
+          <button
+            onClick={run}
+            disabled={busy}
+            className="btn-primary py-3 px-5 text-xs flex items-center justify-center gap-2 shrink-0"
+          >
+            {busy ? <Loader2 size={14} className="animate-spin" /> : null}
+            {busy ? "Sending…" : "Send Test Email"}
+          </button>
+        </div>
+
+        {result && (
+          <div
+            className={`border px-4 py-3 text-sm font-sans ${
+              result.ok
+                ? "bg-green-50 border-green-200 text-green-800"
+                : "bg-red-50 border-red-200 text-red-800"
+            }`}
+          >
+            <p className="font-semibold">
+              {result.ok ? "✓ " : "✗ "}
+              {result.ok ? result.message : result.error}
+            </p>
+            {result.from && (
+              <p className="text-xs mt-1 opacity-70">Sent from: {result.from}</p>
+            )}
+            {result.hint && (
+              <p className="text-xs mt-2 opacity-80 leading-relaxed">{result.hint}</p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

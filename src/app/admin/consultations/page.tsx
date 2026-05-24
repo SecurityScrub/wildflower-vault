@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { CONSULTATION_STATUS_LABELS } from "@/lib/wedding-planning";
 import type { ConsultationStatus } from "@prisma/client";
+import { AutoSubmitSelect } from "@/components/admin/AutoSubmitSelect";
 
 export const dynamic = "force-dynamic";
 
@@ -125,18 +126,17 @@ function ConsultationRow({
       <div className="flex items-center gap-2 shrink-0">
         <form action={updateStatus} className="inline-flex flex-1 sm:flex-none">
           <input type="hidden" name="id" value={c.id} />
-          <select
+          <AutoSubmitSelect
             name="status"
             defaultValue={c.status}
             className="border border-gray-200 text-xs font-sans px-2 py-1.5 rounded w-full sm:w-auto"
-            onChange={(e) => e.currentTarget.form?.requestSubmit()}
           >
             {Object.entries(CONSULTATION_STATUS_LABELS).map(([k, v]) => (
               <option key={k} value={k}>
                 {v}
               </option>
             ))}
-          </select>
+          </AutoSubmitSelect>
         </form>
         {c.lead && (
           <Link

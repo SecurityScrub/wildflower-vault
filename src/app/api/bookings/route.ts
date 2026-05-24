@@ -8,6 +8,7 @@ import {
   sendBookingNotificationToAdmin,
 } from "@/lib/email";
 import { buildICS } from "@/lib/ics";
+import { findBlockingTimeOff } from "@/lib/time-off";
 import { generateBookingNumber, formatCurrency } from "@/lib/utils";
 import { z } from "zod";
 
@@ -60,6 +61,18 @@ export async function POST(req: NextRequest) {
     if (conflicts.length > 0) {
       return NextResponse.json(
         { error: "One or more items are already booked for that date." },
+        { status: 409 }
+      );
+    }
+
+    // Reject if the planner has marked this date as time-off. Rentals span
+    // the whole event day, so we check the full day window.
+    const dayStart = new Date(eventDate);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+    if (await findBlockingTimeOff(dayStart, dayEnd)) {
+      return NextResponse.json(
+        { error: "That date isn't available. Please pick another date." },
         { status: 409 }
       );
     }

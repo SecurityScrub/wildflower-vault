@@ -468,3 +468,34 @@ model WeddingFile {
 
   @@index([weddingId])
 }
+
+// ─── Time Off ────────────────────────────────────────────────────────────────
+// Planner-controlled windows where customer bookings + consultations are
+// blocked. Supports one-time or weekly-recurring blocks (e.g. "every Sunday").
+//
+// For one-time: startAt/endAt are the literal window.
+// For weekly: startAt's date is when the recurrence begins, startAt/endAt
+// times define the daily window (ignored when allDay), recurDays selects
+// which weekdays the block applies to (0=Sun..6=Sat), and recurUntil ends
+// the recurrence (null = forever).
+
+enum TimeOffRecurrence {
+  NONE
+  WEEKLY
+}
+
+model TimeOff {
+  id         String            @id @default(cuid())
+  reason     String?
+  allDay     Boolean           @default(false)
+  startAt    DateTime
+  endAt      DateTime
+  recurrence TimeOffRecurrence @default(NONE)
+  recurDays  Int[]             @default([])
+  recurUntil DateTime?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@index([startAt])
+  @@index([recurUntil])
+}

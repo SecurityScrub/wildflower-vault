@@ -501,3 +501,50 @@ model TimeOff {
   @@index([startAt])
   @@index([recurUntil])
 }
+
+// ─── Email Marketing ─────────────────────────────────────────────────────────
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  subject   String
+  // Array of blocks: { kind: "heading"|"paragraph"|"image"|"button"|"divider"|"signature", ...fields }.
+  // Rendered server-side into brand-styled HTML; supports {{name}} / {{email}} / {{first_name}} substitution.
+  blocks    Json
+  isPreset  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sends     EmailSend[]
+
+  @@index([updatedAt])
+}
+
+model EmailUnsubscribe {
+  email          String   @id
+  unsubscribedAt DateTime @default(now())
+  source         String?  // template slug or "manual"
+}
+
+enum EmailSendStatus {
+  SENT
+  SKIPPED_UNSUBSCRIBED
+  FAILED
+}
+
+model EmailSend {
+  id             String          @id @default(cuid())
+  templateId     String?
+  template       EmailTemplate?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  templateName   String          // snapshot at send time
+  recipientEmail String
+  recipientName  String?
+  subject        String
+  status         EmailSendStatus
+  error          String?
+  sentAt         DateTime        @default(now())
+
+  @@index([sentAt])
+  @@index([recipientEmail])
+  @@index([templateId])
+}

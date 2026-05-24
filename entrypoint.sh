@@ -23,6 +23,12 @@ if [ -n "$DATABASE_URL" ]; then
   node /app/prisma/bootstrap-admin.mjs || {
     echo "[entrypoint] WARNING: admin bootstrap failed. Continuing startup."
   }
+
+  # Seed preset email-marketing templates if they don't already exist.
+  echo "[entrypoint] Seeding email marketing presets..."
+  node /app/prisma/bootstrap-email-presets.mjs || {
+    echo "[entrypoint] WARNING: email preset seed failed. Continuing startup."
+  }
 else
   echo "[entrypoint] DATABASE_URL not set — skipping schema sync."
 fi

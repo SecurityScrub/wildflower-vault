@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   CalendarOff,
+  Mail,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -26,6 +27,7 @@ const NAV_ITEMS = [
   { href: "/admin/calendar", label: "Calendar", icon: Calendar },
   { href: "/admin/time-off", label: "Time Off", icon: CalendarOff },
   { href: "/admin/inquiries", label: "Inquiries", icon: MessageSquare },
+  { href: "/admin/email", label: "Email", icon: Mail },
   { href: "/admin/wedding-planning-leads", label: "Wedding Leads", icon: Heart },
   { href: "/admin/consultations", label: "Consultations", icon: ClipboardList },
   { href: "/admin/weddings", label: "Weddings", icon: Users },

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { buildICS, icsToBase64 } from "@/lib/ics";
+import { findBlockingTimeOff } from "@/lib/time-off";
 import {
   sendConsultationConfirmation,
   sendConsultationAdminNotice,
@@ -51,6 +52,15 @@ export async function POST(req: NextRequest) {
 
     const durationMin = data.durationMin ?? 30;
     const endsAt = new Date(scheduledAt.getTime() + durationMin * 60 * 1000);
+
+    // Reject if the planner has blocked this window via time-off.
+    const blocking = await findBlockingTimeOff(scheduledAt, endsAt);
+    if (blocking) {
+      return NextResponse.json(
+        { error: "That time isn't available. Please pick another slot." },
+        { status: 409 },
+      );
+    }
 
     // Lead linkage: an unauthenticated caller can supply `leadId`, but we only
     // honor it if the email on the request matches the lead's stored email.

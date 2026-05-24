@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { formatShortDate } from "@/lib/utils";
 import { startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, getDay } from "date-fns";
 import Link from "next/link";
+import { expandTimeOffForRange } from "@/lib/time-off";
 
 export const dynamic = "force-dynamic";
 
@@ -15,28 +16,18 @@ const BOOKING_STATUS_COLORS: Record<string, string> = {
 };
 
 const CONSULTATION_COLOR = "bg-brand-pink-100 text-brand-pink-800 border-brand-pink-200";
+const TIMEOFF_COLOR = "bg-gray-200 text-gray-700 border-gray-300";
 
-type CalendarItem =
-  | {
-      kind: "booking";
-      id: string;
-      when: Date;
-      title: string;
-      subtitle: string;
-      href: string;
-      statusLabel: string;
-      colorClass: string;
-    }
-  | {
-      kind: "consultation";
-      id: string;
-      when: Date;
-      title: string;
-      subtitle: string;
-      href: string;
-      statusLabel: string;
-      colorClass: string;
-    };
+type CalendarItem = {
+  kind: "booking" | "consultation" | "timeoff";
+  id: string;
+  when: Date;
+  title: string;
+  subtitle: string;
+  href: string;
+  statusLabel: string;
+  colorClass: string;
+};
 
 export default async function AdminCalendarPage({
   searchParams,
@@ -53,7 +44,7 @@ export default async function AdminCalendarPage({
   const start = startOfMonth(currentMonth);
   const end = endOfMonth(currentMonth);
 
-  const [bookings, consultations] = await Promise.all([
+  const [bookings, consultations, timeOffRows] = await Promise.all([
     prisma.booking.findMany({
       where: {
         eventDate: { gte: start, lte: end },
@@ -71,7 +62,21 @@ export default async function AdminCalendarPage({
       },
       orderBy: { scheduledAt: "asc" },
     }),
+    prisma.timeOff.findMany({
+      where: {
+        OR: [
+          { recurrence: "NONE", startAt: { lte: end }, endAt: { gte: start } },
+          {
+            recurrence: "WEEKLY",
+            startAt: { lte: end },
+            OR: [{ recurUntil: null }, { recurUntil: { gte: start } }],
+          },
+        ],
+      },
+    }),
   ]);
+
+  const timeOffBlocks = expandTimeOffForRange(timeOffRows, start, end);
 
   const items: CalendarItem[] = [
     ...bookings.map<CalendarItem>((b) => ({
@@ -97,6 +102,18 @@ export default async function AdminCalendarPage({
         : "/admin/consultations",
       statusLabel: "Consult",
       colorClass: CONSULTATION_COLOR,
+    })),
+    ...timeOffBlocks.map<CalendarItem>((t) => ({
+      kind: "timeoff" as const,
+      id: t.id,
+      when: t.start,
+      title: t.reason ?? "Time off",
+      subtitle: t.allDay
+        ? `All day${t.recurring ? " · weekly" : ""}`
+        : `${t.start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })} – ${t.end.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}${t.recurring ? " · weekly" : ""}`,
+      href: "/admin/time-off",
+      statusLabel: "Off",
+      colorClass: TIMEOFF_COLOR,
     })),
   ].sort((a, b) => a.when.getTime() - b.when.getTime());
 
@@ -141,6 +158,9 @@ export default async function AdminCalendarPage({
         </span>
         <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-brand-pink-200 bg-brand-pink-100 text-brand-pink-800">
           <span className="w-2 h-2 rounded-full bg-brand-pink-500" /> Consultations
+        </span>
+        <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-gray-300 bg-gray-200 text-gray-700">
+          <span className="w-2 h-2 rounded-full bg-gray-500" /> Time off
         </span>
       </div>
 

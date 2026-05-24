@@ -46,13 +46,21 @@ export function icsAttachment(
   };
 }
 
+/** ZeptoMail's docs say the Authorization header is `Zoho-enczapikey <TOKEN>`.
+ * People (including past me) often paste the token with the prefix included,
+ * which sends "Zoho-enczapikey Zoho-enczapikey ..." and fails auth with a
+ * cryptic "Invalid api token" error. Strip it defensively. */
+function normalizeToken(raw: string): string {
+  return raw.trim().replace(/^Zoho-enczapikey\s+/i, "").trim();
+}
+
 export function getZeptoMailConfig() {
   return {
     apiUrl: process.env.ZEPTOMAIL_API_URL ?? "https://api.zeptomail.com/v1.1/email",
-    token: process.env.ZEPTOMAIL_API_TOKEN ?? "",
-    fromEmail: process.env.ZEPTOMAIL_FROM_EMAIL ?? "",
+    token: normalizeToken(process.env.ZEPTOMAIL_API_TOKEN ?? ""),
+    fromEmail: (process.env.ZEPTOMAIL_FROM_EMAIL ?? "").trim(),
     fromName: process.env.ZEPTOMAIL_FROM_NAME ?? "The Wild Flower Vault",
-    adminEmail: process.env.ADMIN_EMAIL ?? "",
+    adminEmail: (process.env.ADMIN_EMAIL ?? "").trim(),
   };
 }
 
@@ -83,19 +91,35 @@ export async function sendZeptoMail(message: ZeptoMailMessage): Promise<void> {
     }));
   }
 
-  const res = await fetch(config.apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Zoho-enczapikey ${config.token}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch(config.apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Zoho-enczapikey ${config.token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[zeptomail] network error", { to: message.to.address, subject: message.subject, msg });
+    throw new Error(`ZeptoMail network error: ${msg}`);
+  }
 
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`ZeptoMail send failed (${res.status}): ${body}`);
+    // Always log the failure with context — callers often swallow the throw
+    // and we need *something* in Railway logs to diagnose 401 / 403 / 422.
+    console.error("[zeptomail] send failed", {
+      status: res.status,
+      to: message.to.address,
+      subject: message.subject,
+      from: config.fromEmail,
+      body: body.slice(0, 600),
+    });
+    throw new Error(`ZeptoMail send failed (${res.status}): ${body.slice(0, 300)}`);
   }
 }
 

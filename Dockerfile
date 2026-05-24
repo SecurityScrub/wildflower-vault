@@ -25,6 +25,10 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+# bcryptjs is bundled into the Next.js standalone server, but the
+# bootstrap-admin script in prisma/ runs as a standalone node process and
+# needs the package on disk too.
+COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 
 RUN mkdir -p /app/uploads/rentals
 COPY entrypoint.sh /app/entrypoint.sh

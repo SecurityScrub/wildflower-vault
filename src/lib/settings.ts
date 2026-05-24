@@ -56,12 +56,11 @@ export async function getSquareConfig() {
       (await getSetting("square_access_token")) ?? process.env.SQUARE_ACCESS_TOKEN ?? "",
     applicationId:
       (await getSetting("square_application_id")) ?? process.env.SQUARE_APPLICATION_ID ?? "",
+    // Optional override. Empty = auto-discover via the Locations API.
     locationId:
       (await getSetting("square_location_id")) ?? process.env.SQUARE_LOCATION_ID ?? "",
     environment:
       (await getSetting("square_environment")) ?? process.env.SQUARE_ENVIRONMENT ?? "sandbox",
-    webhookKey:
-      (await getSetting("square_webhook_key")) ?? process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "",
   };
 }
 

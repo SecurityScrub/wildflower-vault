@@ -1,9 +1,9 @@
-// Square integration. We only do one-time checkout (hosted payment links),
-// no subscriptions, no webhooks — so the operator only needs to provide
-// Application ID + Access Token + Environment. The location ID is
-// auto-discovered against the Locations API and cached per access token.
+// Square integration. We only do one-time hosted checkout (payment links) —
+// no subscriptions. Webhooks are used so payment status flows back into our
+// DB automatically; a refresh helper covers the case where the webhook is
+// delayed or misconfigured.
 
-import { SquareClient, SquareEnvironment } from "square";
+import { SquareClient, SquareEnvironment, WebhooksHelper } from "square";
 import { getSquareConfig } from "./settings";
 
 let _client: SquareClient | null = null;
@@ -93,4 +93,62 @@ export async function createPaymentLink(params: {
   });
 
   return response.paymentLink;
+}
+
+/** Verify the HMAC signature Square attaches to webhook deliveries. Returns
+ * false (not throw) on any failure so the caller can respond 401. */
+export async function verifyWebhookSignature(
+  body: string,
+  signature: string,
+  webhookKey: string,
+  url: string,
+): Promise<boolean> {
+  try {
+    return WebhooksHelper.verifySignature({
+      requestBody: body,
+      signatureHeader: signature,
+      signatureKey: webhookKey,
+      notificationUrl: url,
+    });
+  } catch {
+    return false;
+  }
+}
+
+/** Pull the latest payment state for a Square order: sum of completed
+ * payments (in dollars) and whether the order's net total has been paid in
+ * full. Used by the webhook handler and the admin "Refresh from Square"
+ * button. Returns null if the order can't be fetched. */
+export async function getSquareOrderPaymentSummary(
+  orderId: string,
+): Promise<{
+  paidAmount: number;
+  totalAmount: number;
+  isFullyPaid: boolean;
+  lastPaymentId: string | null;
+} | null> {
+  const client = await getSquareClient();
+  try {
+    const res = await client.orders.get({ orderId });
+    const order = res.order;
+    if (!order) return null;
+    const totalCents = Number(order.totalMoney?.amount ?? 0);
+    // Tenders represent each completed payment attached to the order.
+    const tenders = order.tenders ?? [];
+    let paidCents = 0;
+    let lastPaymentId: string | null = null;
+    for (const t of tenders) {
+      const amt = Number(t.amountMoney?.amount ?? 0);
+      paidCents += amt;
+      if (t.paymentId) lastPaymentId = t.paymentId;
+    }
+    return {
+      paidAmount: paidCents / 100,
+      totalAmount: totalCents / 100,
+      isFullyPaid: totalCents > 0 && paidCents >= totalCents,
+      lastPaymentId,
+    };
+  } catch {
+    return null;
+  }
 }

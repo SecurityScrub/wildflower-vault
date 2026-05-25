@@ -23,12 +23,19 @@ const SETTING_GROUPS: Array<{
   {
     group: "square",
     title: "Square Payments",
-    description: "Application ID + Access Token are required. Location ID is auto-discovered from your Square account — only set it if you need to override the default.",
+    description: "Application ID + Access Token are required. Webhook Signature Key is required for automatic payment-status updates (otherwise use the \"Refresh from Square\" button on each order). Location ID is auto-discovered.",
     icon: "💳",
     fields: [
       { key: "square_environment", label: "Environment", type: "select", options: ["sandbox", "production"] },
       { key: "square_application_id", label: "Application ID", placeholder: "sq0idp-…", isSecret: true },
       { key: "square_access_token", label: "Access Token", placeholder: "EAAAl…", isSecret: true },
+      {
+        key: "square_webhook_key",
+        label: "Webhook Signature Key",
+        placeholder: "From Square dashboard → Settings → Webhooks → your subscription",
+        isSecret: true,
+        hint: "Subscribe to payment.created + payment.updated; point at https://<your-domain>/api/square/webhook.",
+      },
       { key: "square_location_id", label: "Location ID (optional override)", placeholder: "Leave blank to auto-discover", isSecret: true },
     ],
   },

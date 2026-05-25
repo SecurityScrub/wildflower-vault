@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { formatCurrency, formatShortDate } from "@/lib/utils";
-import { Loader2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2, Search, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 import type { BookingWithItems } from "@/types";
 
 const STATUSES = ["ALL", "PENDING", "CONFIRMED", "DEPOSIT_PAID", "PAID", "CANCELLED", "COMPLETED"];
@@ -30,6 +30,8 @@ export default function AdminOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<BookingWithItems | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshMsg, setRefreshMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -42,6 +44,50 @@ export default function AdminOrdersPage() {
   }, [status, page]);
 
   useEffect(() => { fetchBookings(); }, [fetchBookings]);
+
+  async function refreshFromSquare(id: string) {
+    setRefreshing(true);
+    setRefreshMsg(null);
+    try {
+      const res = await fetch(`/api/admin/bookings/${id}/refresh-square`, { method: "POST" });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        booking?: { status: BookingWithItems["status"]; paidAmount: string | number };
+        summary?: { paidAmount: number; totalAmount: number; isFullyPaid: boolean };
+      };
+      if (!res.ok || !data.ok || !data.booking) {
+        setRefreshMsg({ ok: false, text: data.error ?? "Square refresh failed." });
+        return;
+      }
+      await fetchBookings();
+      const paid = data.summary?.paidAmount ?? Number(data.booking.paidAmount);
+      const total = data.summary?.totalAmount ?? Number(selectedBooking?.totalAmount ?? 0);
+      setSelectedBooking((prev) =>
+        prev?.id === id
+          ? ({
+              ...prev,
+              status: data.booking!.status,
+              // Server returns paidAmount as a string-or-number; cast through
+              // unknown so it round-trips into the Prisma Decimal-typed field.
+              paidAmount: data.booking!.paidAmount as unknown as BookingWithItems["paidAmount"],
+            } as BookingWithItems)
+          : prev,
+      );
+      setRefreshMsg({
+        ok: true,
+        text: data.summary?.isFullyPaid
+          ? `Paid in full: $${paid.toFixed(2)}.`
+          : paid > 0
+            ? `Partial: $${paid.toFixed(2)} of $${total.toFixed(2)}.`
+            : "No payments recorded in Square yet.",
+      });
+    } catch (err) {
+      setRefreshMsg({ ok: false, text: err instanceof Error ? err.message : "Network error" });
+    } finally {
+      setRefreshing(false);
+    }
+  }
 
   async function updateStatus(id: string, newStatus: string) {
     setUpdating(id);
@@ -333,6 +379,31 @@ export default function AdminOrdersPage() {
             {selectedBooking.notes && (
               <div className="mt-4 bg-gray-50 p-3 text-xs text-gray-600">
                 <span className="font-medium">Customer Note: </span>{selectedBooking.notes}
+              </div>
+            )}
+
+            {selectedBooking.squareOrderId && (
+              <div className="mt-6">
+                <button
+                  type="button"
+                  onClick={() => refreshFromSquare(selectedBooking.id)}
+                  disabled={refreshing}
+                  className="w-full flex items-center justify-center gap-2 border border-brand-orange-700 text-brand-orange-700 hover:bg-brand-orange-50 py-2.5 text-xs font-sans uppercase tracking-wider rounded-none disabled:opacity-60"
+                >
+                  {refreshing ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                  {refreshing ? "Checking Square…" : "Refresh from Square"}
+                </button>
+                {refreshMsg && (
+                  <p
+                    className={`mt-2 text-xs px-3 py-2 ${
+                      refreshMsg.ok
+                        ? "bg-green-50 text-green-800 border border-green-200"
+                        : "bg-red-50 text-red-800 border border-red-200"
+                    }`}
+                  >
+                    {refreshMsg.text}
+                  </p>
+                )}
               </div>
             )}
 

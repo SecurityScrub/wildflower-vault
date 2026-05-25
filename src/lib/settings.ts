@@ -61,6 +61,9 @@ export async function getSquareConfig() {
       (await getSetting("square_location_id")) ?? process.env.SQUARE_LOCATION_ID ?? "",
     environment:
       (await getSetting("square_environment")) ?? process.env.SQUARE_ENVIRONMENT ?? "sandbox",
+    // Optional. Without it, /api/square/webhook rejects all deliveries.
+    webhookKey:
+      (await getSetting("square_webhook_key")) ?? process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "",
   };
 }
 
